@@ -1,0 +1,12 @@
+/* Same families as the iOS app (SIL OFL 1.1), self-hosted, latin subset. Roles: see README. */
+@font-face{font-family:"Archivo Expanded";font-weight:700;font-style:normal;font-display:swap;src:url(/fonts/ArchivoExpanded-Bold.woff2) format("woff2")}
+@font-face{font-family:"Archivo SemiExpanded";font-weight:600;font-style:normal;font-display:swap;src:url(/fonts/ArchivoSemiExpanded-SemiBold.woff2) format("woff2")}
+@font-face{font-family:"Archivo SemiExpanded";font-weight:700;font-style:normal;font-display:swap;src:url(/fonts/ArchivoSemiExpanded-Bold.woff2) format("woff2")}
+/* The app maps regular and below to Medium, medium and above to Bold. */
+@font-face{font-family:"Space Grotesk";font-weight:400 500;font-style:normal;font-display:swap;src:url(/fonts/SpaceGrotesk-Medium.woff2) format("woff2")}
+@font-face{font-family:"Space Grotesk";font-weight:600 800;font-style:normal;font-display:swap;src:url(/fonts/SpaceGrotesk-Bold.woff2) format("woff2")}
+
+/* Metric-matched fallbacks so the swap does not shift layout. */
+@font-face{font-family:"Archivo Expanded Fallback";src:local("Arial Bold"),local("Arial");font-weight:700;size-adjust:134.5%;ascent-override:65.3%;descent-override:15.6%;line-gap-override:0%}
+@font-face{font-family:"Archivo SemiExpanded Fallback";src:local("Arial Bold"),local("Arial");font-weight:600 700;size-adjust:120.6%;ascent-override:72.8%;descent-override:17.4%;line-gap-override:0%}
+@font-face{font-family:"Space Grotesk Fallback";src:local("Arial");font-weight:400 800;size-adjust:102.3%;ascent-override:96.2%;descent-override:28.6%;line-gap-override:0%}
