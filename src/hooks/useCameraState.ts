@@ -70,7 +70,7 @@ export function useCameraState(isRawActive: boolean): CameraController {
   const [shutterFlash, setShutterFlash] = useState<boolean>(false)
   const [exifToast, setExifToast] = useState<string | null>(null)
   const [focusKey, setFocusKey] = useState<number>(0)
-  const [hudLayout, setHudLayoutState] = useState<HudLayout>('pro')
+  const [hudLayout, setHudLayoutState] = useState<HudLayout>('free')
 
   const flashTimer = useRef<number | null>(null)
   const toastTimer = useRef<number | null>(null)
