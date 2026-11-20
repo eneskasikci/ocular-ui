@@ -34,5 +34,7 @@ AGENTS.md
 # Design handoff & local docs
 docs/
 
-# Personal local photos (excluded from git)
+# Personal local photos & deployment script (excluded from git)
 public/photos/
+deploy.sh
+.wrangler/

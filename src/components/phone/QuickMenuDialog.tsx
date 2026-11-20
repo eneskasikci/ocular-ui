@@ -33,7 +33,7 @@ export function QuickMenuDialog({ camera, isFree, open, onClose, reduceMotion }:
           onFocusOutside={(e) => e.preventDefault()}
         >
           <m.div
-            className="inphone-q absolute inset-x-2.5 bottom-4 z-35 p-3 rounded-[20px] bg-obsidian/84 backdrop-blur-[24px] backdrop-saturate-140 border border-silver/26 shadow-[0_16px_36px_rgba(0,0,0,.64)] flex flex-col gap-2.5"
+            className="inphone-q absolute inset-x-2.5 bottom-4 z-35 p-3 rounded-[20px] bg-obsidian/94 border border-silver/26 shadow-[0_16px_36px_rgba(0,0,0,.64)] flex flex-col gap-2.5"
             initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 14, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}

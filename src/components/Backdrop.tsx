@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import type { BackdropId } from '../config'
 import { BASE, BLOBS } from '../data/gradients'
 import { cn } from '../lib/cn'
@@ -7,6 +7,19 @@ const IDS = Object.keys(BASE) as BackdropId[]
 
 /** Fixed full-bleed gradient canvas. Layers crossfade purely on GPU opacity. */
 export function Backdrop({ active }: { active: BackdropId }) {
+  // Blobs mount only for the active layer and, during the crossfade, the one fading out.
+  const [prev, setPrev] = useState<BackdropId | null>(null)
+  const [last, setLast] = useState(active)
+  if (last !== active) {
+    setPrev(last)
+    setLast(active)
+  }
+  useEffect(() => {
+    if (!prev) return
+    const t = setTimeout(() => setPrev(null), 950)
+    return () => clearTimeout(t)
+  }, [prev])
+
   return (
     <>
       <div
@@ -18,12 +31,12 @@ export function Backdrop({ active }: { active: BackdropId }) {
             <div
               key={id}
               className={cn(
-                'backdrop-layer absolute inset-0 will-change-[opacity] transition-opacity duration-900 ease-ocular motion-reduce:transition-none',
+                'backdrop-layer absolute inset-0 transition-opacity duration-900 ease-ocular motion-reduce:transition-none',
                 id === active ? 'is-active opacity-100' : 'opacity-0',
               )}
               style={{ background: BASE[id] }}
             >
-              {BLOBS[id].map((b, i) => (
+              {(id === active || id === prev) && BLOBS[id].map((b, i) => (
                 <div
                   key={i}
                   className={cn('backdrop-blob', b.ember && 'backdrop-blob--ember')}
@@ -59,7 +72,7 @@ export function Backdrop({ active }: { active: BackdropId }) {
         aria-hidden="true"
       />
       <div
-        className="fixed inset-0 -z-1 pointer-events-none opacity-12 mix-blend-overlay bg-grain-backdrop"
+        className="fixed inset-0 -z-1 pointer-events-none opacity-[0.045] bg-grain-backdrop"
         aria-hidden="true"
       />
     </>

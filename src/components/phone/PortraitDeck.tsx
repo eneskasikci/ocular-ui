@@ -139,7 +139,7 @@ export function PortraitDeck({
         <AnimatePresence>
           {showEvDial && (
             <m.div
-              className="px-2 py-1.5 rounded-xl bg-obsidian/84 backdrop-blur-[18px] border border-amber/48 flex flex-col gap-[5px]"
+              className="px-2 py-1.5 rounded-xl bg-obsidian/94 border border-amber/48 flex flex-col gap-[5px]"
               initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 8 }}
