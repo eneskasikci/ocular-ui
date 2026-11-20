@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { AnimatePresence } from 'motion/react'
 import * as m from 'motion/react-m'
 import { Dialog, Toggle } from 'radix-ui'
@@ -32,7 +32,7 @@ function HardwareButtons() {
   )
 }
 
-export function CameraPhone({ camera, isGiantMode }: Props) {
+export const CameraPhone = memo(function CameraPhone({ camera, isGiantMode }: Props) {
   const [guidesOn, setGuidesOn] = useState(true)
   const [qOpen, setQOpen] = useState(false)
 
@@ -44,7 +44,7 @@ export function CameraPhone({ camera, isGiantMode }: Props) {
   const giantAware = isGiantMode !== undefined
   const chromeAnimate = giantAware ? { opacity: isGiantMode ? 0 : 1 } : undefined
   const chromeTransition = giantAware
-    ? { duration: 0.5, delay: isGiantMode ? 0 : 0.2, ease: EASE_BUTTER }
+    ? { duration: 0.5, ease: EASE_BUTTER }
     : undefined
 
   return (
@@ -236,4 +236,4 @@ export function CameraPhone({ camera, isGiantMode }: Props) {
       </Dialog.Root>
     </div>
   )
-}
+})

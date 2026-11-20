@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import * as m from 'motion/react-m'
 import { Tabs } from 'radix-ui'
 import { SCENES } from '../../config'
 import type { CameraController } from '../../hooks/useCameraState'
 import { cn } from '../../lib/cn'
-import { EASE_BUTTER, SPRING_DETENT } from '../../lib/motion'
+import { EASE_BUTTER, EASE_OUT, SPRING_DETENT } from '../../lib/motion'
 import { Footer } from '../Footer'
 import { HeroSlideshow } from '../HeroSlideshow'
 import { CapturePanel } from '../panels/CapturePanel'
@@ -13,7 +13,10 @@ import { RecipesPanel } from '../panels/RecipesPanel'
 import { CameraPhone } from '../phone/CameraPhone'
 import { PrivacyStage } from './Privacy'
 import { HudLayoutSwitch, PhotoStepper } from './SimControls'
-import { TiersStage, type TiersStageState } from './Tiers'
+import { TiersStage } from './Tiers'
+
+// Slides 5-7 hold still and crossfade: opacity only, so the compositor does all the work.
+const FADE = { duration: 0.4, ease: EASE_OUT }
 
 type FeatureKey = 'recipes' | 'capture' | 'raw'
 
@@ -46,13 +49,16 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
   }, [])
 
   // Viewport-aware phone coordinates (no CSS transform on carrier — Motion owns x, y, scale)
-  const stageMaxW = Math.min(viewport.w - 64, 1100)
-  const settledScale = Math.min(1, Math.max(0.8, (viewport.h - 110) / PHONE_BASE_H))
-  const settledLeftX = -(stageMaxW / 2) + (PHONE_BASE_W * settledScale) / 2 + 8
+  // Layout is designed at 1440x900; larger viewports scale the deck up uniformly (CSS zoom + phone scale).
+  const k = Math.min(1.6, Math.max(1, Math.min(viewport.w / 1440, viewport.h / 900)))
+  const stageMaxW = Math.min(viewport.w - 64 * k, 1100 * k)
+  const settledScale = Math.min(k, Math.max(0.8, (viewport.h - 110) / PHONE_BASE_H))
+  const settledLeftX = -(stageMaxW / 2) + (PHONE_BASE_W * settledScale) / 2 + 8 * k
   const giantScale = Math.min(5.2, Math.max(2.2, (viewport.w - 28) / PHONE_BASE_W))
   const carrierCenterY = viewport.h / 2 + 22
   const giantY = 76 + (PHONE_BASE_H / 2) * giantScale - carrierCenterY
 
+  const enterCamera = useCallback(() => goToStep(1), [goToStep])
   const isHero = step === 0
   const isGiant = step <= 1
   const phoneVisible = step >= 1 && step <= 4
@@ -61,7 +67,6 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
   const tiersVisible = step === 5
   const privacyVisible = step === 6
   const activeFeature: FeatureKey = step === 3 ? 'capture' : step === 4 ? 'raw' : 'recipes'
-  const tiersStage: TiersStageState = step === 5 ? 'active' : step > 5 ? 'after' : 'before'
 
   const slots = [
     {
@@ -85,9 +90,10 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
     <div className="desktop-deck relative h-svh w-full overflow-hidden flex items-center justify-center">
       {/* Slide 1: Full-height slideshow hero */}
       <m.div
-        className="absolute inset-0 z-30 will-change-[transform,opacity]"
+        className="absolute inset-0 z-30 bg-obsidian will-change-transform"
         initial={false}
-        animate={isHero ? { y: '0%', opacity: 1 } : { y: '-100%', opacity: 0 }}
+        // Slide only: fading a parent of the composited track forces a full-screen offscreen pass each frame.
+        animate={{ y: isHero ? '0%' : '-100%' }}
         transition={{ duration: 0.78, ease: EASE_BUTTER }}
         style={{ pointerEvents: isHero ? 'auto' : 'none' }}
         aria-hidden={!isHero}
@@ -97,7 +103,7 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
           photoId={camera.photo.id}
           paused={!isHero}
           onSelectPhoto={camera.selectPhoto}
-          onEnterCamera={() => goToStep(1)}
+          onEnterCamera={enterCamera}
         />
       </m.div>
 
@@ -107,16 +113,10 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
         initial={false}
         animate={
           phoneParted
-            ? { x: -560, opacity: 0, scale: 0.92 }
-            : isHero
-              ? { x: 0, opacity: 0, scale: 1 }
-              : { x: 0, opacity: 1, scale: 1 }
+            ? { opacity: 0 }
+            : { opacity: 1 }
         }
-        transition={{
-          duration: 0.76,
-          delay: phoneVisible ? 0.08 : 0,
-          ease: EASE_BUTTER,
-        }}
+        transition={FADE}
         aria-hidden={!phoneVisible}
         inert={!phoneVisible || undefined}
       >
@@ -137,7 +137,7 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
       </m.div>
 
       {/* Steps 2-4: Always-Mounted Zero-Lag Right Feature Deck (Radix Tabs) */}
-      <div className="relative z-22 w-full max-w-[1100px] mx-auto px-[var(--gutter)] pt-[calc(var(--header)-10px)] grid grid-cols-[332px_minmax(0,1fr)] gap-x-[clamp(32px,4.5vw,68px)] items-center pointer-events-none">
+      <div style={{ zoom: k }} className="relative z-22 w-full max-w-[1100px] mx-auto px-[var(--gutter)] pt-[calc(var(--header)-10px)] grid grid-cols-[332px_minmax(0,1fr)] gap-x-[clamp(32px,4.5vw,68px)] items-center pointer-events-none">
         <div aria-hidden="true" />
         <m.div
           className="feature-column"
@@ -147,13 +147,9 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
               ? { x: 0, opacity: 1 }
               : step < 2
                 ? { x: 72, opacity: 0 }
-                : { x: 640, opacity: 0 }
+                : { x: 0, opacity: 0 }
           }
-          transition={{
-            duration: 0.76,
-            delay: featuresVisible ? 0.12 : 0,
-            ease: EASE_BUTTER,
-          }}
+          transition={step >= 4 ? FADE : { duration: 0.76, ease: EASE_BUTTER }}
           style={{ pointerEvents: featuresVisible ? 'auto' : 'none' }}
           aria-hidden={!featuresVisible}
           inert={!featuresVisible || undefined}
@@ -182,6 +178,7 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
                       {isCurrent && (
                         <m.span
                           layoutId="feature-tab-bg"
+                          layoutDependency={tab.id}
                           className="absolute inset-0 rounded-[10px] bg-amber/16 border border-amber/60 -z-1"
                           transition={SPRING_DETENT}
                         />
@@ -208,7 +205,8 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
 
             <div className="grid items-start">
               {slots.map(({ id, targetStep, content }) => {
-                const isActive = step === targetStep
+                // Past the deck, the last panel stays put while the whole column fades.
+                const isActive = step === targetStep || (step > 4 && targetStep === 4)
                 return (
                   <Tabs.Content key={id} value={id} forceMount asChild>
                     <m.div
@@ -216,10 +214,8 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
                       initial={false}
                       animate={
                         isActive
-                          ? { opacity: 1, y: 0 }
-                          : step > targetStep
-                            ? { opacity: 0, y: -22 }
-                            : { opacity: 0, y: 22 }
+                          ? { opacity: 1, y: 0, visibility: 'visible' }
+                          : { opacity: 0, y: step > targetStep ? -22 : 22, transitionEnd: { visibility: 'hidden' } }
                       }
                       transition={{ duration: 0.52, ease: EASE_BUTTER }}
                       style={{ pointerEvents: isActive ? 'auto' : 'none' }}
@@ -237,15 +233,20 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
       </div>
 
       {/* Step 5: Free & Pro Tiers */}
-      <section
+      <m.section
         className="absolute inset-0 z-26 flex items-center justify-center pt-[calc(var(--header)+12px)] px-[var(--gutter)] pb-5"
+        initial={false}
+        animate={{ opacity: tiersVisible ? 1 : 0 }}
+        transition={FADE}
         aria-labelledby="h-tiers"
         aria-hidden={!tiersVisible}
         inert={!tiersVisible || undefined}
         style={{ pointerEvents: tiersVisible ? 'auto' : 'none' }}
       >
-        <TiersStage headingId="h-tiers" stage={tiersStage} />
-      </section>
+        <div style={{ zoom: k }} className="w-full flex justify-center">
+          <TiersStage headingId="h-tiers" />
+        </div>
+      </m.section>
 
       {/* Step 6: Privacy + Docked Footer */}
       <m.section
@@ -254,15 +255,11 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
         aria-hidden={!privacyVisible}
         inert={!privacyVisible || undefined}
         initial={false}
-        animate={privacyVisible ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.92, y: 28 }}
-        transition={
-          privacyVisible
-            ? { duration: 0.82, delay: 0.16, ease: EASE_BUTTER }
-            : { duration: 0.5, ease: EASE_BUTTER }
-        }
+        animate={{ opacity: privacyVisible ? 1 : 0 }}
+        transition={FADE}
         style={{ pointerEvents: privacyVisible ? 'auto' : 'none' }}
       >
-        <div className="flex-1 flex items-center justify-center py-3 px-[var(--gutter)]">
+        <div style={{ zoom: k }} className="flex-1 flex items-center justify-center py-3 px-[var(--gutter)]">
           <PrivacyStage headingId="h-privacy" />
         </div>
         <div className="deck-footer w-full shrink-0">

@@ -1,35 +1,10 @@
-import type { Variants } from 'motion/react'
-import * as m from 'motion/react-m'
+import { memo } from 'react'
 import { cn } from '../../lib/cn'
-import { EASE_BUTTER } from '../../lib/motion'
 import { Reveal } from '../Reveal'
-
-export type TiersStageState = 'before' | 'active' | 'after'
 
 interface TiersStageProps {
   headingId: string
-  stage?: TiersStageState
 }
-
-/** Enter/exit poses for one element of the deck stage; `before`/`after` are offsets on `axis`. */
-function stageVariants(
-  axis: 'x' | 'y',
-  before: number,
-  after: number,
-  enter: { duration: number; delay: number },
-  exitDuration: number,
-): Variants {
-  const at = (v: number) => (axis === 'x' ? { x: v } : { y: v })
-  const exit = { duration: exitDuration, ease: EASE_BUTTER }
-  return {
-    before: { opacity: 0, ...at(before), transition: exit },
-    active: { opacity: 1, ...at(0), transition: { ...enter, ease: EASE_BUTTER } },
-    after: { opacity: 0, ...at(after), transition: exit },
-  }
-}
-
-const HEADING_VARIANTS = stageVariants('y', -18, -32, { duration: 0.72, delay: 0.16 }, 0.52)
-const TRIAL_VARIANTS = stageVariants('y', 18, 32, { duration: 0.72, delay: 0.22 }, 0.52)
 
 const CARD_CLS =
   'px-5 py-[18px] rounded-[24px] border shadow-[0_24px_60px_rgba(0,0,0,.48),inset_0_1px_0_rgba(243,241,236,.08)] reduced-transparency:bg-graphite reduced-transparency:bg-none'
@@ -43,7 +18,6 @@ const TIERS = [
     cardCls: 'bg-[linear-gradient(180deg,rgba(22,24,30,.95),rgba(11,12,14,.98))] border-hair',
     badgeCls: 'border-hair text-ink-subtle',
     valueCls: '[&_b]:text-silver',
-    variants: stageVariants('x', -110, -640, { duration: 0.82, delay: 0.14 }, 0.78),
     rows: [
       ['Film stocks', '3 (STD, CC, AC)'],
       ['Manual dials & primes', 'Full'],
@@ -59,7 +33,6 @@ const TIERS = [
       'bg-[radial-gradient(120%_90%_at_100%_0,rgba(122,28,46,.42),rgba(20,22,27,.96)_65%,rgba(11,12,14,.98)_100%)] border-amber/52',
     badgeCls: 'border-amber/55 text-amber',
     valueCls: '[&_b]:text-emerald-ink',
-    variants: stageVariants('x', 110, 640, { duration: 0.82, delay: 0.14 }, 0.78),
     rows: [
       ['Film stocks', 'All 12'],
       ['RAW capture', '14-bit & ProRAW'],
@@ -70,10 +43,10 @@ const TIERS = [
   },
 ] as const
 
-export function TiersStage({ headingId, stage }: TiersStageProps) {
+export const TiersStage = memo(function TiersStage({ headingId }: TiersStageProps) {
   return (
     <div className="w-full max-w-[1100px] flex flex-col gap-4">
-      <m.div className="pool-scrim" variants={HEADING_VARIANTS} initial={false} animate={stage}>
+      <div className="pool-scrim">
         <h2
           id={headingId}
           className="font-display font-bold text-[clamp(1.85rem,5.5vw,3.15rem)] leading-[1.03] tracking-[-0.025em] max-w-[22ch] [overflow-wrap:break-word]"
@@ -83,17 +56,11 @@ export function TiersStage({ headingId, stage }: TiersStageProps) {
         <p className="text-[clamp(1rem,2.1vw,1.1rem)] leading-[1.5] text-ink-muted max-w-[36ch] mt-2.5 mb-0 tracking-[-0.01em]">
           No account required. Prices show in the app.
         </p>
-      </m.div>
+      </div>
 
       <div className="grid grid-cols-1 xs:grid-cols-2 gap-4">
         {TIERS.map((tier) => (
-          <m.article
-            key={tier.name}
-            className={cn(CARD_CLS, tier.cardCls)}
-            variants={tier.variants}
-            initial={false}
-            animate={stage}
-          >
+          <article key={tier.name} className={cn(CARD_CLS, tier.cardCls)}>
             <header className="flex items-center justify-between gap-3 mb-2.5">
               <h3 className="font-display font-bold text-[1.32rem] leading-[1.1]">{tier.name}</h3>
               <span
@@ -113,26 +80,21 @@ export function TiersStage({ headingId, stage }: TiersStageProps) {
                 </li>
               ))}
             </ul>
-          </m.article>
+          </article>
         ))}
       </div>
 
-      <m.div
-        className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3"
-        variants={TRIAL_VARIANTS}
-        initial={false}
-        animate={stage}
-      >
+      <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3">
         <div className="flex-1 basis-[320px] flex flex-wrap items-center gap-x-3.5 gap-y-2 px-[18px] py-[13px] rounded-2xl bg-[#0a2e24]/92 border border-emerald/58 text-ink text-[0.93rem]">
           <b className="font-mono font-bold text-[0.75rem] leading-none tracking-[0.12em] text-emerald-ink whitespace-nowrap">
             3-DAY FREE TRIAL
           </b>
           <span>Monthly, annual, or Lifetime. Saved recipes stay on your device.</span>
         </div>
-      </m.div>
+      </div>
     </div>
   )
-}
+})
 
 export function Tiers() {
   return (
