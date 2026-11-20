@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { GetItButton } from '../GetItButton'
 import { MeniscusMark } from '../MeniscusMark'
 import { Reveal } from '../Reveal'
@@ -5,7 +6,7 @@ import { Reveal } from '../Reveal'
 const PRIVACY_CHIP_CLS =
   'inline-flex items-center min-h-[34px] px-3 rounded-full bg-[#0a2e24]/92 border border-emerald/60 font-mono font-bold text-[0.75rem] leading-none tracking-[0.06em] text-emerald-ink whitespace-nowrap reduced-transparency:bg-graphite'
 
-export function PrivacyStage({ headingId }: { headingId: string }) {
+export const PrivacyStage = memo(function PrivacyStage({ headingId }: { headingId: string }) {
   return (
     <div className="privacy-stage relative z-1 flex flex-col items-center text-center gap-[18px] max-w-[600px] px-6 py-8 rounded-[28px] bg-[radial-gradient(closest-side,rgba(11,12,14,.76),rgba(11,12,14,.38)_72%,rgba(11,12,14,0))]">
       <MeniscusMark className="w-14 h-14" />
@@ -36,7 +37,7 @@ export function PrivacyStage({ headingId }: { headingId: string }) {
       </a>
     </div>
   )
-}
+})
 
 export function Privacy() {
   return (

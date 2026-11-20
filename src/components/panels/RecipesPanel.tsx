@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import * as m from 'motion/react-m'
 import { ToggleGroup } from 'radix-ui'
 import { RECIPES, type FilmId } from '../../data/recipes'
@@ -11,7 +12,7 @@ interface Props {
   camera: CameraController
 }
 
-export function RecipesPanel({ headingId, camera }: Props) {
+export const RecipesPanel = memo(function RecipesPanel({ headingId, camera }: Props) {
   const { photo, filmId, recipe, selectFilm } = camera
 
   return (
@@ -44,6 +45,7 @@ export function RecipesPanel({ headingId, camera }: Props) {
                 {selected && (
                   <m.span
                     layoutId="recipe-ring"
+                    layoutDependency={r.id}
                     className="absolute -inset-px rounded-[14px] border-2 border-amber bg-amber/9 pointer-events-none"
                     transition={SPRING_DETENT}
                     aria-hidden="true"
@@ -88,4 +90,4 @@ export function RecipesPanel({ headingId, camera }: Props) {
       </div>
     </div>
   )
-}
+})

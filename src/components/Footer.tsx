@@ -1,6 +1,7 @@
+import { memo } from 'react'
 import { EULA_URL, SUPPORT_EMAIL } from '../config'
 
-export function Footer() {
+export const Footer = memo(function Footer() {
   return (
     <footer className="site-footer relative z-2 bg-deep/92 border-t border-hair text-ink-subtle text-[0.88rem]">
       <div className="max-w-[1180px] mx-auto px-[var(--gutter)] pt-6 pb-7 flex flex-col gap-3.5 tablet:flex-row tablet:items-center tablet:justify-between">
@@ -24,4 +25,4 @@ export function Footer() {
       </div>
     </footer>
   )
-}
+})

@@ -99,6 +99,7 @@ export function SegmentedControl<T extends string>({
             {selected && (
               <m.span
                 layoutId={layoutId}
+                layoutDependency={opt.value}
                 className="absolute inset-0 rounded-[10px] bg-amber/16 border border-amber/58 -z-1"
                 transition={SPRING_DETENT}
               />

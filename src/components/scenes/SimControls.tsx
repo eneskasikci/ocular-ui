@@ -52,6 +52,7 @@ export function HudLayoutSwitch({
               {selected && (
                 <m.span
                   layoutId="hud-layout-pill"
+                  layoutDependency={opt.id}
                   className="absolute inset-0 rounded-full bg-amber/18 border border-amber/62 -z-1"
                   transition={SPRING_DETENT}
                   aria-hidden="true"

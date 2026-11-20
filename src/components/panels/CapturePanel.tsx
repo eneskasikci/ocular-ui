@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Toggle } from 'radix-ui'
 import {
   ASPECT_RATIOS,
@@ -29,7 +30,7 @@ interface Props {
   camera: CameraController
 }
 
-export function CapturePanel({ headingId, camera }: Props) {
+export const CapturePanel = memo(function CapturePanel({ headingId, camera }: Props) {
   const {
     ev,
     dr,
@@ -143,4 +144,4 @@ export function CapturePanel({ headingId, camera }: Props) {
       </div>
     </div>
   )
-}
+})

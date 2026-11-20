@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Toggle, ToggleGroup } from 'radix-ui'
 import { RECIPES, type FilmId } from '../../data/recipes'
 import type { CameraController } from '../../hooks/useCameraState'
@@ -12,7 +13,7 @@ interface Props {
   camera: CameraController
 }
 
-export function RawPanel({ headingId, camera }: Props) {
+export const RawPanel = memo(function RawPanel({ headingId, camera }: Props) {
   const { filmId, recipe, rawCompare, rawSplit, toggleRawCompare, setRawSplit, selectFilmForRaw } =
     camera
 
@@ -74,4 +75,4 @@ export function RawPanel({ headingId, camera }: Props) {
       </div>
     </div>
   )
-}
+})
