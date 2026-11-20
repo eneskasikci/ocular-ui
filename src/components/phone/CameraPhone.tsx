@@ -110,6 +110,7 @@ export function CameraPhone({ camera, reduceMotion, isGiantMode }: Props) {
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover block transition-[filter] duration-240 ease-ocular"
                   style={{ filter: opticalFilter, objectPosition: photo.objectPosition }}
+                  decoding="async"
                   draggable={false}
                 />
                 {recipe.shadowTint && (

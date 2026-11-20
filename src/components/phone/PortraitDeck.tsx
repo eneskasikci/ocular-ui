@@ -192,7 +192,7 @@ export function PortraitDeck({
         <div className="flex items-center justify-between gap-[5px]">
           <div
             className={cn(
-              'inline-flex items-center gap-0.5 p-0.5 rounded-full bg-obsidian/64 border border-silver/22 backdrop-blur-md',
+              'inline-flex items-center gap-0.5 p-0.5 rounded-full bg-obsidian/84 border border-silver/22',
               focalOpen && 'flex-1',
             )}
           >
@@ -233,10 +233,10 @@ export function PortraitDeck({
           <button
             type="button"
             className={cn(
-              'h-[30px] px-[9px] rounded-full inline-flex items-center justify-center gap-1 font-mono font-extrabold text-[9.5px] leading-none backdrop-blur-md shrink-0 cursor-pointer border',
+              'h-[30px] px-[9px] rounded-full inline-flex items-center justify-center gap-1 font-mono font-extrabold text-[9.5px] leading-none shrink-0 cursor-pointer border',
               aspect !== '4:3'
                 ? 'bg-amber/20 border-amber/60 text-amber'
-                : 'bg-obsidian/64 border-silver/22 text-silver/92',
+                : 'bg-obsidian/84 border-silver/22 text-silver/92',
             )}
             onClick={cycleAspect}
             title="Cycle framing aspect ratio"
@@ -357,7 +357,7 @@ export function PortraitDeck({
         <AnimatePresence initial={false}>
           {showExposureCapsule && (
             <m.div
-              className="exposure-capsule grid grid-cols-4 gap-[3px] p-1 rounded-[13px] bg-obsidian/64 border border-silver/20 backdrop-blur-md"
+              className="exposure-capsule grid grid-cols-4 gap-[3px] p-1 rounded-[13px] bg-obsidian/84 border border-silver/20"
               initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 6 }}

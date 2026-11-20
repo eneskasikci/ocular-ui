@@ -18,8 +18,8 @@ export function Backdrop({ active }: { active: BackdropId }) {
             <div
               key={id}
               className={cn(
-                'absolute inset-0 will-change-[opacity] transition-opacity duration-900 ease-ocular motion-reduce:transition-none',
-                id === active ? 'opacity-100' : 'opacity-0',
+                'backdrop-layer absolute inset-0 will-change-[opacity] transition-opacity duration-900 ease-ocular motion-reduce:transition-none',
+                id === active ? 'is-active opacity-100' : 'opacity-0',
               )}
               style={{ background: BASE[id] }}
             >

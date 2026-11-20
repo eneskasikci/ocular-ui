@@ -88,7 +88,7 @@ export function DesktopDeck({ camera, step, goToStep, reduceMotion }: Props) {
       <m.div
         className="absolute inset-0 z-30 will-change-[transform,opacity]"
         initial={false}
-        animate={isHero ? { y: '0%', opacity: 1 } : { y: '-100%', opacity: 0.35 }}
+        animate={isHero ? { y: '0%', opacity: 1 } : { y: '-100%', opacity: 0 }}
         transition={{ duration: 0.78, ease: EASE_BUTTER }}
         style={{ pointerEvents: isHero ? 'auto' : 'none' }}
         aria-hidden={!isHero}
@@ -97,6 +97,7 @@ export function DesktopDeck({ camera, step, goToStep, reduceMotion }: Props) {
         <HeroSlideshow
           photoId={camera.photo.id}
           reduceMotion={reduceMotion}
+          paused={!isHero}
           onSelectPhoto={camera.selectPhoto}
           onEnterCamera={() => goToStep(1)}
         />
@@ -110,7 +111,7 @@ export function DesktopDeck({ camera, step, goToStep, reduceMotion }: Props) {
           phoneParted
             ? { x: -560, opacity: 0, scale: 0.92 }
             : isHero
-              ? { x: 0, opacity: 0.35, scale: 1 }
+              ? { x: 0, opacity: 0, scale: 1 }
               : { x: 0, opacity: 1, scale: 1 }
         }
         transition={{

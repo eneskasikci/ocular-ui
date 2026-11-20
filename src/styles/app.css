@@ -206,10 +206,10 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .backdrop-blob {
+  .backdrop-layer.is-active .backdrop-blob {
     animation: drift var(--t) ease-in-out infinite;
   }
-  .backdrop-blob--ember .backdrop-blob-shape {
+  .backdrop-layer.is-active .backdrop-blob--ember .backdrop-blob-shape {
     animation: ember 5s ease-in-out infinite;
   }
   .hero-in {
@@ -221,6 +221,9 @@
   }
   .slideshow-track-drift {
     animation: slideshow-drift 64s linear infinite;
+  }
+  .slideshow-track-drift.is-paused {
+    animation-play-state: paused;
   }
 }
 

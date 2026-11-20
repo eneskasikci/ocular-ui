@@ -107,6 +107,7 @@ export function ViewfinderCanvas({ camera, reduceMotion, compact = false, showGu
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: reduceMotion ? 0 : 0.28, ease: EASE_OUT }}
+            decoding="async"
             draggable={false}
           />
         </AnimatePresence>
@@ -120,6 +121,7 @@ export function ViewfinderCanvas({ camera, reduceMotion, compact = false, showGu
               '[filter:brightness(.44)_contrast(3.4)_sepia(1)_hue-rotate(-36deg)_saturate(5.2)_blur(6px)] mix-blend-screen opacity-34 pointer-events-none',
             )}
             style={{ objectPosition: photo.objectPosition }}
+            decoding="async"
             draggable={false}
           />
         )}

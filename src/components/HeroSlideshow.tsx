@@ -7,6 +7,7 @@ import { MeniscusMark } from './MeniscusMark'
 interface Props {
   photoId: PhotoId
   reduceMotion: boolean
+  paused?: boolean
   onSelectPhoto: (id: PhotoId) => void
   onEnterCamera?: () => void
 }
@@ -45,7 +46,8 @@ function SlideCard({
         className="absolute inset-0 w-full h-full object-cover block select-none [-webkit-user-drag:none] transition-transform duration-600 ease-ocular group-hover:scale-[1.03]"
         style={{ objectPosition: photo.objectPosition }}
         fetchPriority={!isDuplicate && index === 0 ? 'high' : undefined}
-        loading={isDuplicate ? 'lazy' : 'eager'}
+        loading={isDuplicate || index > 3 ? 'lazy' : 'eager'}
+        decoding="async"
         draggable={false}
       />
       <span
@@ -86,7 +88,13 @@ function SlideCard({
   )
 }
 
-export function HeroSlideshow({ photoId, reduceMotion, onSelectPhoto, onEnterCamera }: Props) {
+export function HeroSlideshow({
+  photoId,
+  reduceMotion,
+  paused = false,
+  onSelectPhoto,
+  onEnterCamera,
+}: Props) {
   const activeIndex = Math.max(0, PHOTOS.findIndex((p) => p.id === photoId))
   const activePhoto = PHOTOS[activeIndex] ?? PHOTOS[0]
 
@@ -108,6 +116,7 @@ export function HeroSlideshow({ photoId, reduceMotion, onSelectPhoto, onEnterCam
             reduceMotion
               ? 'w-full overflow-x-auto [scroll-snap-type:x_mandatory] [scrollbar-width:thin]'
               : 'w-max will-change-transform slideshow-track-drift',
+            paused && 'is-paused',
           )}
         >
           {PHOTOS.map((photo, index) => (
