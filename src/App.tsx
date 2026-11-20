@@ -62,7 +62,8 @@ function HomePage() {
 
   return (
     <>
-      <Backdrop active={SCENES[active].backdrop} />
+      {/* Hero (and the giant deck phone) cover the backdrop, so its blobs need not drift there. */}
+      <Backdrop active={SCENES[active].backdrop} still={isDesktopDeck ? active <= 1 : active === 0} />
       <a
         className="fixed left-[var(--gutter)] -top-[100px] focus:top-2 z-100 px-4 py-3 bg-silver text-obsidian rounded-lg font-bold"
         href="#main"

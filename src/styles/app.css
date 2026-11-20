@@ -110,7 +110,7 @@
     transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate3d(var(--dx), 2vh, 0);
+    transform: translate3d(3vw, 2vh, 0);
   }
 }
 
@@ -206,8 +206,8 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .backdrop-layer.is-active .backdrop-blob {
-    animation: drift var(--t) ease-in-out infinite;
+  .backdrop-layer.is-active .backdrop-drift {
+    animation: drift 26s ease-in-out infinite;
   }
   .backdrop-layer.is-active .backdrop-blob--ember .backdrop-blob-shape {
     animation: ember 5s ease-in-out infinite;
@@ -218,6 +218,10 @@
   }
   .scroll-cue-line {
     animation: cue 2.4s var(--ease-ocular) 1.1s infinite;
+  }
+  .backdrop-layer.is-still .backdrop-drift,
+  .backdrop-layer.is-still .backdrop-blob-shape {
+    animation-play-state: paused;
   }
   .slideshow-track-drift {
     animation: slideshow-drift 64s linear infinite;
