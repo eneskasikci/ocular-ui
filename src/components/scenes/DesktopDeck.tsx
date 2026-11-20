@@ -30,10 +30,9 @@ interface Props {
   camera: CameraController
   step: number
   goToStep: (target: number) => void
-  reduceMotion: boolean
 }
 
-export function DesktopDeck({ camera, step, goToStep, reduceMotion }: Props) {
+export function DesktopDeck({ camera, step, goToStep }: Props) {
   const [viewport, setViewport] = useState(() =>
     typeof window !== 'undefined'
       ? { w: window.innerWidth, h: window.innerHeight }
@@ -68,12 +67,12 @@ export function DesktopDeck({ camera, step, goToStep, reduceMotion }: Props) {
     {
       id: 'recipes' as const,
       targetStep: 2,
-      content: <RecipesPanel headingId="h-recipes" camera={camera} reduceMotion={reduceMotion} />,
+      content: <RecipesPanel headingId="h-recipes" camera={camera} />,
     },
     {
       id: 'capture' as const,
       targetStep: 3,
-      content: <CapturePanel headingId="h-capture" camera={camera} reduceMotion={reduceMotion} />,
+      content: <CapturePanel headingId="h-capture" camera={camera} />,
     },
     {
       id: 'raw' as const,
@@ -96,7 +95,6 @@ export function DesktopDeck({ camera, step, goToStep, reduceMotion }: Props) {
       >
         <HeroSlideshow
           photoId={camera.photo.id}
-          reduceMotion={reduceMotion}
           paused={!isHero}
           onSelectPhoto={camera.selectPhoto}
           onEnterCamera={() => goToStep(1)}
@@ -134,7 +132,7 @@ export function DesktopDeck({ camera, step, goToStep, reduceMotion }: Props) {
           transition={{ duration: 0.86, ease: EASE_BUTTER }}
           style={{ pointerEvents: phoneVisible ? 'auto' : 'none' }}
         >
-          <CameraPhone camera={camera} reduceMotion={reduceMotion} isGiantMode={isGiant} />
+          <CameraPhone camera={camera} isGiantMode={isGiant} />
         </m.div>
       </m.div>
 
@@ -203,7 +201,6 @@ export function DesktopDeck({ camera, step, goToStep, reduceMotion }: Props) {
                 />
                 <HudLayoutSwitch
                   layout={camera.hudLayout}
-                  reduceMotion={reduceMotion}
                   onChange={camera.setHudLayout}
                 />
               </div>
@@ -284,7 +281,7 @@ export function DesktopDeck({ camera, step, goToStep, reduceMotion }: Props) {
             <button
               key={s.id}
               type="button"
-              className="step-dot group w-6 h-[22px] p-0 border-0 bg-transparent cursor-pointer flex items-center justify-center"
+              className="step-dot group w-6 h-6 p-0 border-0 bg-transparent cursor-pointer flex items-center justify-center"
               onClick={() => goToStep(idx)}
               aria-label={`Jump to ${s.label} (${idx + 1} of ${SCENES.length})`}
               aria-current={isCurrent ? 'step' : undefined}

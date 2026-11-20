@@ -12,12 +12,10 @@ const HUD_LAYOUTS: readonly { id: HudLayout; label: string }[] = [
 
 export function HudLayoutSwitch({
   layout,
-  reduceMotion,
   wide = false,
   onChange,
 }: {
   layout: HudLayout
-  reduceMotion: boolean
   wide?: boolean
   onChange: (next: HudLayout) => void
 }) {
@@ -55,7 +53,7 @@ export function HudLayoutSwitch({
                 <m.span
                   layoutId="hud-layout-pill"
                   className="absolute inset-0 rounded-full bg-amber/18 border border-amber/62 -z-1"
-                  transition={reduceMotion ? { duration: 0 } : SPRING_DETENT}
+                  transition={SPRING_DETENT}
                   aria-hidden="true"
                 />
               )}

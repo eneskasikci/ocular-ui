@@ -9,14 +9,13 @@ interface Props {
   isFree: boolean
   guidesOn: boolean
   onToggleGuides: (v: boolean) => void
-  reduceMotion: boolean
 }
 
 const GUIDE_BTN_CLS =
   'guide-btn w-[34px] h-[34px] rounded-[10px] bg-obsidian/68 border border-silver/20 flex flex-col items-center justify-center gap-0.5 p-0 text-silver/84 cursor-pointer data-[state=on]:bg-amber/18 data-[state=on]:border-amber/68 data-[state=on]:text-amber'
 
 /** Symmetric shutter deck: Roll + RANGE/RAW left, burgundy shutter center, knurled FILM dial right. */
-export function ShutterDeck({ camera, isFree, guidesOn, onToggleGuides, reduceMotion }: Props) {
+export function ShutterDeck({ camera, isFree, guidesOn, onToggleGuides }: Props) {
   const { photo, recipe, shotCount, rawCompare, stepPhoto, toggleRawCompare, triggerShutter, cycleRecipe } =
     camera
 
@@ -65,7 +64,7 @@ export function ShutterDeck({ camera, isFree, guidesOn, onToggleGuides, reduceMo
         type="button"
         className="shutter-outer w-[52px] h-[52px] p-0 rounded-full bg-obsidian/42 border-[2.5px] border-silver flex items-center justify-center shadow-[0_8px_16px_rgba(0,0,0,.52)] cursor-pointer"
         onClick={triggerShutter}
-        whileTap={reduceMotion ? undefined : { scale: 0.9 }}
+        whileTap={{ scale: 0.9 }}
         transition={SPRING_DETENT}
         aria-label="Capture frame and write recipe EXIF"
       >
@@ -88,7 +87,7 @@ export function ShutterDeck({ camera, isFree, guidesOn, onToggleGuides, reduceMo
             <m.g
               style={{ transformOrigin: '43px 43px' }}
               animate={{ rotate: dialAngle }}
-              transition={reduceMotion ? { duration: 0 } : SPRING_DETENT}
+              transition={SPRING_DETENT}
             >
               {RECIPES.map((r, i) => {
                 const angleDeg = i * (360 / RECIPES.length)

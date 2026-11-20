@@ -1,4 +1,4 @@
-import { AppLink } from '../AppLink'
+import { GetItButton } from '../GetItButton'
 import { MeniscusMark } from '../MeniscusMark'
 import { Reveal } from '../Reveal'
 
@@ -26,13 +26,14 @@ export function PrivacyStage({ headingId }: { headingId: string }) {
         <li className={PRIVACY_CHIP_CLS}>OPT-IN GPS</li>
       </ul>
 
-      <AppLink className="inline-flex items-center min-h-[44px] font-bold" href="/privacy">
-        Read the privacy policy
-      </AppLink>
-
-      <p className="mt-3.5 mb-0 font-mono font-medium text-[0.78rem] leading-[1.5] tracking-[0.04em] text-ink-subtle">
-        Ocular for iPhone and iPad
+      <GetItButton className="mt-2" />
+      <p className="m-0 font-mono font-medium text-[0.78rem] leading-[1.5] tracking-[0.04em] text-ink-subtle">
+        Free to start · 3-day Pro trial · iPhone and iPad
       </p>
+
+      <a className="inline-flex items-center min-h-[44px] font-bold" href="/privacy">
+        Read the privacy policy
+      </a>
     </div>
   )
 }

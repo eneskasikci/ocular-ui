@@ -65,7 +65,6 @@ interface SegmentedControlProps<T extends string> {
   value: T
   options: readonly SegOption<T>[]
   layoutId: string
-  reduceMotion: boolean
   className?: string
   onChange: (value: T) => void
 }
@@ -76,7 +75,6 @@ export function SegmentedControl<T extends string>({
   value,
   options,
   layoutId,
-  reduceMotion,
   className,
   onChange,
 }: SegmentedControlProps<T>) {
@@ -102,7 +100,7 @@ export function SegmentedControl<T extends string>({
               <m.span
                 layoutId={layoutId}
                 className="absolute inset-0 rounded-[10px] bg-amber/16 border border-amber/58 -z-1"
-                transition={reduceMotion ? { duration: 0 } : SPRING_DETENT}
+                transition={SPRING_DETENT}
               />
             )}
             <span>{opt.label}</span>

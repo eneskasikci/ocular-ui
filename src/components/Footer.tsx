@@ -1,5 +1,4 @@
 import { EULA_URL, SUPPORT_EMAIL } from '../config'
-import { AppLink } from './AppLink'
 
 export function Footer() {
   return (
@@ -15,8 +14,8 @@ export function Footer() {
           aria-label="Footer"
           className="flex flex-wrap gap-x-5 gap-y-0 [&_a]:inline-flex [&_a]:items-center [&_a]:min-h-[44px] [&_a]:text-ink-muted [&_a]:[overflow-wrap:anywhere] [&_a:hover]:text-ink"
         >
-          <AppLink href="/privacy">Privacy Policy</AppLink>
-          <AppLink href="/support">Support</AppLink>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/support">Support</a>
           <a href={EULA_URL} rel="noopener noreferrer">
             Terms of Use (EULA)
           </a>

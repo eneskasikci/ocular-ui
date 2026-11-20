@@ -14,7 +14,6 @@ import { EASE_OUT, SPRING_LENS } from '../../lib/motion'
 
 interface Props {
   camera: CameraController
-  reduceMotion: boolean
   compact?: boolean
   showGuides?: boolean
 }
@@ -55,7 +54,7 @@ function getMatteScales(aspect: AspectId, compact: boolean): { y: number; x: num
 const IMG_BASE =
   'vf__img absolute inset-0 w-full h-full object-cover block select-none [-webkit-user-drag:none] transition-[filter] duration-240 ease-ocular motion-reduce:transition-none'
 
-export function ViewfinderCanvas({ camera, reduceMotion, compact = false, showGuides = true }: Props) {
+export function ViewfinderCanvas({ camera, compact = false, showGuides = true }: Props) {
   const {
     photo,
     recipe,
@@ -77,7 +76,7 @@ export function ViewfinderCanvas({ camera, reduceMotion, compact = false, showGu
   const showHalation = halation && recipe.id !== 'ac'
   const matte = getMatteScales(aspect, compact)
   const scale = LENS_SCALE[lens]
-  const lensTransition = reduceMotion ? { duration: 0 } : SPRING_LENS
+  const lensTransition = SPRING_LENS
 
   return (
     <div
@@ -103,10 +102,10 @@ export function ViewfinderCanvas({ camera, reduceMotion, compact = false, showGu
             alt=""
             className={IMG_BASE}
             style={{ filter: opticalFilter, objectPosition: photo.objectPosition }}
-            initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
+            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.28, ease: EASE_OUT }}
+            transition={{ duration: 0.28, ease: EASE_OUT }}
             decoding="async"
             draggable={false}
           />
@@ -254,9 +253,9 @@ export function ViewfinderCanvas({ camera, reduceMotion, compact = false, showGu
             key={focusKey}
             className="vf__af absolute left-1/2 top-1/2 w-[42px] h-[42px] -mt-[21px] -ml-[21px] pointer-events-none z-6"
             aria-hidden="true"
-            initial={reduceMotion ? false : { scale: 1.15, opacity: 0.35 }}
+            initial={{ scale: 1.15, opacity: 0.35 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: reduceMotion ? 0 : 0.24, ease: EASE_OUT }}
+            transition={{ duration: 0.24, ease: EASE_OUT }}
           >
             <span className="absolute top-0 left-0 w-[7px] h-[7px] border-t-[1.4px] border-l-[1.4px] border-[#ffd60a]/55" />
             <span className="absolute top-0 right-0 w-[7px] h-[7px] border-t-[1.4px] border-r-[1.4px] border-[#ffd60a]/55" />
@@ -312,7 +311,7 @@ export function ViewfinderCanvas({ camera, reduceMotion, compact = false, showGu
         className="absolute inset-0 bg-[#050608] pointer-events-none z-11"
         initial={false}
         animate={{ opacity: shutterFlash ? 0.92 : 0 }}
-        transition={{ duration: reduceMotion ? 0 : 0.08 }}
+        transition={{ duration: 0.08 }}
         aria-hidden="true"
       />
 

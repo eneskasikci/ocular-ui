@@ -9,10 +9,9 @@ import { HEADING_CLS, LEDE_CLS, PANEL_CLS } from './controls'
 interface Props {
   headingId: string
   camera: CameraController
-  reduceMotion: boolean
 }
 
-export function RecipesPanel({ headingId, camera, reduceMotion }: Props) {
+export function RecipesPanel({ headingId, camera }: Props) {
   const { photo, filmId, recipe, selectFilm } = camera
 
   return (
@@ -46,7 +45,7 @@ export function RecipesPanel({ headingId, camera, reduceMotion }: Props) {
                   <m.span
                     layoutId="recipe-ring"
                     className="absolute -inset-px rounded-[14px] border-2 border-amber bg-amber/9 pointer-events-none"
-                    transition={reduceMotion ? { duration: 0 } : SPRING_DETENT}
+                    transition={SPRING_DETENT}
                     aria-hidden="true"
                   />
                 )}

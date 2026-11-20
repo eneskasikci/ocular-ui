@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { AnimatePresence, type Transition } from 'motion/react'
 import * as m from 'motion/react-m'
 import { Slider, Toggle, ToggleGroup } from 'radix-ui'
-import { ASPECT_RATIOS, formatEv, LENSES, type LensMm } from '../../data/recipes'
+import { ASPECT_RATIOS, formatEv, GRAIN_LEVELS, LENSES, type LensMm } from '../../data/recipes'
 import type { CameraController } from '../../hooks/useCameraState'
 import { cn } from '../../lib/cn'
 import { EASE_OUT } from '../../lib/motion'
@@ -15,7 +15,6 @@ interface Props {
   onToggleQ: () => void
   guidesOn: boolean
   onToggleGuides: (v: boolean) => void
-  reduceMotion: boolean
   chromeAnimate?: { opacity: number }
   chromeTransition?: Transition
   disablePointer?: boolean
@@ -76,7 +75,6 @@ export function PortraitDeck({
   onToggleQ,
   guidesOn,
   onToggleGuides,
-  reduceMotion,
   chromeAnimate,
   chromeTransition,
   disablePointer = false,
@@ -112,7 +110,7 @@ export function PortraitDeck({
   }
 
   const aspectLabel = ASPECT_RATIOS.find((r) => r.id === aspect)?.label ?? '4:3'
-  const grainLabel = grain === 'off' ? 'OFF' : grain === 'weak' ? 'WEAK' : 'HIGH'
+  const grainLabel = GRAIN_LEVELS.find((g) => g.id === grain)?.label ?? 'OFF'
   const evModified = Math.abs(ev) > 0.05
   const rulerOffsetPx = -(ev * 22)
 
@@ -140,10 +138,10 @@ export function PortraitDeck({
           {showEvDial && (
             <m.div
               className="px-2 py-1.5 rounded-xl bg-obsidian/94 border border-amber/48 flex flex-col gap-[5px]"
-              initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 8 }}
-              transition={{ duration: reduceMotion ? 0 : 0.18, ease: EASE_OUT }}
+              transition={{ duration: 0.18, ease: EASE_OUT }}
             >
               <div className="flex items-center justify-between font-mono font-bold text-[8.5px] leading-none text-silver/78">
                 <span>EXPOSURE COMP</span>
@@ -257,10 +255,10 @@ export function PortraitDeck({
               className="flex items-center gap-1"
               role="group"
               aria-label="Camera function tiles"
-              initial={reduceMotion ? false : { opacity: 0, y: 4 }}
+              initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 4 }}
-              transition={{ duration: reduceMotion ? 0 : 0.16, ease: EASE_OUT }}
+              transition={{ duration: 0.16, ease: EASE_OUT }}
             >
               <FlashToggle pressed={flashOn} onPressedChange={setFlashOn} />
               <div className="w-px h-[22px] bg-silver/22 shrink-0" aria-hidden="true" />
@@ -296,10 +294,10 @@ export function PortraitDeck({
               className="simple-row flex items-center justify-center gap-1"
               role="group"
               aria-label="Camera simple controls"
-              initial={reduceMotion ? false : { opacity: 0, y: 4 }}
+              initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 4 }}
-              transition={{ duration: reduceMotion ? 0 : 0.16, ease: EASE_OUT }}
+              transition={{ duration: 0.16, ease: EASE_OUT }}
             >
               <FlashToggle pressed={flashOn} onPressedChange={setFlashOn} />
               <div className="w-px h-[22px] bg-silver/22 shrink-0" aria-hidden="true" />
@@ -358,10 +356,10 @@ export function PortraitDeck({
           {showExposureCapsule && (
             <m.div
               className="exposure-capsule grid grid-cols-4 gap-[3px] p-1 rounded-[13px] bg-obsidian/84 border border-silver/20"
-              initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 6 }}
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 6 }}
-              transition={{ duration: reduceMotion ? 0 : 0.18, ease: EASE_OUT }}
+              transition={{ duration: 0.18, ease: EASE_OUT }}
             >
               <div className="flex flex-col items-center justify-center gap-0.5 px-0.5 py-1 rounded-[9px] border border-transparent">
                 <span className="font-mono font-bold text-[7px] leading-none tracking-[0.04em] text-silver/58 whitespace-nowrap">SS AUTO</span>
@@ -404,7 +402,6 @@ export function PortraitDeck({
           isFree={isFree}
           guidesOn={guidesOn}
           onToggleGuides={onToggleGuides}
-          reduceMotion={reduceMotion}
         />
       </m.div>
     </>

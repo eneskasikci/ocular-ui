@@ -11,20 +11,19 @@ import { Tiers } from './Tiers'
 
 interface Props {
   camera: CameraController
-  reduceMotion: boolean
 }
 
-export function StaticCameraFlow({ camera, reduceMotion }: Props) {
+export function StaticCameraFlow({ camera }: Props) {
   const sections = [
     {
       id: 'recipes',
       headingId: 'h-recipes-static',
-      panel: <RecipesPanel headingId="h-recipes-static" camera={camera} reduceMotion={reduceMotion} />,
+      panel: <RecipesPanel headingId="h-recipes-static" camera={camera} />,
     },
     {
       id: 'capture',
       headingId: 'h-capture-static',
-      panel: <CapturePanel headingId="h-capture-static" camera={camera} reduceMotion={reduceMotion} />,
+      panel: <CapturePanel headingId="h-capture-static" camera={camera} />,
     },
     {
       id: 'raw',
@@ -37,7 +36,6 @@ export function StaticCameraFlow({ camera, reduceMotion }: Props) {
     <div className="phone-static-compact relative">
       <HeroSlideshow
         photoId={camera.photo.id}
-        reduceMotion={reduceMotion}
         onSelectPhoto={camera.selectPhoto}
       />
 
@@ -48,10 +46,9 @@ export function StaticCameraFlow({ camera, reduceMotion }: Props) {
           aria-label="Interactive Ocular camera viewfinder"
         >
           <div className="flex flex-col items-center gap-3">
-            <CameraPhone camera={camera} reduceMotion={reduceMotion} />
+            <CameraPhone camera={camera} />
             <HudLayoutSwitch
               layout={camera.hudLayout}
-              reduceMotion={reduceMotion}
               onChange={camera.setHudLayout}
               wide
             />
@@ -72,7 +69,7 @@ export function StaticCameraFlow({ camera, reduceMotion }: Props) {
             aria-labelledby={headingId}
           >
             <div className="flex flex-col gap-2.5 deck:hidden">
-              <ViewfinderCanvas camera={camera} reduceMotion={reduceMotion} compact />
+              <ViewfinderCanvas camera={camera} compact />
             </div>
             {panel}
           </section>

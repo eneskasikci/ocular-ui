@@ -27,10 +27,9 @@ const LENS_OPTIONS = LENSES.map((mm) => ({ value: String(mm), label: `${mm}mm` }
 interface Props {
   headingId: string
   camera: CameraController
-  reduceMotion: boolean
 }
 
-export function CapturePanel({ headingId, camera, reduceMotion }: Props) {
+export function CapturePanel({ headingId, camera }: Props) {
   const {
     ev,
     dr,
@@ -90,7 +89,6 @@ export function CapturePanel({ headingId, camera, reduceMotion }: Props) {
             value={dr}
             options={DR_OPTIONS}
             layoutId="dr-pill"
-            reduceMotion={reduceMotion}
             onChange={setDr}
           />
         </div>
@@ -102,7 +100,6 @@ export function CapturePanel({ headingId, camera, reduceMotion }: Props) {
             value={aspect}
             options={RATIO_OPTIONS}
             layoutId="ratio-pill"
-            reduceMotion={reduceMotion}
             className="flex-wrap xs:flex-nowrap"
             onChange={setAspect}
           />
@@ -116,7 +113,6 @@ export function CapturePanel({ headingId, camera, reduceMotion }: Props) {
               value={grain}
               options={GRAIN_OPTIONS}
               layoutId="grain-pill"
-              reduceMotion={reduceMotion}
               onChange={setGrain}
             />
           </div>
@@ -141,7 +137,6 @@ export function CapturePanel({ headingId, camera, reduceMotion }: Props) {
             value={String(lens)}
             options={LENS_OPTIONS}
             layoutId="lens-pill"
-            reduceMotion={reduceMotion}
             onChange={(v) => selectLens(Number(v) as LensMm)}
           />
         </div>

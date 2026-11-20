@@ -1,4 +1,6 @@
+import type { Variants } from 'motion/react'
 import * as m from 'motion/react-m'
+import { cn } from '../../lib/cn'
 import { EASE_BUTTER } from '../../lib/motion'
 import { Reveal } from '../Reveal'
 
@@ -9,31 +11,69 @@ interface TiersStageProps {
   stage?: TiersStageState
 }
 
-export function TiersStage({ headingId, stage }: TiersStageProps) {
-  const animated = stage !== undefined
+/** Enter/exit poses for one element of the deck stage; `before`/`after` are offsets on `axis`. */
+function stageVariants(
+  axis: 'x' | 'y',
+  before: number,
+  after: number,
+  enter: { duration: number; delay: number },
+  exitDuration: number,
+): Variants {
+  const at = (v: number) => (axis === 'x' ? { x: v } : { y: v })
+  const exit = { duration: exitDuration, ease: EASE_BUTTER }
+  return {
+    before: { opacity: 0, ...at(before), transition: exit },
+    active: { opacity: 1, ...at(0), transition: { ...enter, ease: EASE_BUTTER } },
+    after: { opacity: 0, ...at(after), transition: exit },
+  }
+}
 
+const HEADING_VARIANTS = stageVariants('y', -18, -32, { duration: 0.72, delay: 0.16 }, 0.52)
+const TRIAL_VARIANTS = stageVariants('y', 18, 32, { duration: 0.72, delay: 0.22 }, 0.52)
+
+const CARD_CLS =
+  'px-5 py-[18px] rounded-[24px] border shadow-[0_24px_60px_rgba(0,0,0,.48),inset_0_1px_0_rgba(243,241,236,.08)] reduced-transparency:bg-graphite reduced-transparency:bg-none'
+const LIST_CLS =
+  'list-none m-0 p-0 [&_li]:flex [&_li]:items-baseline [&_li]:justify-between [&_li]:gap-4 [&_li]:py-[9px] [&_li]:border-t [&_li]:border-hair [&_li]:text-[0.93rem] [&_span]:text-ink-muted [&_b]:font-mono [&_b]:font-bold [&_b]:text-[0.8rem] [&_b]:leading-[1.2] [&_b]:text-right'
+
+const TIERS = [
+  {
+    name: 'Ocular',
+    badge: 'FREE',
+    cardCls: 'bg-[linear-gradient(180deg,rgba(22,24,30,.95),rgba(11,12,14,.98))] border-hair',
+    badgeCls: 'border-hair text-ink-subtle',
+    valueCls: '[&_b]:text-silver',
+    variants: stageVariants('x', -110, -640, { duration: 0.82, delay: 0.14 }, 0.78),
+    rows: [
+      ['Film stocks', '3 (STD, CC, AC)'],
+      ['Manual dials & primes', 'Full'],
+      ['Output', 'Full resolution'],
+      ['RAW & optics', '—'],
+      ['Custom slots', '1 (C1)'],
+    ],
+  },
+  {
+    name: 'Ocular Pro',
+    badge: 'PRO',
+    cardCls:
+      'bg-[radial-gradient(120%_90%_at_100%_0,rgba(122,28,46,.42),rgba(20,22,27,.96)_65%,rgba(11,12,14,.98)_100%)] border-amber/52',
+    badgeCls: 'border-amber/55 text-amber',
+    valueCls: '[&_b]:text-emerald-ink',
+    variants: stageVariants('x', 110, 640, { duration: 0.82, delay: 0.14 }, 0.78),
+    rows: [
+      ['Film stocks', 'All 12'],
+      ['RAW capture', '14-bit & ProRAW'],
+      ['RAW darkroom', 'Re-develop any shot'],
+      ['Optics & framing', 'Halation · XPan 65:24'],
+      ['Custom slots', '7 (C1–C7)'],
+    ],
+  },
+] as const
+
+export function TiersStage({ headingId, stage }: TiersStageProps) {
   return (
     <div className="w-full max-w-[1100px] flex flex-col gap-4">
-      <m.div
-        className="pool-scrim"
-        initial={false}
-        animate={
-          animated
-            ? stage === 'active'
-              ? { opacity: 1, y: 0 }
-              : stage === 'after'
-                ? { opacity: 0, y: -32 }
-                : { opacity: 0, y: -18 }
-            : undefined
-        }
-        transition={
-          animated
-            ? stage === 'active'
-              ? { duration: 0.72, delay: 0.16, ease: EASE_BUTTER }
-              : { duration: 0.52, ease: EASE_BUTTER }
-            : undefined
-        }
-      >
+      <m.div className="pool-scrim" variants={HEADING_VARIANTS} initial={false} animate={stage}>
         <h2
           id={headingId}
           className="font-display font-bold text-[clamp(1.85rem,5.5vw,3.15rem)] leading-[1.03] tracking-[-0.025em] max-w-[22ch] [overflow-wrap:break-word]"
@@ -46,96 +86,42 @@ export function TiersStage({ headingId, stage }: TiersStageProps) {
       </m.div>
 
       <div className="grid grid-cols-1 xs:grid-cols-2 gap-4">
-        <m.article
-          className="px-5 py-[18px] rounded-[24px] bg-[linear-gradient(180deg,rgba(22,24,30,.95),rgba(11,12,14,.98))] border border-hair shadow-[0_24px_60px_rgba(0,0,0,.48),inset_0_1px_0_rgba(243,241,236,.08)] reduced-transparency:bg-graphite reduced-transparency:bg-none"
-          initial={false}
-          animate={
-            animated
-              ? stage === 'active'
-                ? { x: 0, opacity: 1 }
-                : stage === 'after'
-                  ? { x: -640, opacity: 0 }
-                  : { x: -110, opacity: 0 }
-              : undefined
-          }
-          transition={
-            animated
-              ? stage === 'active'
-                ? { duration: 0.82, delay: 0.14, ease: EASE_BUTTER }
-                : { duration: 0.78, ease: EASE_BUTTER }
-              : undefined
-          }
-        >
-          <header className="flex items-center justify-between gap-3 mb-2.5">
-            <h3 className="font-display font-bold text-[1.32rem] leading-[1.1]">Ocular</h3>
-            <span className="inline-flex items-center min-h-[26px] px-2.5 rounded-full border border-hair font-mono font-bold text-[0.72rem] leading-none tracking-[0.1em] text-ink-subtle">
-              FREE
-            </span>
-          </header>
-          <ul className="list-none m-0 p-0 [&_li]:flex [&_li]:items-baseline [&_li]:justify-between [&_li]:gap-4 [&_li]:py-[9px] [&_li]:border-t [&_li]:border-hair [&_li]:text-[0.93rem] [&_span]:text-ink-muted [&_b]:font-mono [&_b]:font-bold [&_b]:text-[0.8rem] [&_b]:leading-[1.2] [&_b]:text-silver [&_b]:text-right">
-            <li><span>Film stocks</span><b>3 (STD, CC, AC)</b></li>
-            <li><span>Manual dials &amp; primes</span><b>Full</b></li>
-            <li><span>Output</span><b>Full resolution</b></li>
-            <li><span>RAW &amp; optics</span><b>—</b></li>
-            <li><span>Custom slots</span><b>1 (C1)</b></li>
-          </ul>
-        </m.article>
-
-        <m.article
-          className="px-5 py-[18px] rounded-[24px] bg-[radial-gradient(120%_90%_at_100%_0,rgba(122,28,46,.42),rgba(20,22,27,.96)_65%,rgba(11,12,14,.98)_100%)] border border-amber/52 shadow-[0_24px_60px_rgba(0,0,0,.48),inset_0_1px_0_rgba(243,241,236,.08)] reduced-transparency:bg-graphite reduced-transparency:bg-none"
-          initial={false}
-          animate={
-            animated
-              ? stage === 'active'
-                ? { x: 0, opacity: 1 }
-                : stage === 'after'
-                  ? { x: 640, opacity: 0 }
-                  : { x: 110, opacity: 0 }
-              : undefined
-          }
-          transition={
-            animated
-              ? stage === 'active'
-                ? { duration: 0.82, delay: 0.14, ease: EASE_BUTTER }
-                : { duration: 0.78, ease: EASE_BUTTER }
-              : undefined
-          }
-        >
-          <header className="flex items-center justify-between gap-3 mb-2.5">
-            <h3 className="font-display font-bold text-[1.32rem] leading-[1.1]">Ocular Pro</h3>
-            <span className="inline-flex items-center min-h-[26px] px-2.5 rounded-full border border-amber/55 font-mono font-bold text-[0.72rem] leading-none tracking-[0.1em] text-amber">
-              PRO
-            </span>
-          </header>
-          <ul className="list-none m-0 p-0 [&_li]:flex [&_li]:items-baseline [&_li]:justify-between [&_li]:gap-4 [&_li]:py-[9px] [&_li]:border-t [&_li]:border-hair [&_li]:text-[0.93rem] [&_span]:text-ink-muted [&_b]:font-mono [&_b]:font-bold [&_b]:text-[0.8rem] [&_b]:leading-[1.2] [&_b]:text-emerald-ink [&_b]:text-right">
-            <li><span>Film stocks</span><b>All 12</b></li>
-            <li><span>RAW capture</span><b>14-bit &amp; ProRAW</b></li>
-            <li><span>RAW darkroom</span><b>Re-develop any shot</b></li>
-            <li><span>Optics &amp; framing</span><b>Halation · XPan 65:24</b></li>
-            <li><span>Custom slots</span><b>7 (C1–C7)</b></li>
-          </ul>
-        </m.article>
+        {TIERS.map((tier) => (
+          <m.article
+            key={tier.name}
+            className={cn(CARD_CLS, tier.cardCls)}
+            variants={tier.variants}
+            initial={false}
+            animate={stage}
+          >
+            <header className="flex items-center justify-between gap-3 mb-2.5">
+              <h3 className="font-display font-bold text-[1.32rem] leading-[1.1]">{tier.name}</h3>
+              <span
+                className={cn(
+                  'inline-flex items-center min-h-[26px] px-2.5 rounded-full border font-mono font-bold text-[0.72rem] leading-none tracking-[0.1em]',
+                  tier.badgeCls,
+                )}
+              >
+                {tier.badge}
+              </span>
+            </header>
+            <ul className={cn(LIST_CLS, tier.valueCls)}>
+              {tier.rows.map(([label, value]) => (
+                <li key={label}>
+                  <span>{label}</span>
+                  <b>{value}</b>
+                </li>
+              ))}
+            </ul>
+          </m.article>
+        ))}
       </div>
 
       <m.div
         className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3"
+        variants={TRIAL_VARIANTS}
         initial={false}
-        animate={
-          animated
-            ? stage === 'active'
-              ? { opacity: 1, y: 0 }
-              : stage === 'after'
-                ? { opacity: 0, y: 32 }
-                : { opacity: 0, y: 18 }
-            : undefined
-        }
-        transition={
-          animated
-            ? stage === 'active'
-              ? { duration: 0.72, delay: 0.22, ease: EASE_BUTTER }
-              : { duration: 0.52, ease: EASE_BUTTER }
-            : undefined
-        }
+        animate={stage}
       >
         <div className="flex-1 basis-[320px] flex flex-wrap items-center gap-x-3.5 gap-y-2 px-[18px] py-[13px] rounded-2xl bg-[#0a2e24]/92 border border-emerald/58 text-ink text-[0.93rem]">
           <b className="font-mono font-bold text-[0.75rem] leading-none tracking-[0.12em] text-emerald-ink whitespace-nowrap">

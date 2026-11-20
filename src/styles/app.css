@@ -222,7 +222,8 @@
   .slideshow-track-drift {
     animation: slideshow-drift 64s linear infinite;
   }
-  .slideshow-track-drift.is-paused {
+  .slideshow-track-drift.is-paused,
+  .slideshow-track-drift:focus-within {
     animation-play-state: paused;
   }
 }

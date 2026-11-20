@@ -1,4 +1,3 @@
-import { useReducedMotion } from 'motion/react'
 import * as m from 'motion/react-m'
 import { APP_STORE_URL } from '../config'
 import { cn } from '../lib/cn'
@@ -12,7 +11,6 @@ interface Props {
 
 /** Primary App Store capsule rendered directly inside each view. */
 export function GetItButton({ variant = 'default', className }: Props) {
-  const reduce = Boolean(useReducedMotion())
   return (
     <m.a
       className={cn(
@@ -23,8 +21,8 @@ export function GetItButton({ variant = 'default', className }: Props) {
         className,
       )}
       href={APP_STORE_URL}
-      whileTap={reduce ? undefined : { scale: 0.97 }}
-      transition={reduce ? { duration: 0 } : SPRING_DETENT}
+      whileTap={{ scale: 0.97 }}
+      transition={SPRING_DETENT}
     >
       <span className="inline-flex" aria-hidden="true">
         <AppleGlyph />

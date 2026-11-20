@@ -1,4 +1,5 @@
-import type { CSSProperties } from 'react'
+import { useState, type CSSProperties } from 'react'
+import { useReducedMotion } from 'motion/react'
 import { PHOTOS, type PhotoAsset, type PhotoId } from '../data/photos'
 import { cn } from '../lib/cn'
 import { GetItButton } from './GetItButton'
@@ -6,7 +7,6 @@ import { MeniscusMark } from './MeniscusMark'
 
 interface Props {
   photoId: PhotoId
-  reduceMotion: boolean
   paused?: boolean
   onSelectPhoto: (id: PhotoId) => void
   onEnterCamera?: () => void
@@ -90,11 +90,12 @@ function SlideCard({
 
 export function HeroSlideshow({
   photoId,
-  reduceMotion,
   paused = false,
   onSelectPhoto,
   onEnterCamera,
 }: Props) {
+  const reduceMotion = Boolean(useReducedMotion())
+  const [userPaused, setUserPaused] = useState(false)
   const activeIndex = Math.max(0, PHOTOS.findIndex((p) => p.id === photoId))
   const activePhoto = PHOTOS[activeIndex] ?? PHOTOS[0]
 
@@ -116,7 +117,7 @@ export function HeroSlideshow({
             reduceMotion
               ? 'w-full overflow-x-auto [scroll-snap-type:x_mandatory] [scrollbar-width:thin]'
               : 'w-max will-change-transform slideshow-track-drift',
-            paused && 'is-paused',
+            (paused || userPaused) && 'is-paused',
           )}
         >
           {PHOTOS.map((photo, index) => (
@@ -201,6 +202,18 @@ export function HeroSlideshow({
               >
                 ›
               </button>
+              {!reduceMotion && (
+                <button
+                  type="button"
+                  className="min-w-[44px] min-h-[44px] rounded-full bg-obsidian/86 border border-hair-strong text-silver inline-flex items-center justify-center cursor-pointer transition-colors duration-180 ease-ocular hover:border-amber hover:text-amber"
+                  onClick={() => setUserPaused((v) => !v)}
+                  aria-label={userPaused ? 'Play slideshow' : 'Pause slideshow'}
+                >
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+                    {userPaused ? <path d="M2.5 1.2v9.6L10.5 6z" /> : <path d="M2 1h3v10H2zM7 1h3v10H7z" />}
+                  </svg>
+                </button>
+              )}
             </div>
             <span className="font-mono font-bold text-[0.75rem] leading-[1.2] tracking-[0.08em] text-silver [text-shadow:0_1px_10px_rgba(0,0,0,.75)]">
               <strong className="text-amber">

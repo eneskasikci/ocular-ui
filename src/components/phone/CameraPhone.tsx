@@ -13,7 +13,6 @@ import { ViewfinderCanvas } from './ViewfinderCanvas'
 
 interface Props {
   camera: CameraController
-  reduceMotion: boolean
   isGiantMode?: boolean
 }
 
@@ -33,7 +32,7 @@ function HardwareButtons() {
   )
 }
 
-export function CameraPhone({ camera, reduceMotion, isGiantMode }: Props) {
+export function CameraPhone({ camera, isGiantMode }: Props) {
   const [guidesOn, setGuidesOn] = useState(true)
   const [qOpen, setQOpen] = useState(false)
 
@@ -45,7 +44,7 @@ export function CameraPhone({ camera, reduceMotion, isGiantMode }: Props) {
   const giantAware = isGiantMode !== undefined
   const chromeAnimate = giantAware ? { opacity: isGiantMode ? 0 : 1 } : undefined
   const chromeTransition = giantAware
-    ? { duration: reduceMotion ? 0 : 0.5, delay: reduceMotion || isGiantMode ? 0 : 0.2, ease: EASE_BUTTER }
+    ? { duration: 0.5, delay: isGiantMode ? 0 : 0.2, ease: EASE_BUTTER }
     : undefined
 
   return (
@@ -101,7 +100,7 @@ export function CameraPhone({ camera, reduceMotion, isGiantMode }: Props) {
               className="absolute inset-0 z-24 pointer-events-none bg-[#050608] overflow-hidden"
               initial={false}
               animate={{ opacity: isGiantMode ? 1 : 0 }}
-              transition={{ duration: reduceMotion ? 0 : 0.44, ease: EASE_BUTTER }}
+              transition={{ duration: 0.44, ease: EASE_BUTTER }}
               aria-hidden="true"
             >
               <div className="relative w-full h-[188px]">
@@ -191,17 +190,17 @@ export function CameraPhone({ camera, reduceMotion, isGiantMode }: Props) {
 
           {/* Live 3:4 Portrait Sensor Aperture + EXIF toast */}
           <div className="relative mt-0.5 w-full">
-            <ViewfinderCanvas camera={camera} reduceMotion={reduceMotion} showGuides={isFree ? guidesOn : true} />
+            <ViewfinderCanvas camera={camera} showGuides={isFree ? guidesOn : true} />
 
             <AnimatePresence>
               {exifToast && (
                 <m.div
                   key={exifToast}
                   className="absolute inset-x-2.5 top-2.5 w-fit max-w-[calc(100%-20px)] mx-auto px-2.5 py-1 rounded-full bg-deep/90 border border-amber/68 text-amber font-mono font-bold text-[9px] leading-none tracking-[0.08em] whitespace-nowrap pointer-events-none z-22"
-                  initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 6 }}
+                  initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: reduceMotion ? 0 : 0.2, ease: EASE_OUT }}
+                  transition={{ duration: 0.2, ease: EASE_OUT }}
                   role="status"
                 >
                   {exifToast}
@@ -217,7 +216,6 @@ export function CameraPhone({ camera, reduceMotion, isGiantMode }: Props) {
             onToggleQ={() => setQOpen((v) => !v)}
             guidesOn={guidesOn}
             onToggleGuides={setGuidesOn}
-            reduceMotion={reduceMotion}
             chromeAnimate={chromeAnimate}
             chromeTransition={chromeTransition}
             disablePointer={Boolean(isGiantMode)}
@@ -228,7 +226,6 @@ export function CameraPhone({ camera, reduceMotion, isGiantMode }: Props) {
             isFree={isFree}
             open={qOpen}
             onClose={() => setQOpen(false)}
-            reduceMotion={reduceMotion}
           />
 
           <div

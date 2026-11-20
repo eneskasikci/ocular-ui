@@ -1,4 +1,3 @@
-import { useReducedMotion } from 'motion/react'
 import { SCENES } from '../../config'
 import { useCameraState } from '../../hooks/useCameraState'
 import { useDesktopDeckNav } from '../../hooks/useDesktopDeckNav'
@@ -13,7 +12,6 @@ interface CameraExperienceProps {
 }
 
 export function CameraExperience({ active, step, isDesktopDeck, onChangeStep }: CameraExperienceProps) {
-  const reduceMotion = Boolean(useReducedMotion())
   const activeScene = SCENES[active] ?? SCENES[0]
   const isRawActive = isDesktopDeck ? step === 4 : activeScene.id === 'raw'
 
@@ -21,8 +19,8 @@ export function CameraExperience({ active, step, isDesktopDeck, onChangeStep }: 
   const goToStep = useDesktopDeckNav({ enabled: isDesktopDeck, step, onChangeStep })
 
   if (!isDesktopDeck) {
-    return <StaticCameraFlow camera={camera} reduceMotion={reduceMotion} />
+    return <StaticCameraFlow camera={camera} />
   }
 
-  return <DesktopDeck camera={camera} step={step} goToStep={goToStep} reduceMotion={reduceMotion} />
+  return <DesktopDeck camera={camera} step={step} goToStep={goToStep} />
 }

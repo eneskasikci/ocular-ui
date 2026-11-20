@@ -1,18 +1,14 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LazyMotion, MotionConfig, useReducedMotion } from 'motion/react'
 import { SCENES } from './config'
 import { Backdrop } from './components/Backdrop'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { CameraExperience } from './components/scenes/CameraExperience'
-import { useRouter } from './context/router-context'
-import { RouterProvider } from './context/RouterProvider'
 import { useActiveScene } from './hooks/useActiveScene'
 
-const PrivacyPage = lazy(() => import('./components/pages/PrivacyPage'))
-const SupportPage = lazy(() => import('./components/pages/SupportPage'))
-
-const DESKTOP_BP = 900
+// The deck is driven by wheel and keyboard only, so touch screens get the scrolling flow.
+const DECK_QUERY = '(min-width: 900px) and (pointer: fine)'
 
 function getStepFromHash(): number {
   if (typeof window === 'undefined') return 0
@@ -21,23 +17,29 @@ function getStepFromHash(): number {
   return idx >= 0 ? idx : 0
 }
 
+function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches)
+  useEffect(() => {
+    const mql = window.matchMedia(query)
+    const onChange = () => setMatches(mql.matches)
+    mql.addEventListener('change', onChange)
+    return () => mql.removeEventListener('change', onChange)
+  }, [query])
+  return matches
+}
+
 function HomePage() {
   const reduce = Boolean(useReducedMotion())
-  const [vw, setVw] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 1280))
+  const deckMedia = useMediaQuery(DECK_QUERY)
   const [step, setStep] = useState<number>(() => getStepFromHash())
 
   useEffect(() => {
-    const onResize = () => setVw(window.innerWidth)
     const onHashChange = () => setStep(getStepFromHash())
-    window.addEventListener('resize', onResize, { passive: true })
     window.addEventListener('hashchange', onHashChange)
-    return () => {
-      window.removeEventListener('resize', onResize)
-      window.removeEventListener('hashchange', onHashChange)
-    }
+    return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
 
-  const isDesktopDeck = vw >= DESKTOP_BP && !reduce
+  const isDesktopDeck = deckMedia && !reduce
   const scrollActive = useActiveScene(isDesktopDeck)
   const active = isDesktopDeck ? step : scrollActive
 
@@ -48,6 +50,15 @@ function HomePage() {
   useEffect(() => {
     if (isDesktopDeck) window.scrollTo({ top: 0, behavior: 'instant' })
   }, [isDesktopDeck])
+
+  // Keep the deck step in the URL so refresh and shared links land on the same view.
+  useEffect(() => {
+    if (!isDesktopDeck) return
+    const hash = step === 0 ? '' : `#${SCENES[step].id}`
+    if (window.location.hash !== hash) {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`)
+    }
+  }, [isDesktopDeck, step])
 
   return (
     <>
@@ -72,32 +83,11 @@ function HomePage() {
   )
 }
 
-function AppShell() {
-  const { route } = useRouter()
-  if (route === 'privacy') {
-    return (
-      <Suspense fallback={null}>
-        <PrivacyPage />
-      </Suspense>
-    )
-  }
-  if (route === 'support') {
-    return (
-      <Suspense fallback={null}>
-        <SupportPage />
-      </Suspense>
-    )
-  }
-  return <HomePage />
-}
-
 export default function App() {
   return (
     <LazyMotion features={() => import('./motionFeatures').then((m) => m.default)} strict>
       <MotionConfig reducedMotion="user">
-        <RouterProvider>
-          <AppShell />
-        </RouterProvider>
+        <HomePage />
       </MotionConfig>
     </LazyMotion>
   )

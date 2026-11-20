@@ -1,7 +1,7 @@
 import { AnimatePresence } from 'motion/react'
 import * as m from 'motion/react-m'
 import { Dialog, Toggle, ToggleGroup } from 'radix-ui'
-import { RECIPES, type FilmId } from '../../data/recipes'
+import { GRAIN_LEVELS, RECIPES, type FilmId } from '../../data/recipes'
 import type { CameraController } from '../../hooks/useCameraState'
 import { cn } from '../../lib/cn'
 import { EASE_OUT } from '../../lib/motion'
@@ -11,17 +11,16 @@ interface Props {
   isFree: boolean
   open: boolean
   onClose: () => void
-  reduceMotion: boolean
 }
 
 const OPTIC_BTN_CLS =
   'inphone-q__opt group h-9 rounded-[10px] bg-graphite/78 border border-silver/16 flex flex-col items-center justify-center gap-0.5 cursor-pointer'
 
 /** Frosted in-phone Q-Menu overlay backed by a non-modal Radix Dialog. */
-export function QuickMenuDialog({ camera, isFree, open, onClose, reduceMotion }: Props) {
+export function QuickMenuDialog({ camera, isFree, open, onClose }: Props) {
   const { recipe, dr, grain, halation, selectFilm, cycleDr, cycleGrain, toggleHalation, setHudLayout } =
     camera
-  const grainLabel = grain === 'off' ? 'OFF' : grain === 'weak' ? 'WEAK' : 'HIGH'
+  const grainLabel = GRAIN_LEVELS.find((g) => g.id === grain)?.label ?? 'OFF'
 
   return (
     <AnimatePresence>
@@ -34,10 +33,10 @@ export function QuickMenuDialog({ camera, isFree, open, onClose, reduceMotion }:
         >
           <m.div
             className="inphone-q absolute inset-x-2.5 bottom-4 z-35 p-3 rounded-[20px] bg-obsidian/94 border border-silver/26 shadow-[0_16px_36px_rgba(0,0,0,.64)] flex flex-col gap-2.5"
-            initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 14, scale: 0.98 }}
+            initial={{ opacity: 0, y: 14, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
-            transition={{ duration: reduceMotion ? 0 : 0.2, ease: EASE_OUT }}
+            transition={{ duration: 0.2, ease: EASE_OUT }}
             aria-label="In-phone Q-Menu film simulations"
           >
             <div className="flex items-start justify-between gap-2">

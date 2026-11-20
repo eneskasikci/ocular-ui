@@ -1,4 +1,4 @@
-import { AnimatePresence, useReducedMotion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
 import * as m from 'motion/react-m'
 import { SCENES } from '../config'
 import { EASE_OCULAR } from '../lib/motion'
@@ -11,7 +11,6 @@ interface Props {
 }
 
 export function Header({ active, onGoTop }: Props) {
-  const reduce = Boolean(useReducedMotion())
   const scene = SCENES[active]
   const showHeaderCta = active > 0
 
@@ -38,10 +37,10 @@ export function Header({ active, onGoTop }: Props) {
           {showHeaderCta && (
             <m.div
               key="header-cta"
-              initial={reduce ? { opacity: 1 } : { opacity: 0, y: -8 }}
+              initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
-              transition={{ duration: reduce ? 0 : 0.28, ease: EASE_OCULAR }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.28, ease: EASE_OCULAR }}
             >
               <GetItButton
                 variant="compact"
