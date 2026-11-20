@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react'
+import { memo, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useReducedMotion } from 'motion/react'
 import { PHOTOS, type PhotoAsset, type PhotoId } from '../data/photos'
 import { cn } from '../lib/cn'
@@ -88,7 +88,7 @@ function SlideCard({
   )
 }
 
-export function HeroSlideshow({
+export const HeroSlideshow = memo(function HeroSlideshow({
   photoId,
   paused = false,
   onSelectPhoto,
@@ -96,6 +96,16 @@ export function HeroSlideshow({
 }: Props) {
   const reduceMotion = Boolean(useReducedMotion())
   const [userPaused, setUserPaused] = useState(false)
+  // Stop the infinite drift once the hero scrolls out of view (scroll layout).
+  const sectionRef = useRef<HTMLElement>(null)
+  const [offscreen, setOffscreen] = useState(false)
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => setOffscreen(!e.isIntersecting))
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
   const activeIndex = Math.max(0, PHOTOS.findIndex((p) => p.id === photoId))
   const activePhoto = PHOTOS[activeIndex] ?? PHOTOS[0]
 
@@ -105,7 +115,7 @@ export function HeroSlideshow({
   }
 
   return (
-    <section className="relative h-svh min-h-[580px] overflow-hidden" id="top" aria-labelledby="h-hero">
+    <section ref={sectionRef} className="relative h-svh min-h-[580px] overflow-hidden" id="top" aria-labelledby="h-hero">
       <div
         className="absolute inset-0 z-1 overflow-hidden"
         role="region"
@@ -117,7 +127,7 @@ export function HeroSlideshow({
             reduceMotion
               ? 'w-full overflow-x-auto [scroll-snap-type:x_mandatory] [scrollbar-width:thin]'
               : 'w-max will-change-transform slideshow-track-drift',
-            (paused || userPaused) && 'is-paused',
+            (paused || userPaused || offscreen) && 'is-paused',
           )}
         >
           {PHOTOS.map((photo, index) => (
@@ -239,4 +249,4 @@ export function HeroSlideshow({
       </div>
     </section>
   )
-}
+})
