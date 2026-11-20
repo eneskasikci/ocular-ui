@@ -23,6 +23,7 @@ export function useDesktopDeckNav({ enabled, step, onChangeStep }: Options) {
   const accumRef = useRef(0)
   const gestureConsumedRef = useRef(false)
   const lockUntilRef = useRef(0)
+  const queuedRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   const goToStep = useCallback(
     (target: number) => {
@@ -61,7 +62,7 @@ export function useDesktopDeckNav({ enabled, step, onChangeStep }: Options) {
       lastWheelTimeRef.current = now
       lastAbsDeltaRef.current = absY
 
-      if (gestureConsumedRef.current || now < lockUntilRef.current) return
+      if (gestureConsumedRef.current) return
 
       accumRef.current += e.deltaY
       if (Math.abs(accumRef.current) < WHEEL_THRESHOLD) return
@@ -70,8 +71,14 @@ export function useDesktopDeckNav({ enabled, step, onChangeStep }: Options) {
       gestureConsumedRef.current = true
       accumRef.current = 0
 
-      const next = stepRef.current + dir
-      if (next >= 0 && next < SCENES.length) goToStep(next)
+      // A fresh swipe during the post-step lock is queued, not dropped (else it needs a second scroll).
+      const wait = lockUntilRef.current - now
+      clearTimeout(queuedRef.current)
+      if (wait > 0) {
+        queuedRef.current = setTimeout(() => goToStep(stepRef.current + dir), wait)
+        return
+      }
+      goToStep(stepRef.current + dir)
     }
 
     const onKeyDown = (e: KeyboardEvent) => {
@@ -118,6 +125,7 @@ export function useDesktopDeckNav({ enabled, step, onChangeStep }: Options) {
     return () => {
       window.removeEventListener('wheel', onWheel)
       window.removeEventListener('keydown', onKeyDown)
+      clearTimeout(queuedRef.current)
     }
   }, [enabled, goToStep])
 
