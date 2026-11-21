@@ -39,7 +39,7 @@ export function StaticCameraFlow({ camera }: Props) {
         onSelectPhoto={camera.selectPhoto}
       />
 
-      <div className="camera-static max-w-[1100px] mx-auto px-[var(--gutter)] grid grid-cols-1 gap-[18px] deck:grid-cols-[minmax(308px,340px)_minmax(0,1.08fr)] deck:gap-x-[clamp(32px,5vw,76px)] deck:gap-y-0 deck:items-start">
+      <div className="camera-static max-w-[1160px] mx-auto px-[var(--gutter)] grid grid-cols-1 gap-[18px] deck:grid-cols-[minmax(308px,340px)_minmax(0,1.08fr)] deck:gap-x-[clamp(48px,6vw,96px)] deck:gap-y-0 deck:items-start">
         <aside
           className="static-phone w-full max-w-[348px] mx-auto pt-7 pb-2 deck:col-1 deck:row-[1/4] deck:sticky deck:top-[calc(var(--header)+12px)] deck:min-h-[calc(100svh-var(--header)-24px)] deck:flex deck:flex-col deck:justify-center deck:py-0"
           id="camera"

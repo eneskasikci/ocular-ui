@@ -47,11 +47,11 @@ export const RECIPES: readonly FilmRecipe[] = [
     wb: '5600K',
     wbShort: '5600K',
     tone: '0 / 0',
-    defaultDr: 'DR200',
-    defaultGrain: 'weak',
+    defaultDr: 'DR100',
+    defaultGrain: 'off',
     defaultHalation: false,
     swatch: ['#3c5a78', '#b84336', '#d8cbb8'],
-    grade: { brightness: 1.0, contrast: 1.05, saturate: 1.08, sepia: 0, grayscale: 0, hueRotate: 0 },
+    grade: { brightness: 1.0, contrast: 1.0, saturate: 1.0, sepia: 0, grayscale: 0, hueRotate: 0 },
   },
   {
     id: 'cc',
@@ -62,19 +62,19 @@ export const RECIPES: readonly FilmRecipe[] = [
     wb: '5800K −1/+2',
     wbShort: '5800K',
     tone: 'H-1 S+1',
-    defaultDr: 'DR400',
+    defaultDr: 'DR100',
     defaultGrain: 'weak',
     defaultHalation: false,
     swatch: ['#435160', '#7c6f64', '#b9ad99'],
-    grade: { brightness: 0.96, contrast: 1.18, saturate: 0.7, sepia: 0.08, grayscale: 0, hueRotate: -2 },
+    grade: { brightness: 1.02, contrast: 1.14, saturate: 0.84, sepia: 0, grayscale: 0, hueRotate: -2 },
     highlightTint: {
-      background: 'linear-gradient(180deg, rgba(236,216,184,0.42), transparent 65%)',
+      background: 'linear-gradient(180deg, rgba(232,238,246,0.24), rgba(242,235,222,0.10) 55%, transparent)',
       blendMode: 'soft-light',
-      opacity: 0.36,
+      opacity: 0.30,
     },
     shadowTint: {
-      background: 'linear-gradient(0deg, rgba(24,38,54,0.65), rgba(34,42,50,0.22))',
-      blendMode: 'multiply',
+      background: 'linear-gradient(0deg, rgba(28,54,78,0.44), rgba(44,68,90,0.14) 55%, transparent)',
+      blendMode: 'soft-light',
       opacity: 0.34,
     },
   },
@@ -91,7 +91,7 @@ export const RECIPES: readonly FilmRecipe[] = [
     defaultGrain: 'weak',
     defaultHalation: false,
     swatch: ['#1e2024', '#6d7076', '#e6e4de'],
-    grade: { brightness: 0.98, contrast: 1.32, saturate: 1.0, sepia: 0, grayscale: 1, hueRotate: 0 },
+    grade: { brightness: 1.02, contrast: 1.24, saturate: 1.0, sepia: 0, grayscale: 1, hueRotate: 0 },
     highlightTint: {
       background: 'radial-gradient(circle at 50% 30%, rgba(243,241,236,0.35), transparent 75%)',
       blendMode: 'soft-light',
@@ -100,7 +100,7 @@ export const RECIPES: readonly FilmRecipe[] = [
     shadowTint: {
       background: 'linear-gradient(180deg, transparent, rgba(11,12,14,0.55))',
       blendMode: 'multiply',
-      opacity: 0.35,
+      opacity: 0.20,
     },
   },
   {
@@ -116,16 +116,16 @@ export const RECIPES: readonly FilmRecipe[] = [
     defaultGrain: 'strong',
     defaultHalation: true,
     swatch: ['#1f5052', '#cf6d3a', '#f0cf9b'],
-    grade: { brightness: 1.01, contrast: 1.2, saturate: 1.18, sepia: 0.1, grayscale: 0, hueRotate: -6 },
+    grade: { brightness: 1.01, contrast: 1.16, saturate: 0.98, sepia: 0.06, grayscale: 0, hueRotate: -4 },
     highlightTint: {
       background: 'linear-gradient(160deg, rgba(255,204,132,0.5), rgba(232,131,42,0.16))',
       blendMode: 'soft-light',
-      opacity: 0.44,
+      opacity: 0.34,
     },
     shadowTint: {
       background: 'linear-gradient(0deg, rgba(16,58,62,0.7), rgba(20,48,54,0.22))',
       blendMode: 'soft-light',
-      opacity: 0.52,
+      opacity: 0.38,
     },
   },
   {
@@ -137,20 +137,20 @@ export const RECIPES: readonly FilmRecipe[] = [
     wb: '6200K +3/−4',
     wbShort: '6200K',
     tone: 'H-2 S+1',
-    defaultDr: 'DR400',
+    defaultDr: 'DR200',
     defaultGrain: 'weak',
     defaultHalation: true,
     swatch: ['#4d1a27', '#a65e38', '#e8a65a'],
-    grade: { brightness: 0.97, contrast: 1.24, saturate: 0.92, sepia: 0.18, grayscale: 0, hueRotate: -9 },
+    grade: { brightness: 1.01, contrast: 1.10, saturate: 0.92, sepia: 0.14, grayscale: 0, hueRotate: -6 },
     highlightTint: {
       background: 'radial-gradient(90% 70% at 50% 25%, rgba(232,131,42,0.55), rgba(243,190,120,0.2))',
       blendMode: 'soft-light',
-      opacity: 0.5,
+      opacity: 0.38,
     },
     shadowTint: {
       background: 'linear-gradient(0deg, rgba(48,16,26,0.68), rgba(24,20,24,0.2))',
       blendMode: 'multiply',
-      opacity: 0.36,
+      opacity: 0.22,
     },
   },
   {
@@ -166,16 +166,16 @@ export const RECIPES: readonly FilmRecipe[] = [
     defaultGrain: 'off',
     defaultHalation: false,
     swatch: ['#1a4f7a', '#24a876', '#e07a32'],
-    grade: { brightness: 0.99, contrast: 1.24, saturate: 1.48, sepia: 0, grayscale: 0, hueRotate: 4 },
+    grade: { brightness: 1.0, contrast: 1.10, saturate: 1.35, sepia: 0, grayscale: 0, hueRotate: 2 },
     highlightTint: {
       background: 'linear-gradient(180deg, rgba(255,222,158,0.28), transparent 55%)',
       blendMode: 'soft-light',
-      opacity: 0.3,
+      opacity: 0.20,
     },
     shadowTint: {
       background: 'linear-gradient(0deg, rgba(16,38,62,0.5), transparent 70%)',
       blendMode: 'multiply',
-      opacity: 0.28,
+      opacity: 0.18,
     },
   },
   {
@@ -191,16 +191,16 @@ export const RECIPES: readonly FilmRecipe[] = [
     defaultGrain: 'strong',
     defaultHalation: false,
     swatch: ['#3c281b', '#8d6c4d', '#e4d2b4'],
-    grade: { brightness: 0.98, contrast: 1.22, saturate: 1.18, sepia: 0.74, grayscale: 1, hueRotate: -4 },
+    grade: { brightness: 1.0, contrast: 1.12, saturate: 1.05, sepia: 0.82, grayscale: 1, hueRotate: -3 },
     highlightTint: {
       background: 'radial-gradient(circle at 50% 35%, rgba(244,218,172,0.45), transparent 75%)',
       blendMode: 'soft-light',
-      opacity: 0.4,
+      opacity: 0.32,
     },
     shadowTint: {
       background: 'linear-gradient(0deg, rgba(46,26,14,0.65), transparent)',
       blendMode: 'multiply',
-      opacity: 0.34,
+      opacity: 0.20,
     },
   },
 ] as const
@@ -246,9 +246,9 @@ export const RAW_FILTER = 'brightness(0.95) contrast(0.82) saturate(0.72)'
 
 /** Combines film recipe grading, EV bias, and DR highlight compression into a GPU filter string. */
 export function buildOpticalFilter(recipe: FilmRecipe, ev: number, dr: DrMode): string {
-  const drContrast = dr === 'DR400' ? 0.87 : dr === 'DR200' ? 0.94 : 1.0
-  const drBrightness = dr === 'DR400' ? 1.04 : dr === 'DR200' ? 1.02 : 1.0
-  const evMult = Math.min(1.55, Math.max(0.55, Math.pow(2, ev * 0.22)))
+  const drContrast = dr === 'DR400' ? 0.93 : dr === 'DR200' ? 0.97 : 1.0
+  const drBrightness = dr === 'DR400' ? 1.03 : dr === 'DR200' ? 1.015 : 1.0
+  const evMult = Math.min(1.55, Math.max(0.55, Math.pow(2, ev * 0.35)))
   const brightness = recipe.grade.brightness * drBrightness * evMult
   const contrast = recipe.grade.contrast * drContrast
 

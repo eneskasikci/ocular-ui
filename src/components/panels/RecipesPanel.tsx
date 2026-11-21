@@ -31,8 +31,8 @@ export const RecipesPanel = memo(function RecipesPanel({ headingId, camera }: Pr
           onValueChange={(v) => {
             if (v) selectFilm(v as FilmId)
           }}
-          aria-label="Film simulations"
-          className="grid grid-cols-[repeat(auto-fill,minmax(118px,1fr))] gap-2"
+          aria-label="Film looks"
+          className="grid grid-cols-[repeat(auto-fill,minmax(112px,1fr))] gap-2"
         >
           {RECIPES.map((r) => {
             const selected = r.id === filmId
@@ -40,7 +40,7 @@ export const RecipesPanel = memo(function RecipesPanel({ headingId, camera }: Pr
               <ToggleGroup.Item
                 key={r.id}
                 value={r.id}
-                className="group relative flex flex-col justify-between gap-1.5 w-full min-h-[74px] px-3 py-2.5 text-left rounded-[14px] bg-graphite/78 border border-hair cursor-pointer transition-[background-color,transform,border-color] duration-180 ease-ocular hover:bg-[#30343d]/92 hover:border-hair-strong active:scale-[0.97]"
+                className="group relative flex flex-col justify-between gap-1.5 w-full min-h-[68px] px-3 py-2.5 text-left rounded-[14px] bg-graphite/78 border border-hair cursor-pointer transition-[background-color,transform,border-color] duration-180 ease-ocular hover:bg-[#30343d]/92 hover:border-hair-strong active:scale-[0.97]"
               >
                 {selected && (
                   <m.span

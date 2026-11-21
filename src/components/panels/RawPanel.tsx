@@ -59,7 +59,7 @@ export const RawPanel = memo(function RawPanel({ headingId, camera }: Props) {
             <ToggleGroup.Item
               key={r.id}
               value={r.id}
-              className="relative inline-flex items-center gap-[5px] min-h-[42px] px-[13px] rounded-full bg-obsidian/84 border border-hair font-mono font-bold text-[0.78rem] leading-none tracking-[0.06em] text-silver cursor-pointer z-1 transition-colors duration-180 ease-ocular hover:border-hair-strong data-[state=on]:border-amber data-[state=on]:bg-amber/18 data-[state=on]:text-amber"
+              className="relative inline-flex items-center gap-[5px] min-h-[38px] px-[13px] rounded-full bg-obsidian/84 border border-hair font-mono font-bold text-[0.78rem] leading-none tracking-[0.06em] text-silver cursor-pointer z-1 transition-colors duration-180 ease-ocular hover:border-hair-strong data-[state=on]:border-amber data-[state=on]:bg-amber/18 data-[state=on]:text-amber"
             >
               <span>{r.code}</span>
             </ToggleGroup.Item>

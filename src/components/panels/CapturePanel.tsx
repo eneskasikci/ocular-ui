@@ -55,7 +55,7 @@ export const CapturePanel = memo(function CapturePanel({ headingId, camera }: Pr
         <p className={LEDE_CLS}>Exposure, dynamic range, primes, and optics before the shot.</p>
       </div>
 
-      <div className={cn(PANEL_CLS, 'flex flex-col gap-[13px]')}>
+      <div className={cn(PANEL_CLS, 'flex flex-col gap-[11px]')}>
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center justify-between gap-3">
             <span id={`ev-label-${headingId}`} className={LABEL_CLS}>
@@ -123,7 +123,7 @@ export const CapturePanel = memo(function CapturePanel({ headingId, camera }: Pr
             <Toggle.Root
               pressed={halation}
               onPressedChange={toggleHalation}
-              className="w-full min-h-[52px] px-3.5 rounded-[14px] bg-graphite/78 border border-hair flex items-center justify-between gap-2 font-mono font-bold text-[0.78rem] leading-none tracking-[0.08em] text-silver cursor-pointer transition-[border-color,background-color] duration-180 ease-ocular data-[state=on]:border-amber data-[state=on]:bg-amber/16 data-[state=on]:text-amber"
+              className="w-full min-h-[44px] px-3.5 rounded-[14px] bg-graphite/78 border border-hair flex items-center justify-between gap-2 font-mono font-bold text-[0.78rem] leading-none tracking-[0.08em] text-silver cursor-pointer transition-[border-color,background-color] duration-180 ease-ocular data-[state=on]:border-amber data-[state=on]:bg-amber/16 data-[state=on]:text-amber"
             >
               <span>HALATION</span>
               <em className="not-italic text-[0.68rem] text-amber tracking-[0.06em]">PRO</em>

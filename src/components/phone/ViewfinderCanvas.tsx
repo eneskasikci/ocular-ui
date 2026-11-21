@@ -316,8 +316,8 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
       />
 
       <span className="sr-only">
-        {photo.alt} Active simulation: {recipe.name} ({recipe.code}), {lens}mm lens, {dr},{' '}
-        {aspect === 'xpan' ? 'XPan 65:24' : aspect} ratio.
+        {photo.alt} Active film look: {recipe.name} ({recipe.code}), {lens}mm lens, {dr},{' '}
+        {aspect === 'xpan' ? '65:24 panoramic' : aspect} ratio.
       </span>
     </div>
   )

@@ -37,7 +37,7 @@ const TIERS = [
       ['Film stocks', 'All 12'],
       ['RAW capture', 'Bayer RAW & ProRAW'],
       ['RAW darkroom', 'Re-develop any shot'],
-      ['Optics & framing', 'Halation · XPan 65:24'],
+      ['Optics & framing', 'Halation · 65:24 Pano'],
       ['Custom slots', '7 (C1–C7)'],
     ],
   },
@@ -45,11 +45,11 @@ const TIERS = [
 
 export const TiersStage = memo(function TiersStage({ headingId }: TiersStageProps) {
   return (
-    <div className="w-full max-w-[1100px] flex flex-col gap-4">
+    <div className="w-full max-w-[960px] flex flex-col gap-4">
       <div className="pool-scrim">
         <h2
           id={headingId}
-          className="font-display font-bold text-[clamp(1.85rem,5.5vw,3.15rem)] leading-[1.03] tracking-[-0.025em] max-w-[22ch] [overflow-wrap:break-word]"
+          className="font-display font-bold text-[clamp(1.7rem,4.2vw,2.75rem)] leading-[1.03] tracking-[-0.025em] max-w-[22ch] [overflow-wrap:break-word]"
         >
           Start free. Go Pro anytime.
         </h2>
@@ -58,7 +58,7 @@ export const TiersStage = memo(function TiersStage({ headingId }: TiersStageProp
         </p>
       </div>
 
-      <div className="grid grid-cols-1 xs:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 xs:grid-cols-2 gap-6">
         {TIERS.map((tier) => (
           <article key={tier.name} className={cn(CARD_CLS, tier.cardCls)}>
             <header className="flex items-center justify-between gap-3 mb-2.5">

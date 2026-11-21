@@ -48,12 +48,13 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
-  // Viewport-aware phone coordinates (no CSS transform on carrier — Motion owns x, y, scale)
-  // Layout is designed at 1440x900; larger viewports scale the deck up uniformly (CSS zoom + phone scale).
-  const k = Math.min(1.6, Math.max(1, Math.min(viewport.w / 1440, viewport.h / 900)))
-  const stageMaxW = Math.min(viewport.w - 64 * k, 1100 * k)
-  const settledScale = Math.min(k, Math.max(0.8, (viewport.h - 110) / PHONE_BASE_H))
-  const settledLeftX = -(stageMaxW / 2) + (PHONE_BASE_W * settledScale) / 2 + 8 * k
+  // Gentle scale-up on large displays so phone and control deck stay refined with generous breathing room.
+  const rawScale = Math.min(viewport.w / 1440, viewport.h / 900)
+  const k = Math.min(1.16, Math.max(0.92, 0.94 + Math.max(0, rawScale - 1) * 0.28))
+  const innerContainerW = Math.min(viewport.w / k, 1160)
+  const gutter = viewport.w >= 720 ? 32 : 16
+  const settledScale = Math.min(k * 0.94, Math.max(0.76, (viewport.h - 148) / PHONE_BASE_H))
+  const settledLeftX = (-innerContainerW / 2 + gutter + 158) * k
   const giantScale = Math.min(5.2, Math.max(2.2, (viewport.w - 28) / PHONE_BASE_W))
   const carrierCenterY = viewport.h / 2 + 22
   const giantY = 76 + (PHONE_BASE_H / 2) * giantScale - carrierCenterY
@@ -137,7 +138,7 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
       </m.div>
 
       {/* Steps 2-4: Always-Mounted Zero-Lag Right Feature Deck (Radix Tabs) */}
-      <div style={{ zoom: k }} className="relative z-22 w-full max-w-[1100px] mx-auto px-[var(--gutter)] pt-[calc(var(--header)-10px)] grid grid-cols-[332px_minmax(0,1fr)] gap-x-[clamp(32px,4.5vw,68px)] items-center pointer-events-none">
+      <div style={{ zoom: k }} className="relative z-22 w-full max-w-[1160px] mx-auto px-[var(--gutter)] pt-[calc(var(--header)-10px)] grid grid-cols-[316px_minmax(0,1fr)] gap-x-[clamp(56px,6.5vw,108px)] items-center pointer-events-none">
         <div aria-hidden="true" />
         <m.div
           className="feature-column"
@@ -162,7 +163,7 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
             }}
             className="flex flex-col gap-3.5 min-w-0"
           >
-            <div className="flex flex-col gap-2 max-w-[560px]">
+            <div className="flex flex-col gap-2 max-w-[520px]">
               <Tabs.List
                 aria-label="Camera features"
                 className="self-start inline-flex gap-1 p-1 rounded-[14px] bg-[#0f1014]/94 border border-hair shadow-[0_12px_32px_rgba(0,0,0,.36)] reduced-transparency:bg-graphite"

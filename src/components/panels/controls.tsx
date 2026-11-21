@@ -4,11 +4,11 @@ import { cn } from '../../lib/cn'
 import { SPRING_DETENT } from '../../lib/motion'
 
 export const HEADING_CLS =
-  'font-display font-bold text-[clamp(1.65rem,3.4vw,2.65rem)] leading-[1.03] tracking-[-0.025em] max-w-[18ch] [overflow-wrap:break-word]'
+  'font-display font-bold text-[clamp(1.55rem,2.8vw,2.35rem)] leading-[1.03] tracking-[-0.025em] max-w-[18ch] [overflow-wrap:break-word]'
 export const LEDE_CLS =
   'text-[clamp(.96rem,1.4vw,1.06rem)] leading-[1.5] text-ink-muted max-w-[40ch] mt-1.5 mb-0 tracking-[-0.01em]'
 export const PANEL_CLS =
-  'p-[18px] xs:px-[22px] xs:py-5 rounded-[24px] bg-[linear-gradient(180deg,rgba(22,24,30,.94),rgba(11,12,14,.97))] border border-hair shadow-[0_24px_60px_rgba(0,0,0,.48),inset_0_1px_0_rgba(243,241,236,.08)] max-w-[560px] reduced-transparency:bg-graphite reduced-transparency:bg-none'
+  'p-4 xs:px-5 xs:py-[18px] rounded-[24px] bg-[linear-gradient(180deg,rgba(22,24,30,.94),rgba(11,12,14,.97))] border border-hair shadow-[0_24px_60px_rgba(0,0,0,.48),inset_0_1px_0_rgba(243,241,236,.08)] max-w-[520px] reduced-transparency:bg-graphite reduced-transparency:bg-none'
 export const LABEL_CLS = 'font-mono font-bold text-[0.75rem] leading-[1.2] tracking-[0.1em] uppercase text-ink-subtle'
 export const RESET_BTN_CLS =
   'min-h-8 px-2.5 rounded-full bg-graphite/90 border border-hair-strong font-mono font-bold text-[0.72rem] leading-none tracking-[0.08em] text-silver cursor-pointer data-[state=on]:border-amber data-[state=on]:text-amber'
@@ -94,7 +94,7 @@ export function SegmentedControl<T extends string>({
           <ToggleGroup.Item
             key={opt.value}
             value={opt.value}
-            className="relative flex-1 min-h-[42px] px-2 border-0 rounded-[10px] bg-transparent inline-flex items-center justify-center gap-1 font-mono font-bold text-[0.75rem] leading-none tabular-nums tracking-[0.04em] text-ink-muted whitespace-nowrap cursor-pointer z-1 hover:text-silver data-[state=on]:text-amber"
+            className="relative flex-1 min-h-[38px] px-2 border-0 rounded-[10px] bg-transparent inline-flex items-center justify-center gap-1 font-mono font-bold text-[0.75rem] leading-none tabular-nums tracking-[0.04em] text-ink-muted whitespace-nowrap cursor-pointer z-1 hover:text-silver data-[state=on]:text-amber"
           >
             {selected && (
               <m.span

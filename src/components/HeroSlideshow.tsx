@@ -30,7 +30,7 @@ function SlideCard({
     <button
       type="button"
       className={cn(
-        'group relative flex-none h-full w-[78vw] xs:w-[clamp(300px,38vw,540px)] p-0 border-0 rounded-none overflow-hidden bg-deep cursor-pointer snap-center transition-[filter] duration-240 ease-ocular',
+        'group relative flex-none h-full w-[78vw] xs:w-[clamp(280px,32vw,460px)] p-0 border-0 rounded-none overflow-hidden bg-deep cursor-pointer snap-center transition-[filter] duration-240 ease-ocular',
         selected &&
           "after:content-[''] after:absolute after:inset-0 after:shadow-[inset_0_0_0_3px_var(--color-amber)] after:pointer-events-none after:z-2",
       )}
@@ -165,7 +165,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
             <MeniscusMark className="w-[clamp(34px,4.2vw,46px)] h-[clamp(34px,4.2vw,46px)] shrink-0" />
             <h1
               id="h-hero"
-              className="font-wordmark font-bold text-[clamp(2.4rem,6vw,4.35rem)] leading-[0.94] tracking-[0.1em] text-silver [text-shadow:0_4px_28px_rgba(0,0,0,.55)]"
+              className="font-wordmark font-bold text-[clamp(2.25rem,5vw,3.85rem)] leading-[0.94] tracking-[0.1em] text-silver [text-shadow:0_4px_28px_rgba(0,0,0,.55)]"
             >
               OCULAR
             </h1>
