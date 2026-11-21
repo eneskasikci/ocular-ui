@@ -194,7 +194,7 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
 
           <div className="absolute top-2 inset-x-2 flex justify-between pointer-events-none z-10" aria-hidden="true">
             <span className="px-[7px] py-[3px] rounded-full bg-deep/86 border border-silver/24 font-mono font-bold text-[8.5px] leading-none tracking-[0.08em] text-silver">
-              14-BIT RAW
+              RAW DNG
             </span>
             <span className="px-[7px] py-[3px] rounded-full bg-deep/86 border border-amber/58 font-mono font-bold text-[8.5px] leading-none tracking-[0.08em] text-amber">
               {recipe.code}
@@ -213,7 +213,7 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
               <Slider.Range className="hidden" />
             </Slider.Track>
             <Slider.Thumb
-              aria-label={`Compare flat 14-bit RAW with ${recipe.name} film recipe`}
+              aria-label={`Compare flat RAW with ${recipe.name} film recipe`}
               className="block w-8 h-full bg-transparent opacity-0 focus-visible:opacity-100"
             />
           </Slider.Root>

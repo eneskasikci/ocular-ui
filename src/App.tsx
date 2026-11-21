@@ -44,7 +44,7 @@ function HomePage() {
   const active = isDesktopDeck ? step : scrollActive
 
   useEffect(() => {
-    document.title = 'Ocular — Film-recipe RAW camera for iPhone and iPad'
+    document.title = 'Ocular Camera for iPhone & iPad — Film Recipe & RAW Camera App'
   }, [])
 
   useEffect(() => {

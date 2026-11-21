@@ -1,3 +1,5 @@
+export const SITE_URL = 'https://ocularcamera.com'
+
 /**
  * TODO: replace with the real App Store URL once the app id is known.
  * This is the single source of truth for every download button on the site.

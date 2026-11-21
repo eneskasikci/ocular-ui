@@ -35,7 +35,7 @@ const TIERS = [
     valueCls: '[&_b]:text-emerald-ink',
     rows: [
       ['Film stocks', 'All 12'],
-      ['RAW capture', '14-bit & ProRAW'],
+      ['RAW capture', 'Bayer RAW & ProRAW'],
       ['RAW darkroom', 'Re-develop any shot'],
       ['Optics & framing', 'Halation · XPan 65:24'],
       ['Custom slots', '7 (C1–C7)'],

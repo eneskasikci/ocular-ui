@@ -1,6 +1,6 @@
 # Ocular site
 
-Marketing site for **Ocular**, a film-recipe RAW camera for iPhone and iPad. Features an interactive 7-step camera experience—from a continuous photo gallery hero and full-bleed iPhone 18 Pro Max entrance to a live viewfinder simulator with **Free / Pro HUD layout switching**, 12 film simulations, hardware capture workbench, 14-bit RAW darkroom comparison wipe, Free & Pro tier breakdown, and on-device privacy—plus dedicated `/privacy` and `/support` pages.
+Marketing site for **Ocular**, a film-recipe RAW camera for iPhone and iPad. Features an interactive 7-step camera experience—from a continuous photo gallery hero and full-bleed iPhone 18 Pro Max entrance to a live viewfinder simulator with **Free / Pro HUD layout switching**, 12 film simulations, hardware capture workbench, RAW darkroom comparison wipe, Free & Pro tier breakdown, and on-device privacy—plus dedicated `/privacy` and `/support` pages.
 
 ## Stack
 

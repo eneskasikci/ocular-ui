@@ -23,7 +23,7 @@ export const RawPanel = memo(function RawPanel({ headingId, camera }: Props) {
         <h2 id={headingId} className={HEADING_CLS}>
           Re-develop any RAW.
         </h2>
-        <p className={LEDE_CLS}>14-bit Bayer RAW and Apple ProRAW. Recipe saved in EXIF.</p>
+        <p className={LEDE_CLS}>Bayer RAW (DNG) and Apple ProRAW. Recipe saved in EXIF.</p>
       </div>
 
       <div className={cn(PANEL_CLS, 'flex flex-col gap-[13px]')}>
@@ -67,7 +67,7 @@ export const RawPanel = memo(function RawPanel({ headingId, camera }: Props) {
         </ToggleGroup.Root>
 
         <ul className="flex flex-wrap gap-2 list-none m-0 p-0" aria-label="RAW specifications">
-          <li className={cn(SPEC_CHIP_BASE, 'text-amber border-amber/60')}>14-BIT BAYER</li>
+          <li className={cn(SPEC_CHIP_BASE, 'text-amber border-amber/60')}>BAYER DNG</li>
           <li className={cn(SPEC_CHIP_BASE, 'text-ink border-hair')}>PRORAW</li>
           <li className={cn(SPEC_CHIP_BASE, 'text-ink border-hair')}>EXIF RECIPE</li>
           <li className={cn(SPEC_CHIP_BASE, 'text-ink border-hair')}>NON-DESTRUCTIVE</li>

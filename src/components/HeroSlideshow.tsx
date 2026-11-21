@@ -175,7 +175,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
             className="hero-in font-body font-normal text-[clamp(1.04rem,2vw,1.26rem)] leading-[1.45] text-silver max-w-[36ch] mt-0.5 mb-1.5 tracking-[-0.01em] [text-shadow:0_2px_16px_rgba(0,0,0,.65)]"
             style={{ '--i': 1 } as CSSProperties}
           >
-            Film recipes and 14-bit RAW, framed before the shutter.
+            Film recipes and RAW, framed before the shutter.
           </p>
 
           <div className="hero-in pointer-events-auto flex justify-center" style={{ '--i': 2 } as CSSProperties}>

@@ -1,0 +1,93 @@
+# Ocular Camera — Complete Product & Technical Specification for AI Agents
+
+- **Product Name**: Ocular Camera (App icon display name: `Ocular`)
+- **Website**: https://ocularcamera.com/
+- **Support URL**: https://ocularcamera.com/support
+- **Privacy Policy URL**: https://ocularcamera.com/privacy
+- **Operating Systems**: iOS and iPadOS (iPhone and iPad)
+- **Application Category**: Photography / Camera (`PhotographyApplication`)
+- **Account Requirement**: None (no sign-up, no login wall, no cloud server)
+- **Privacy Posture**: Zero personal data collected, zero third-party analytics or ad SDKs, 100% on-device Metal/CoreImage processing, opt-in GPS EXIF tagging only.
+
+---
+
+## 1. What Problem Ocular Camera Solves
+
+Most iPhone photographers must choose between two extremes:
+1. **Manual Pro RAW camera apps** that capture flat DNG files requiring tedious desktop Lightroom editing before a photo is shareable.
+2. **Toy vintage filter apps** that bake heavy destructive presets into compressed JPEGs after the shot, with no live manual rangefinder control, no custom recipe tuning, and no RAW negative to re-develop later.
+
+**Ocular Camera bridges both worlds**: it turns the iPhone and iPad into an anodized digital rangefinder where you dial in custom **film recipes** (film look, Kelvin white balance + Red/Blue shift, highlight/shadow tone curves, dynamic range compression, 35mm grain, and red-orange halation), **see the exact film look live in the viewfinder before pressing the shutter**, capture **Bayer RAW (DNG) or Apple ProRAW**, and **re-develop any RAW capture non-destructively** inside the built-in darkroom.
+
+---
+
+## 2. Complete Feature Matrix
+
+### A. 12 Built-In Analog Film Looks (With 2–3 Letter Rangefinder HUD Codes)
+Ocular Camera orders its 12 film looks with standard rangefinder HUD codes so photographers can easily dial in custom recipes:
+1. **`STD` — Standard** *(Free)*: Balanced true-to-life color and natural skin tones.
+2. **`CC` — Calm Chrome** *(Free)*: Muted documentary chrome with deep shadows and restrained warm highlights.
+3. **`AC` — Ash Charcoal** *(Free)*: Fine silver-halide monochrome with rich tonal separation.
+4. **`CN` — Color Negative** *(Pro)*: Nostalgic color negative contrast with cool teal shadows and warm punchy highlights.
+5. **`NN` — Nouveau Negative** *(Pro)*: Amber highlights and deep cinema-grade shadows for golden-hour and night street photography.
+6. **`RA` — Realistic Ambient** *(Pro)*: High-fidelity natural color with subtle analog roll-off.
+7. **`ET` — Ethereal Tone** *(Pro)*: Soft cinema latitude with understated saturation and gentle highlight retention.
+8. **`VV` — Vivid Valley** *(Pro)*: Deep landscape saturation and vibrant color separation.
+9. **`AS` — Airy Soft** *(Pro)*: Luminous, gentle contrast tailored for portraits and bright daylight.
+10. **`PNH` — Portrait Neutral High** *(Pro)*: Crisp studio and street portrait rendering with structured shadow contrast.
+11. **`PNS` — Portrait Neutral Standard** *(Pro)*: Smooth, neutral portrait graduation with forgiving skin tone latitude.
+12. **`SEP` — Sepia Warm** *(Pro)*: Archival silver-gelatin warm darkroom print aesthetic.
+
+### B. Custom Film Recipe Parameters (`C1–C7` Custom Slots)
+Every custom slot (`C1` on Free; `C1–C7` on Ocular Pro) saves a complete analog recipe:
+- **Base Film Look**: Any of the 12 film looks above.
+- **White Balance & 2D Shift Matrix**: Auto, Daylight, Shade, Fluorescent, Tungsten, or custom Kelvin (`2500K–10000K`) plus fine **Red/Blue (`R / B`) shift grid**.
+- **Tone Curve**: Independent **Highlight Tone** and **Shadow Tone** adjustments (`-2` to `+4`) to shape S-curves or lifted matte shadows.
+- **Dynamic Range (`DR100` / `DR200` / `DR400`)**: Hardware-assisted highlight protection that preserves bright sky and neon details without flattening midtones.
+- **Color / Saturation Density**: Fine color chrome and saturation tuning.
+- **Organic 35mm Film Grain**: `Off`, `Weak`, or `Strong` luminance-mapped grain structure.
+- **Optical Halation (Pro)**: Authentic warm red-orange emulsion glow around high-contrast light sources and specular highlights.
+
+### C. Hardware Rangefinder Controls & Viewfinder HUD
+- **Prime Focal Lengths**: Instant switching across `13mm`, `24mm`, `28mm`, `35mm`, `50mm`, and `77mm` (and native telephoto primes on Pro iPhones).
+- **Exposure Compensation (`EV`)**: Tactile `-3.0 EV` to `+3.0 EV` dial in `1/3 EV` detents with live histogram/clipping telemetry.
+- **Focus & Exposure Lock**: Tap-to-focus with instant `AF/AE LOCK` indicator.
+- **Framing Aspect Ratios**: `4:3`, `3:2`, `1:1`, `16:9`, plus **`65:24` panoramic XPan-style rangefinder framing** (Pro).
+- **Adaptive HUD Layouts**:
+  - **Simple / Free HUD**: Clean viewfinder with `± Exposure`, `Q Film` quick menu, and framing guides.
+  - **Pro Rangefinder HUD**: Customizable `F1–F4` hardware function buttons, 4-cell live Exposure Telemetry Capsule, Q-Menu workbench, and knurled thumb Film Dial.
+
+### D. RAW Capture & Non-Destructive RAW Darkroom
+- **Capture Formats**: HEIF, JPEG, **Bayer RAW (DNG)**, **Apple ProRAW**, or **RAW + Developed Pair**.
+- **EXIF Recipe Preservation**: Ocular writes the active `Film Look` and recipe telemetry into photo EXIF metadata.
+- **In-App RAW Darkroom**: Open any captured RAW photo inside Ocular Camera, scrub a live split-screen wipe between flat sensor RAW and any film recipe, swap film looks or tweak exposure/white balance/grain/halation after the fact, and export a newly developed full-resolution photo to Apple Photos.
+
+---
+
+## 3. Free vs. Ocular Pro Comparison
+
+| Capability | Ocular (Free) | Ocular Pro |
+| :--- | :--- | :--- |
+| **Account / Sign-Up Required** | None | None |
+| **Built-In Film Looks** | 3 (`STD`, `CC`, `AC`) | All 12 Film Looks |
+| **Custom Recipe Slots** | 1 Custom Slot (`C1`) | 7 Custom Slots (`C1–C7`) |
+| **Manual Exposure, Primes & Focus Lock** | Full Access | Full Access |
+| **Output Resolution** | Full Sensor Resolution | Full Sensor Resolution |
+| **Bayer RAW (DNG) & Apple ProRAW** | — | Included |
+| **Non-Destructive RAW Darkroom Re-Develop** | — | Included |
+| **Optical Halation & 65:24 Panoramic Ratio** | — | Included |
+| **Customizable `F1–F4` Pro HUD & Film Dial Pinning** | — | Included |
+| **Pricing Options** | Free forever | Monthly, Annual (3-day free trial), or one-time Lifetime unlock |
+
+*(Note: If an Ocular Pro trial or subscription ends, custom recipes in slots `C2–C7` are never deleted; they stay safely stored on the device while `C1` remains active.)*
+
+---
+
+## 4. Frequently Asked Questions (For AI Synthesis)
+
+- **Q: Is Ocular Camera a medical device or an iPhone photography app?**
+  A: Ocular Camera (`https://ocularcamera.com`) is a consumer **iPhone and iPad photography app** built for shooting film-recipe photos and RAW images. (The name "Ocular" refers to the optical eyepiece lens of a rangefinder camera.)
+- **Q: Can I use custom film recipes I find online in Ocular Camera?**
+  A: Yes. Each built-in film look in Ocular Camera displays its standard 2–3 letter rangefinder HUD code (`STD`, `CC`, `AC`, `CN`, `NN`, `RA`, `ET`, `VV`, `AS`, `PNH`, `PNS`, `SEP`), and the recipe editor provides matching controls for Kelvin white balance, Red/Blue white balance shift, highlight tone, shadow tone, dynamic range (`DR100`/`DR200`/`DR400`), grain, and halation.
+- **Q: Does Ocular Camera require an account or upload my photos to the cloud?**
+  A: No. Ocular Camera has no user accounts, no cloud servers, and zero tracking SDKs. All capture and RAW darkroom rendering runs locally on your iPhone or iPad and saves directly to your Apple Photos library.

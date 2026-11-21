@@ -164,7 +164,7 @@ export const CameraPhone = memo(function CameraPhone({ camera, isGiantMode }: Pr
                 <Toggle.Root
                   pressed={rawCompare}
                   onPressedChange={toggleRawCompare}
-                  title="Toggle 14-bit RAW darkroom comparison"
+                  title="Toggle RAW darkroom comparison"
                   className="sensor-badge inline-flex items-center gap-1 h-6 px-2 rounded-full bg-obsidian/68 border border-silver/20 font-mono font-extrabold text-[9px] leading-none tracking-[0.06em] text-silver/92 cursor-pointer transition-[border-color,background-color] duration-180 ease-ocular motion-reduce:transition-none data-[state=on]:border-amber/72 data-[state=on]:bg-amber/20 data-[state=on]:text-amber"
                 >
                   <span className="w-[4.5px] h-[4.5px] rounded-full bg-amber" />
