@@ -21,7 +21,7 @@ const TIERS = [
     rows: [
       ['Film stocks', '3 (STD, CC, AC)'],
       ['Manual dials & primes', 'Full'],
-      ['Output', 'Full resolution'],
+      ['Output', '12 MP · Subtle watermark'],
       ['RAW & optics', '—'],
       ['Custom slots', '1 (C1)'],
     ],
@@ -35,8 +35,8 @@ const TIERS = [
     valueCls: '[&_b]:text-emerald-ink',
     rows: [
       ['Film stocks', 'All 12'],
-      ['RAW capture', 'Bayer RAW & ProRAW'],
-      ['RAW darkroom', 'Re-develop any shot'],
+      ['Output', 'Full res · Unmarked'],
+      ['RAW & darkroom', 'Bayer RAW & ProRAW'],
       ['Optics & framing', 'Halation · 65:24 Pano'],
       ['Custom slots', '7 (C1–C7)'],
     ],
