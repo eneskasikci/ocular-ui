@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { SCENES } from '../config'
 
 /** Index of the scene crossing the middle of the viewport. */
-export function useActiveScene(resetKey?: unknown): number {
+export function useActiveScene(enabled: boolean): number {
   const [active, setActive] = useState(0)
   useEffect(() => {
+    if (!enabled) return
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
@@ -21,6 +22,6 @@ export function useActiveScene(resetKey?: unknown): number {
       if (el) io.observe(el)
     }
     return () => io.disconnect()
-  }, [resetKey])
+  }, [enabled])
   return active
 }

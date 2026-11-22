@@ -6,6 +6,7 @@ import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { CameraExperience } from './components/scenes/CameraExperience'
 import { useActiveScene } from './hooks/useActiveScene'
+import { useDesktopDeckNav } from './hooks/useDesktopDeckNav'
 
 // The deck is driven by wheel and keyboard only, so touch screens get the scrolling flow.
 const DECK_QUERY = '(min-width: 900px) and (pointer: fine)'
@@ -32,15 +33,23 @@ function HomePage() {
   const reduce = Boolean(useReducedMotion())
   const deckMedia = useMediaQuery(DECK_QUERY)
   const [step, setStep] = useState<number>(() => getStepFromHash())
+  const isDesktopDeck = deckMedia && !reduce
+  const goToStep = useDesktopDeckNav({ enabled: isDesktopDeck, step, onChangeStep: setStep })
 
   useEffect(() => {
-    const onHashChange = () => setStep(getStepFromHash())
+    const onHashChange = () => {
+      const next = getStepFromHash()
+      if (isDesktopDeck) {
+        goToStep(next, 'smooth')
+      } else {
+        setStep(next)
+      }
+    }
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
-  }, [])
+  }, [goToStep, isDesktopDeck])
 
-  const isDesktopDeck = deckMedia && !reduce
-  const scrollActive = useActiveScene(isDesktopDeck)
+  const scrollActive = useActiveScene(!isDesktopDeck)
   const active = isDesktopDeck ? step : scrollActive
 
   useEffect(() => {
@@ -48,8 +57,9 @@ function HomePage() {
   }, [])
 
   useEffect(() => {
-    if (isDesktopDeck) window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [isDesktopDeck])
+    if (!isDesktopDeck) return
+    goToStep(getStepFromHash(), 'instant')
+  }, [goToStep, isDesktopDeck])
 
   // Keep the deck step in the URL so refresh and shared links land on the same view.
   useEffect(() => {
@@ -70,13 +80,16 @@ function HomePage() {
       >
         Skip to content
       </a>
-      <Header active={active} onGoTop={isDesktopDeck ? () => setStep(0) : undefined} />
+      <Header
+        active={active}
+        onGoTop={isDesktopDeck ? () => goToStep(0, 'smooth') : undefined}
+      />
       <main id="main">
         <CameraExperience
           active={active}
           step={step}
           isDesktopDeck={isDesktopDeck}
-          onChangeStep={setStep}
+          goToStep={goToStep}
         />
       </main>
       {!isDesktopDeck && <Footer />}
