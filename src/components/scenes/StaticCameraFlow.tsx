@@ -1,4 +1,5 @@
 import type { CameraController } from '../../hooks/useCameraState'
+import { useI18n } from '../../i18n'
 import { HeroSlideshow } from '../HeroSlideshow'
 import { CapturePanel } from '../panels/CapturePanel'
 import { RawPanel } from '../panels/RawPanel'
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export function StaticCameraFlow({ camera }: Props) {
+  const { t } = useI18n()
   const sections = [
     {
       id: 'recipes',
@@ -43,7 +45,7 @@ export function StaticCameraFlow({ camera }: Props) {
         <aside
           className="static-phone w-full max-w-[348px] mx-auto pt-7 pb-2 deck:col-1 deck:row-[1/4] deck:sticky deck:top-[calc(var(--header)+12px)] deck:min-h-[calc(100svh-var(--header)-24px)] deck:flex deck:flex-col deck:justify-center deck:py-0"
           id="camera"
-          aria-label="Interactive Ocular camera viewfinder"
+          aria-label={t.a11y.interactiveViewfinder}
         >
           <div className="flex flex-col items-center gap-3">
             <CameraPhone camera={camera} />

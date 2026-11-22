@@ -9,6 +9,7 @@ import {
   type AspectId,
 } from '../../data/recipes'
 import type { CameraController } from '../../hooks/useCameraState'
+import { useI18n } from '../../i18n'
 import { cn } from '../../lib/cn'
 import { EASE_OUT, SPRING_LENS } from '../../lib/motion'
 
@@ -55,6 +56,7 @@ const IMG_BASE =
   'vf__img absolute inset-0 w-full h-full object-cover block select-none [-webkit-user-drag:none] transition-[filter] duration-240 ease-ocular motion-reduce:transition-none'
 
 export function ViewfinderCanvas({ camera, compact = false, showGuides = true }: Props) {
+  const { t, format } = useI18n()
   const {
     photo,
     recipe,
@@ -213,7 +215,7 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
               <Slider.Range className="hidden" />
             </Slider.Track>
             <Slider.Thumb
-              aria-label={`Compare flat RAW with ${recipe.name} film recipe`}
+              aria-label={format(t.a11y.compareRawWithRecipe, { name: recipe.name })}
               className="block w-8 h-full bg-transparent opacity-0 focus-visible:opacity-100"
             />
           </Slider.Root>
@@ -316,8 +318,14 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
       />
 
       <span className="sr-only">
-        {photo.alt} Active film look: {recipe.name} ({recipe.code}), {lens}mm lens, {dr},{' '}
-        {aspect === 'xpan' ? '65:24 panoramic' : aspect} ratio.
+        {format(t.a11y.viewfinderSr, {
+          alt: photo.alt,
+          name: recipe.name,
+          code: recipe.code,
+          lens,
+          dr,
+          aspect: aspect === 'xpan' ? `65:24 ${t.phone.panoramic}` : aspect,
+        })}
       </span>
     </div>
   )

@@ -4,6 +4,7 @@ import * as m from 'motion/react-m'
 import { Tabs } from 'radix-ui'
 import { SCENES } from '../../config'
 import type { CameraController } from '../../hooks/useCameraState'
+import { useI18n } from '../../i18n'
 import { EASE_BUTTER, SPRING_DETENT } from '../../lib/motion'
 import { Footer } from '../Footer'
 import { HeroSlideshow } from '../HeroSlideshow'
@@ -21,10 +22,10 @@ const MAX_STEP = SCENES.length - 1
 
 type FeatureKey = 'recipes' | 'capture' | 'raw'
 
-const FEATURE_TABS: readonly { id: FeatureKey; step: number; num: string; label: string }[] = [
-  { id: 'recipes', step: 2, num: '01', label: 'Recipes' },
-  { id: 'capture', step: 3, num: '02', label: 'Capture' },
-  { id: 'raw', step: 4, num: '03', label: 'Darkroom' },
+const FEATURE_TABS: readonly { id: FeatureKey; step: number; num: string }[] = [
+  { id: 'recipes', step: 2, num: '01' },
+  { id: 'capture', step: 3, num: '02' },
+  { id: 'raw', step: 4, num: '03' },
 ]
 
 const PHONE_BASE_W = 308
@@ -62,6 +63,7 @@ interface Props {
 }
 
 export function DesktopDeck({ camera, step, goToStep }: Props) {
+  const { t } = useI18n()
   const stageRef = useRef<HTMLDivElement>(null)
   const [viewport, setViewport] = useState(() =>
     typeof window !== 'undefined'
@@ -179,7 +181,7 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
               >
                 <div className="flex flex-col gap-2 max-w-[520px]">
                   <Tabs.List
-                    aria-label="Camera features"
+                    aria-label={t.a11y.cameraFeatures}
                     className="self-start inline-flex gap-1 p-1 rounded-[14px] bg-[#0f1014]/94 border border-hair shadow-[0_12px_32px_rgba(0,0,0,.36)] reduced-transparency:bg-graphite"
                   >
                     {FEATURE_TABS.map((tab) => {
@@ -199,7 +201,7 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
                             />
                           )}
                           <span className="opacity-72">{tab.num}</span>
-                          <span>{tab.label}</span>
+                          <span>{t.scenes[tab.id]}</span>
                         </Tabs.Trigger>
                       )
                     })}

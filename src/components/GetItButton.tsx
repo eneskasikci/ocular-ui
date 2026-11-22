@@ -1,5 +1,6 @@
 import * as m from 'motion/react-m'
 import { APP_STORE_URL } from '../config'
+import { useI18n } from '../i18n'
 import { cn } from '../lib/cn'
 import { SPRING_DETENT } from '../lib/motion'
 import { AppleGlyph } from './AppleGlyph'
@@ -11,6 +12,7 @@ interface Props {
 
 /** Primary App Store capsule rendered directly inside each view. */
 export function GetItButton({ variant = 'default', className }: Props) {
+  const { t } = useI18n()
   return (
     <m.a
       className={cn(
@@ -27,7 +29,7 @@ export function GetItButton({ variant = 'default', className }: Props) {
       <span className="inline-flex" aria-hidden="true">
         <AppleGlyph />
       </span>
-      <span>{variant === 'compact' ? 'Get the app' : 'Download on the App Store'}</span>
+      <span>{variant === 'compact' ? t.cta.getApp : t.cta.downloadAppStore}</span>
     </m.a>
   )
 }

@@ -1,8 +1,10 @@
 import { AnimatePresence } from 'motion/react'
 import * as m from 'motion/react-m'
 import { SCENES } from '../config'
+import { useI18n, type SceneId } from '../i18n'
 import { EASE_OCULAR } from '../lib/motion'
 import { GetItButton } from './GetItButton'
+import { LanguageSwitcher } from './LanguageSwitcher'
 import { MeniscusMark } from './MeniscusMark'
 
 interface Props {
@@ -11,7 +13,9 @@ interface Props {
 }
 
 export function Header({ active, onGoTop }: Props) {
+  const { t } = useI18n()
   const scene = SCENES[active]
+  const sceneLabel = t.scenes[scene.id as SceneId] ?? scene.label
   const showHeaderCta = active > 0
 
   return (
@@ -19,7 +23,7 @@ export function Header({ active, onGoTop }: Props) {
       <a
         className="brand inline-flex items-center gap-2 min-h-[44px] text-ink no-underline shrink-0 xs:justify-self-start"
         href="#top"
-        aria-label="Ocular, back to top"
+        aria-label={t.a11y.backToTop}
         onClick={(e) => {
           if (!onGoTop) return
           e.preventDefault()
@@ -51,14 +55,15 @@ export function Header({ active, onGoTop }: Props) {
         </AnimatePresence>
       </div>
 
-      <div className="hidden xs:flex xs:justify-self-end items-center justify-end gap-4 min-w-0">
+      <div className="flex xs:justify-self-end items-center justify-end gap-3 min-w-0">
         <span
           className="counter hidden xs:inline font-mono font-bold text-[0.76rem] tracking-[0.14em] tabular-nums text-ink-muted whitespace-nowrap"
           aria-hidden="true"
         >
           {String(active + 1).padStart(2, '0')} / {String(SCENES.length).padStart(2, '0')}
-          <span className="hidden deck:inline"> · {scene.label.toUpperCase()}</span>
+          <span className="hidden deck:inline"> · {sceneLabel.toUpperCase()}</span>
         </span>
+        <LanguageSwitcher />
       </div>
     </header>
   )

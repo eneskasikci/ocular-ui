@@ -17,8 +17,8 @@
   --color-hair: rgba(243, 241, 236, 0.16);
   --color-hair-strong: rgba(243, 241, 236, 0.28);
 
-  --font-wordmark: "Archivo Expanded", "Archivo Expanded Fallback", Arial, sans-serif;
-  --font-display: "Archivo SemiExpanded", "Archivo SemiExpanded Fallback", Arial, sans-serif;
+  --font-wordmark: "Archivo Expanded", "Archivo Expanded Fallback", system-ui, -apple-system, Arial, sans-serif;
+  --font-display: "Archivo SemiExpanded", "Archivo SemiExpanded Fallback", system-ui, -apple-system, Arial, sans-serif;
   --font-body: "Space Grotesk", "Space Grotesk Fallback", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
   --font-ios: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;

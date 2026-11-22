@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { AnimatePresence, type Transition } from 'motion/react'
 import * as m from 'motion/react-m'
 import { Slider, Toggle, ToggleGroup } from 'radix-ui'
-import { ASPECT_RATIOS, formatEv, GRAIN_LEVELS, LENSES, type LensMm } from '../../data/recipes'
+import { ASPECT_RATIOS, formatEv, LENSES, type LensMm } from '../../data/recipes'
 import type { CameraController } from '../../hooks/useCameraState'
+import { useI18n } from '../../i18n'
 import { cn } from '../../lib/cn'
 import { EASE_OUT } from '../../lib/motion'
 import { ShutterDeck } from './ShutterDeck'
@@ -28,12 +29,20 @@ const FN_TILE_ACTIVE =
 const SIMPLE_PILL_BASE =
   'h-[30px] px-2 rounded-full border inline-flex items-center justify-center gap-[3.5px] font-body font-semibold text-[9px] leading-none tracking-[-0.01em] whitespace-nowrap shrink-0 cursor-pointer transition-[border-color,background-color,color] duration-180 ease-ocular motion-reduce:transition-none'
 
-function FlashToggle({ pressed, onPressedChange }: { pressed: boolean; onPressedChange: (v: boolean) => void }) {
+function FlashToggle({
+  pressed,
+  ariaLabel,
+  onPressedChange,
+}: {
+  pressed: boolean
+  ariaLabel: string
+  onPressedChange: (v: boolean) => void
+}) {
   return (
     <Toggle.Root
       pressed={pressed}
       onPressedChange={onPressedChange}
-      aria-label="Toggle flash"
+      aria-label={ariaLabel}
       className="w-7 h-7 rounded-full flex items-center justify-center bg-obsidian/72 border border-silver/20 text-silver/82 shrink-0 p-0 cursor-pointer data-[state=on]:bg-amber/18 data-[state=on]:border-amber/72 data-[state=on]:text-amber"
     >
       <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
@@ -79,6 +88,7 @@ export function PortraitDeck({
   chromeTransition,
   disablePointer = false,
 }: Props) {
+  const { t } = useI18n()
   const [focalOpen, setFocalOpen] = useState(false)
   const [evDialOpen, setEvDialOpen] = useState(false)
   const [freeExposureOpen, setFreeExposureOpen] = useState(false)
@@ -110,7 +120,7 @@ export function PortraitDeck({
   }
 
   const aspectLabel = ASPECT_RATIOS.find((r) => r.id === aspect)?.label ?? '4:3'
-  const grainLabel = GRAIN_LEVELS.find((g) => g.id === grain)?.label ?? 'OFF'
+  const grainLabel = t.capture.grainLevels[grain]
   const evModified = Math.abs(ev) > 0.05
   const rulerOffsetPx = -(ev * 22)
 
@@ -144,7 +154,7 @@ export function PortraitDeck({
               transition={{ duration: 0.18, ease: EASE_OUT }}
             >
               <div className="flex items-center justify-between font-mono font-bold text-[8.5px] leading-none text-silver/78">
-                <span>EXPOSURE COMP</span>
+                <span>{t.phone.exposureComp}</span>
                 <div className="flex items-center gap-1.5">
                   {evModified && (
                     <button
@@ -152,7 +162,7 @@ export function PortraitDeck({
                       className="px-1.5 py-0.5 rounded-full bg-black/55 border border-silver/22 text-amber font-mono font-extrabold text-[7.5px] leading-none cursor-pointer"
                       onClick={() => setEv(0)}
                     >
-                      ↺ RESET
+                      {t.phone.reset}
                     </button>
                   )}
                   <b className="text-amber text-[10px]">{formatEv(ev)} EV</b>
@@ -177,7 +187,7 @@ export function PortraitDeck({
                     <Slider.Range className="hidden" />
                   </Slider.Track>
                   <Slider.Thumb
-                    aria-label="In-camera exposure compensation EV"
+                    aria-label={t.a11y.inCameraEv}
                     className="block w-5 h-full bg-transparent opacity-0 focus-visible:opacity-100"
                   />
                 </Slider.Root>
@@ -212,7 +222,7 @@ export function PortraitDeck({
                   if (!v) setFocalOpen(false)
                   else selectLens(Number(v) as LensMm)
                 }}
-                aria-label="Prime focal lengths"
+                aria-label={t.a11y.primeFocalLengths}
                 className="flex flex-1 items-center gap-0.5"
               >
                 {LENSES.map((mm) => (
@@ -237,7 +247,7 @@ export function PortraitDeck({
                 : 'bg-obsidian/84 border-silver/22 text-silver/92',
             )}
             onClick={cycleAspect}
-            title="Cycle framing aspect ratio"
+            title={t.a11y.cycleAspect}
           >
             <svg width="12" height="10" viewBox="0 0 24 20" aria-hidden="true">
               <rect x="1.5" y="2" width="21" height="16" rx="3" fill="none" stroke="currentColor" strokeWidth="2.1" />
@@ -254,13 +264,13 @@ export function PortraitDeck({
               key="pro-row"
               className="flex items-center gap-1"
               role="group"
-              aria-label="Camera function tiles"
+              aria-label={t.a11y.cameraFnTiles}
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 4 }}
               transition={{ duration: 0.16, ease: EASE_OUT }}
             >
-              <FlashToggle pressed={flashOn} onPressedChange={setFlashOn} />
+              <FlashToggle pressed={flashOn} ariaLabel={t.a11y.toggleFlash} onPressedChange={setFlashOn} />
               <div className="w-px h-[22px] bg-silver/22 shrink-0" aria-hidden="true" />
               <FnTile label="F1 DR" value={dr} active={dr !== 'DR100'} onClick={cycleDr} />
               <FnTile label="F2 TONE" value={recipe.tone} active={recipe.tone !== '0 / 0'} onClick={cycleRecipe} />
@@ -272,14 +282,14 @@ export function PortraitDeck({
               >
                 <span className="font-mono font-bold text-[7px] leading-none text-silver/68 whitespace-nowrap">F4 HAL</span>
                 <span className={cn('font-mono font-extrabold text-[9px] leading-none whitespace-nowrap', halation ? 'text-amber' : 'text-silver')}>
-                  {halation ? 'ON' : 'OFF'}
+                  {halation ? t.phone.on : t.phone.off}
                 </span>
               </Toggle.Root>
               <button
                 type="button"
                 onClick={onToggleQ}
                 aria-pressed={qOpen}
-                aria-label="Open Quick Menu"
+                aria-label={t.a11y.openQMenu}
                 className={cn(
                   'q-tile w-[34px] h-[38px] rounded-[10px] flex items-center justify-center font-mono font-extrabold text-[13px] leading-none text-amber shrink-0 p-0 cursor-pointer border',
                   qOpen ? 'bg-amber/24 border-amber' : 'bg-obsidian/74 border-silver/22',
@@ -293,13 +303,13 @@ export function PortraitDeck({
               key="free-row"
               className="simple-row flex items-center justify-center gap-1"
               role="group"
-              aria-label="Camera simple controls"
+              aria-label={t.a11y.cameraSimpleControls}
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 4 }}
               transition={{ duration: 0.16, ease: EASE_OUT }}
             >
-              <FlashToggle pressed={flashOn} onPressedChange={setFlashOn} />
+              <FlashToggle pressed={flashOn} ariaLabel={t.a11y.toggleFlash} onPressedChange={setFlashOn} />
               <div className="w-px h-[22px] bg-silver/22 shrink-0" aria-hidden="true" />
               <Toggle.Root
                 pressed={freeExposureOpen}
@@ -313,7 +323,7 @@ export function PortraitDeck({
                 )}
               >
                 <span className="text-amber font-bold" aria-hidden="true">±</span>
-                <span>Exposure</span>
+                <span>{t.phone.exposure}</span>
                 {evModified && (
                   <span className="simple-pill__m px-1 py-[1.5px] rounded-full bg-amber/22 text-amber font-mono font-extrabold text-[7px] leading-none">
                     M
@@ -333,7 +343,7 @@ export function PortraitDeck({
                 onClick={onToggleQ}
               >
                 <span className="text-amber font-mono font-extrabold text-[10px] leading-none" aria-hidden="true">Q</span>
-                <span>Film</span>
+                <span>{t.phone.film}</span>
               </button>
               <button
                 type="button"
@@ -343,9 +353,9 @@ export function PortraitDeck({
                   'bg-obsidian/76 border-amber/38 text-silver hover:border-amber/76 hover:bg-amber/16',
                 )}
                 onClick={() => setHudLayout('pro')}
-                title="Switch simulator to Pro HUD layout"
+                title={t.a11y.switchToProHud}
               >
-                <span className="text-amber font-bold">✦ Pro</span>
+                <span className="text-amber font-bold">{t.phone.proPill}</span>
               </button>
             </m.div>
           )}

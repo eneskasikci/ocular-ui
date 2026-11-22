@@ -7,6 +7,7 @@ import { Header } from './components/Header'
 import { CameraExperience } from './components/scenes/CameraExperience'
 import { useActiveScene } from './hooks/useActiveScene'
 import { useDesktopDeckNav } from './hooks/useDesktopDeckNav'
+import { I18nProvider, useI18n } from './i18n'
 
 // The deck is driven by wheel and keyboard only, so touch screens get the scrolling flow.
 const DECK_QUERY = '(min-width: 900px) and (pointer: fine)'
@@ -30,6 +31,7 @@ function useMediaQuery(query: string): boolean {
 }
 
 function HomePage() {
+  const { t } = useI18n()
   const reduce = Boolean(useReducedMotion())
   const deckMedia = useMediaQuery(DECK_QUERY)
   const [step, setStep] = useState<number>(() => getStepFromHash())
@@ -53,10 +55,6 @@ function HomePage() {
   const active = isDesktopDeck ? step : scrollActive
 
   useEffect(() => {
-    document.title = 'Ocular Camera for iPhone & iPad — Film Recipe & RAW Camera App'
-  }, [])
-
-  useEffect(() => {
     if (!isDesktopDeck) return
     goToStep(getStepFromHash(), 'instant')
   }, [goToStep, isDesktopDeck])
@@ -78,7 +76,7 @@ function HomePage() {
         className="fixed left-[var(--gutter)] -top-[100px] focus:top-2 z-100 px-4 py-3 bg-silver text-obsidian rounded-lg font-bold"
         href="#main"
       >
-        Skip to content
+        {t.a11y.skipToContent}
       </a>
       <Header
         active={active}
@@ -99,10 +97,12 @@ function HomePage() {
 
 export default function App() {
   return (
-    <LazyMotion features={() => import('./motionFeatures').then((m) => m.default)} strict>
-      <MotionConfig reducedMotion="user">
-        <HomePage />
-      </MotionConfig>
-    </LazyMotion>
+    <I18nProvider>
+      <LazyMotion features={() => import('./motionFeatures').then((m) => m.default)} strict>
+        <MotionConfig reducedMotion="user">
+          <HomePage />
+        </MotionConfig>
+      </LazyMotion>
+    </I18nProvider>
   )
 }

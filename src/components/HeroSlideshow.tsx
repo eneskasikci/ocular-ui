@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useReducedMotion } from 'motion/react'
 import { PHOTOS, type PhotoAsset, type PhotoId } from '../data/photos'
+import { useI18n } from '../i18n'
 import { cn } from '../lib/cn'
 import { GetItButton } from './GetItButton'
 import { MeniscusMark } from './MeniscusMark'
@@ -25,6 +26,7 @@ function SlideCard({
   isDuplicate: boolean
   onSelectPhoto: (id: PhotoId) => void
 }) {
+  const { t, format } = useI18n()
   const num = String(index + 1).padStart(2, '0')
   return (
     <button
@@ -38,7 +40,11 @@ function SlideCard({
       aria-pressed={!isDuplicate ? selected : undefined}
       aria-hidden={isDuplicate || undefined}
       tabIndex={isDuplicate ? -1 : undefined}
-      aria-label={isDuplicate ? undefined : `Select ${photo.name} (${photo.region}) for the Ocular camera`}
+      aria-label={
+        isDuplicate
+          ? undefined
+          : format(t.a11y.selectPhotoForCamera, { name: photo.name, region: photo.region })
+      }
     >
       <img
         src={photo.src}
@@ -60,7 +66,7 @@ function SlideCard({
             className="absolute top-[calc(var(--header)+14px)] left-4 z-3 px-2.5 py-[5px] rounded-full bg-deep/88 border border-amber/80 text-amber font-mono font-bold text-[0.72rem] leading-none tracking-[0.08em] pointer-events-none"
             aria-hidden="true"
           >
-            IN CAMERA
+            {t.hero.inCamera}
           </span>
           <span
             className="absolute inset-3.5 top-[calc(var(--header)+6px)] bottom-[118px] xs:bottom-[74px] border border-amber/36 pointer-events-none z-2"
@@ -94,6 +100,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
   onSelectPhoto,
   onEnterCamera,
 }: Props) {
+  const { t } = useI18n()
   const reduceMotion = Boolean(useReducedMotion())
   const [userPaused, setUserPaused] = useState(false)
   // Stop the infinite drift once the hero scrolls out of view (scroll layout).
@@ -119,7 +126,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
       <div
         className="absolute inset-0 z-1 overflow-hidden"
         role="region"
-        aria-label="Choose a photograph to preview inside the Ocular camera"
+        aria-label={t.a11y.choosePhoto}
       >
         <div
           className={cn(
@@ -175,7 +182,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
             className="hero-in font-body font-normal text-[clamp(1.04rem,2vw,1.26rem)] leading-[1.45] text-silver max-w-[36ch] mt-0.5 mb-1.5 tracking-[-0.01em] [text-shadow:0_2px_16px_rgba(0,0,0,.65)]"
             style={{ '--i': 1 } as CSSProperties}
           >
-            Film recipes and RAW, framed before the shutter.
+            {t.hero.tagline}
           </p>
 
           <div className="hero-in pointer-events-auto flex justify-center" style={{ '--i': 2 } as CSSProperties}>
@@ -186,7 +193,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
             className="hero-in mt-0.5 mb-0 font-mono font-medium text-[0.78rem] leading-[1.5] tracking-[0.04em] text-silver/84 [text-shadow:0_1px_10px_rgba(0,0,0,.7)]"
             style={{ '--i': 3 } as CSSProperties}
           >
-            Free to start · 3-day Pro trial · No account
+            {t.hero.subline}
           </p>
         </div>
 
@@ -195,12 +202,12 @@ export const HeroSlideshow = memo(function HeroSlideshow({
           style={{ '--i': 4 } as CSSProperties}
         >
           <div className="inline-flex items-center gap-3">
-            <div className="inline-flex gap-1.5 pointer-events-auto" role="group" aria-label="Step through sample photographs">
+            <div className="inline-flex gap-1.5 pointer-events-auto" role="group" aria-label={t.a11y.stepPhotos}>
               <button
                 type="button"
                 className="min-w-[44px] min-h-[44px] rounded-full bg-obsidian/86 border border-hair-strong text-silver font-body font-semibold text-[1.15rem] leading-none inline-flex items-center justify-center cursor-pointer transition-colors duration-180 ease-ocular hover:border-amber hover:text-amber"
                 onClick={() => stepPhoto(-1)}
-                aria-label="Previous photograph"
+                aria-label={t.a11y.prevPhoto}
               >
                 ‹
               </button>
@@ -208,7 +215,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
                 type="button"
                 className="min-w-[44px] min-h-[44px] rounded-full bg-obsidian/86 border border-hair-strong text-silver font-body font-semibold text-[1.15rem] leading-none inline-flex items-center justify-center cursor-pointer transition-colors duration-180 ease-ocular hover:border-amber hover:text-amber"
                 onClick={() => stepPhoto(1)}
-                aria-label="Next photograph"
+                aria-label={t.a11y.nextPhoto}
               >
                 ›
               </button>
@@ -217,7 +224,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
                   type="button"
                   className="min-w-[44px] min-h-[44px] rounded-full bg-obsidian/86 border border-hair-strong text-silver inline-flex items-center justify-center cursor-pointer transition-colors duration-180 ease-ocular hover:border-amber hover:text-amber"
                   onClick={() => setUserPaused((v) => !v)}
-                  aria-label={userPaused ? 'Play slideshow' : 'Pause slideshow'}
+                  aria-label={userPaused ? t.a11y.playSlideshow : t.a11y.pauseSlideshow}
                 >
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
                     {userPaused ? <path d="M2.5 1.2v9.6L10.5 6z" /> : <path d="M2 1h3v10H2zM7 1h3v10H7z" />}
@@ -243,7 +250,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
             }}
           >
             <span className="scroll-cue-line block w-px h-6 bg-current origin-top" aria-hidden="true" />
-            <span>Scroll into camera</span>
+            <span>{t.hero.scrollIntoCamera}</span>
           </a>
         </div>
       </div>

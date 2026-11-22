@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { useI18n } from '../../i18n'
 import { cn } from '../../lib/cn'
 import { Reveal } from '../Reveal'
 
@@ -11,39 +12,29 @@ const CARD_CLS =
 const LIST_CLS =
   'list-none m-0 p-0 [&_li]:flex [&_li]:items-baseline [&_li]:justify-between [&_li]:gap-4 [&_li]:py-[9px] [&_li]:border-t [&_li]:border-hair [&_li]:text-[0.93rem] [&_span]:text-ink-muted [&_b]:font-mono [&_b]:font-bold [&_b]:text-[0.8rem] [&_b]:leading-[1.2] [&_b]:text-right'
 
-const TIERS = [
-  {
-    name: 'Ocular',
-    badge: 'FREE',
-    cardCls: 'bg-[linear-gradient(180deg,rgba(22,24,30,.95),rgba(11,12,14,.98))] border-hair',
-    badgeCls: 'border-hair text-ink-subtle',
-    valueCls: '[&_b]:text-silver',
-    rows: [
-      ['Film stocks', '3 (STD, CC, AC)'],
-      ['Manual dials & primes', 'Full'],
-      ['Output', '12 MP · Subtle watermark'],
-      ['RAW & optics', '—'],
-      ['Custom slots', '1 (C1)'],
-    ],
-  },
-  {
-    name: 'Ocular Pro',
-    badge: 'PRO',
-    cardCls:
-      'bg-[radial-gradient(120%_90%_at_100%_0,rgba(122,28,46,.42),rgba(20,22,27,.96)_65%,rgba(11,12,14,.98)_100%)] border-amber/52',
-    badgeCls: 'border-amber/55 text-amber',
-    valueCls: '[&_b]:text-emerald-ink',
-    rows: [
-      ['Film stocks', 'All 12'],
-      ['Output', 'Full res · Unmarked'],
-      ['RAW & darkroom', 'Bayer RAW & ProRAW'],
-      ['Optics & framing', 'Halation · 65:24 Pano'],
-      ['Custom slots', '7 (C1–C7)'],
-    ],
-  },
-] as const
-
 export const TiersStage = memo(function TiersStage({ headingId }: TiersStageProps) {
+  const { t } = useI18n()
+
+  const tiers = [
+    {
+      name: 'Ocular',
+      badge: t.tiers.freeBadge,
+      cardCls: 'bg-[linear-gradient(180deg,rgba(22,24,30,.95),rgba(11,12,14,.98))] border-hair',
+      badgeCls: 'border-hair text-ink-subtle',
+      valueCls: '[&_b]:text-silver',
+      rows: t.tiers.freeRows,
+    },
+    {
+      name: 'Ocular Pro',
+      badge: t.tiers.proBadge,
+      cardCls:
+        'bg-[radial-gradient(120%_90%_at_100%_0,rgba(122,28,46,.42),rgba(20,22,27,.96)_65%,rgba(11,12,14,.98)_100%)] border-amber/52',
+      badgeCls: 'border-amber/55 text-amber',
+      valueCls: '[&_b]:text-emerald-ink',
+      rows: t.tiers.proRows,
+    },
+  ] as const
+
   return (
     <div className="w-full max-w-[960px] flex flex-col gap-4">
       <div className="pool-scrim">
@@ -51,15 +42,15 @@ export const TiersStage = memo(function TiersStage({ headingId }: TiersStageProp
           id={headingId}
           className="font-display font-bold text-[clamp(1.7rem,4.2vw,2.75rem)] leading-[1.03] tracking-[-0.025em] max-w-[22ch] [overflow-wrap:break-word]"
         >
-          Start free. Go Pro anytime.
+          {t.tiers.heading}
         </h2>
         <p className="text-[clamp(1rem,2.1vw,1.1rem)] leading-[1.5] text-ink-muted max-w-[36ch] mt-2.5 mb-0 tracking-[-0.01em]">
-          No account required. Prices show in the app.
+          {t.tiers.lede}
         </p>
       </div>
 
       <div className="grid grid-cols-1 xs:grid-cols-2 gap-6">
-        {TIERS.map((tier) => (
+        {tiers.map((tier) => (
           <article key={tier.name} className={cn(CARD_CLS, tier.cardCls)}>
             <header className="flex items-center justify-between gap-3 mb-2.5">
               <h3 className="font-display font-bold text-[1.32rem] leading-[1.1]">{tier.name}</h3>
@@ -87,9 +78,9 @@ export const TiersStage = memo(function TiersStage({ headingId }: TiersStageProp
       <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3">
         <div className="flex-1 basis-[320px] flex flex-wrap items-center gap-x-3.5 gap-y-2 px-[18px] py-[13px] rounded-2xl bg-[#0a2e24]/92 border border-emerald/58 text-ink text-[0.93rem]">
           <b className="font-mono font-bold text-[0.75rem] leading-none tracking-[0.12em] text-emerald-ink whitespace-nowrap">
-            3-DAY FREE TRIAL
+            {t.tiers.trialBadge}
           </b>
-          <span>Monthly, annual, or Lifetime. Saved recipes stay on your device.</span>
+          <span>{t.tiers.trialCopy}</span>
         </div>
       </div>
     </div>

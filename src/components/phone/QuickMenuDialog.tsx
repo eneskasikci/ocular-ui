@@ -1,8 +1,9 @@
 import { AnimatePresence } from 'motion/react'
 import * as m from 'motion/react-m'
 import { Dialog, Toggle, ToggleGroup } from 'radix-ui'
-import { GRAIN_LEVELS, RECIPES, type FilmId } from '../../data/recipes'
+import { RECIPES, type FilmId } from '../../data/recipes'
 import type { CameraController } from '../../hooks/useCameraState'
+import { useI18n } from '../../i18n'
 import { cn } from '../../lib/cn'
 import { EASE_OUT } from '../../lib/motion'
 
@@ -18,9 +19,10 @@ const OPTIC_BTN_CLS =
 
 /** Frosted in-phone Q-Menu overlay backed by a non-modal Radix Dialog. */
 export function QuickMenuDialog({ camera, isFree, open, onClose }: Props) {
+  const { t } = useI18n()
   const { recipe, dr, grain, halation, selectFilm, cycleDr, cycleGrain, toggleHalation, setHudLayout } =
     camera
-  const grainLabel = GRAIN_LEVELS.find((g) => g.id === grain)?.label ?? 'OFF'
+  const grainLabel = t.capture.grainLevels[grain]
 
   return (
     <AnimatePresence>
@@ -37,25 +39,25 @@ export function QuickMenuDialog({ camera, isFree, open, onClose }: Props) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: EASE_OUT }}
-            aria-label="In-phone Q-Menu film simulations"
+            aria-label={t.a11y.qMenuLabel}
           >
             <div className="flex items-start justify-between gap-2">
               <div>
                 <span className="inphone-q__kicker block font-mono font-bold text-[8px] leading-[1.2] tracking-[0.08em] text-silver/64">
-                  {isFree ? 'Q-MENU · FREE (3 STOCKS · C1)' : 'Q-MENU · FILM & OPTICS'}
+                  {isFree ? t.phone.qKickerFree : t.phone.qKickerPro}
                 </span>
                 <Dialog.Title className="block font-display font-bold text-[14px] leading-[1.2] text-silver mt-0.5">
                   {recipe.name}
                 </Dialog.Title>
                 <Dialog.Description className="sr-only">
-                  Select a film simulation or configure dynamic range and grain inside the camera.
+                  {t.a11y.qMenuDescription}
                 </Dialog.Description>
               </div>
               <Dialog.Close asChild>
                 <button
                   type="button"
                   className="w-7 h-7 rounded-full bg-graphite border border-silver/20 text-silver font-body font-bold text-[16px] leading-none flex items-center justify-center p-0 cursor-pointer"
-                  aria-label="Close Q-Menu"
+                  aria-label={t.a11y.closeQMenu}
                 >
                   ×
                 </button>
@@ -68,7 +70,7 @@ export function QuickMenuDialog({ camera, isFree, open, onClose }: Props) {
               onValueChange={(v) => {
                 if (v) selectFilm(v as FilmId)
               }}
-              aria-label="Film stocks"
+              aria-label={t.a11y.filmStocks}
               className="grid grid-cols-4 gap-[5px]"
             >
               {RECIPES.map((r) => (
@@ -95,7 +97,7 @@ export function QuickMenuDialog({ camera, isFree, open, onClose }: Props) {
                 <b className="font-mono font-extrabold text-[9.5px] leading-none text-silver">{dr}</b>
               </button>
               <button type="button" className={OPTIC_BTN_CLS} onClick={cycleGrain}>
-                <span className="font-mono font-bold text-[7.5px] leading-none text-silver/68">GRAIN</span>
+                <span className="font-mono font-bold text-[7.5px] leading-none text-silver/68">{t.phone.grain}</span>
                 <b className="font-mono font-extrabold text-[9.5px] leading-none text-silver">{grainLabel}</b>
               </button>
               {!isFree && (
@@ -106,7 +108,7 @@ export function QuickMenuDialog({ camera, isFree, open, onClose }: Props) {
                 >
                   <span className="font-mono font-bold text-[7.5px] leading-none text-silver/68">HAL</span>
                   <b className="font-mono font-extrabold text-[9.5px] leading-none text-silver group-data-[state=on]:text-amber">
-                    {halation ? 'ON' : 'OFF'}
+                    {halation ? t.phone.on : t.phone.off}
                   </b>
                 </Toggle.Root>
               )}
@@ -118,7 +120,7 @@ export function QuickMenuDialog({ camera, isFree, open, onClose }: Props) {
                   PRO
                 </span>
                 <span className="inphone-q__upsell-text flex-1 font-body font-medium text-[9.5px] leading-[1.2] text-silver/78 min-w-0">
-                  F1–F4 deck &amp; RAW
+                  {t.phone.upsellText}
                 </span>
                 <button
                   type="button"
@@ -128,7 +130,7 @@ export function QuickMenuDialog({ camera, isFree, open, onClose }: Props) {
                     onClose()
                   }}
                 >
-                  Pro HUD
+                  {t.phone.upsellBtn}
                 </button>
               </div>
             )}

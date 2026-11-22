@@ -2,6 +2,7 @@ import * as m from 'motion/react-m'
 import { Toggle } from 'radix-ui'
 import { RECIPES } from '../../data/recipes'
 import type { CameraController } from '../../hooks/useCameraState'
+import { useI18n } from '../../i18n'
 import { SPRING_DETENT } from '../../lib/motion'
 
 interface Props {
@@ -16,6 +17,7 @@ const GUIDE_BTN_CLS =
 
 /** Symmetric shutter deck: Roll + RANGE/RAW left, burgundy shutter center, knurled FILM dial right. */
 export function ShutterDeck({ camera, isFree, guidesOn, onToggleGuides }: Props) {
+  const { t, format } = useI18n()
   const { photo, recipe, shotCount, rawCompare, stepPhoto, toggleRawCompare, triggerShutter, cycleRecipe } =
     camera
 
@@ -29,8 +31,8 @@ export function ShutterDeck({ camera, isFree, guidesOn, onToggleGuides }: Props)
           type="button"
           className="relative w-[38px] h-[38px] p-0 rounded-[11px] overflow-hidden border-[1.5px] border-silver/36 bg-graphite cursor-pointer"
           onClick={() => stepPhoto(1)}
-          aria-label={`Switch location photo (currently ${photo.name})`}
-          title="Switch sample photo"
+          aria-label={format(t.a11y.switchLocationPhoto, { name: photo.name })}
+          title={t.a11y.switchSamplePhotoTitle}
         >
           <img
             src={photo.src}
@@ -46,7 +48,7 @@ export function ShutterDeck({ camera, isFree, guidesOn, onToggleGuides }: Props)
         <Toggle.Root
           pressed={isFree ? guidesOn : rawCompare}
           onPressedChange={isFree ? onToggleGuides : toggleRawCompare}
-          title={isFree ? 'Toggle rangefinder framing guides' : 'Toggle RAW Darkroom split'}
+          title={isFree ? t.a11y.toggleGuides : t.a11y.toggleRawSplit}
           className={GUIDE_BTN_CLS}
         >
           <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
@@ -56,7 +58,7 @@ export function ShutterDeck({ camera, isFree, guidesOn, onToggleGuides }: Props)
             <line x1="2" y1="12" x2="6.5" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             <line x1="17.5" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
           </svg>
-          <span className="font-mono font-bold text-[7px] leading-none">{isFree ? 'RANGE' : 'RAW'}</span>
+          <span className="font-mono font-bold text-[7px] leading-none">{isFree ? t.phone.range : t.phone.raw}</span>
         </Toggle.Root>
       </div>
 
@@ -66,7 +68,7 @@ export function ShutterDeck({ camera, isFree, guidesOn, onToggleGuides }: Props)
         onClick={triggerShutter}
         whileTap={{ scale: 0.9 }}
         transition={SPRING_DETENT}
-        aria-label="Capture frame and write recipe EXIF"
+        aria-label={t.a11y.captureFrame}
       >
         <span className="shutter-inner w-10 h-10 rounded-full bg-[radial-gradient(circle_at_35%_30%,#a82842_0%,#7a1c2e_68%,#4a101d_100%)] border-[1.5px] border-silver/44" />
       </m.button>
@@ -76,8 +78,8 @@ export function ShutterDeck({ camera, isFree, guidesOn, onToggleGuides }: Props)
           type="button"
           className="film-dial-btn w-16 h-16 p-0 border-0 bg-transparent rounded-full cursor-pointer"
           onClick={cycleRecipe}
-          aria-label={`Film dial: ${recipe.name} (${recipe.code}). Tap for next stock.`}
-          title="Rotate film dial"
+          aria-label={format(t.a11y.filmDialLabel, { name: recipe.name, code: recipe.code })}
+          title={t.a11y.rotateFilmDial}
         >
           <svg viewBox="0 0 86 86" className="w-full h-full block" aria-hidden="true">
             <circle cx="43" cy="43" r="42" fill="rgba(17,18,21,0.96)" stroke="rgba(243,241,236,0.22)" strokeWidth="1" />

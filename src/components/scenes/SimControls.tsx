@@ -2,13 +2,9 @@ import * as m from 'motion/react-m'
 import { ToggleGroup } from 'radix-ui'
 import { PHOTOS } from '../../data/photos'
 import type { HudLayout } from '../../hooks/useCameraState'
+import { useI18n } from '../../i18n'
 import { cn } from '../../lib/cn'
 import { SPRING_DETENT } from '../../lib/motion'
-
-const HUD_LAYOUTS: readonly { id: HudLayout; label: string }[] = [
-  { id: 'free', label: 'Free' },
-  { id: 'pro', label: 'Pro' },
-]
 
 export function HudLayoutSwitch({
   layout,
@@ -19,6 +15,12 @@ export function HudLayoutSwitch({
   wide?: boolean
   onChange: (next: HudLayout) => void
 }) {
+  const { t } = useI18n()
+  const hudLayouts: readonly { id: HudLayout; label: string }[] = [
+    { id: 'free', label: t.sim.free },
+    { id: 'pro', label: t.sim.pro },
+  ]
+
   return (
     <div
       className={cn(
@@ -27,7 +29,7 @@ export function HudLayoutSwitch({
       )}
     >
       <span className="font-mono font-bold text-[0.7rem] leading-none tracking-[0.1em] text-ink-subtle uppercase whitespace-nowrap">
-        HUD
+        {t.sim.hud}
       </span>
       <ToggleGroup.Root
         type="single"
@@ -35,10 +37,10 @@ export function HudLayoutSwitch({
         onValueChange={(v) => {
           if (v) onChange(v as HudLayout)
         }}
-        aria-label="Phone simulator HUD layout"
+        aria-label={t.a11y.phoneHudLayout}
         className="inline-flex items-center gap-0.5"
       >
-        {HUD_LAYOUTS.map((opt) => {
+        {hudLayouts.map((opt) => {
           const selected = layout === opt.id
           return (
             <ToggleGroup.Item
@@ -78,6 +80,7 @@ export function PhotoStepper({
   wide?: boolean
   onStep: (dir: -1 | 1) => void
 }) {
+  const { t } = useI18n()
   const btnCls =
     'w-[34px] h-[34px] rounded-full border border-hair bg-graphite/78 text-silver font-body font-semibold text-base leading-none inline-flex items-center justify-center cursor-pointer shrink-0 hover:border-amber hover:text-amber'
   return (
@@ -87,9 +90,9 @@ export function PhotoStepper({
         wide && 'photo-stepper--wide w-[min(100%,308px)] justify-between',
       )}
       role="group"
-      aria-label={wide ? 'Switch sample photograph' : 'Switch active photograph'}
+      aria-label={wide ? t.a11y.switchSamplePhoto : t.a11y.switchActivePhoto}
     >
-      <button type="button" className={btnCls} onClick={() => onStep(-1)} aria-label="Previous photograph">
+      <button type="button" className={btnCls} onClick={() => onStep(-1)} aria-label={t.a11y.prevPhoto}>
         ‹
       </button>
       <span
@@ -103,7 +106,7 @@ export function PhotoStepper({
         </b>
         <span> {photoName}</span>
       </span>
-      <button type="button" className={btnCls} onClick={() => onStep(1)} aria-label="Next photograph">
+      <button type="button" className={btnCls} onClick={() => onStep(1)} aria-label={t.a11y.nextPhoto}>
         ›
       </button>
     </div>

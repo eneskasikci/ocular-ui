@@ -4,6 +4,7 @@ import * as m from 'motion/react-m'
 import { Dialog, Toggle } from 'radix-ui'
 import { buildOpticalFilter } from '../../data/recipes'
 import type { CameraController } from '../../hooks/useCameraState'
+import { useI18n } from '../../i18n'
 import { cn } from '../../lib/cn'
 import { EASE_BUTTER, EASE_OUT } from '../../lib/motion'
 import { MeniscusMark } from '../MeniscusMark'
@@ -33,6 +34,7 @@ function HardwareButtons() {
 }
 
 export const CameraPhone = memo(function CameraPhone({ camera, isGiantMode }: Props) {
+  const { t } = useI18n()
   const [guidesOn, setGuidesOn] = useState(true)
   const [qOpen, setQOpen] = useState(false)
 
@@ -51,7 +53,7 @@ export const CameraPhone = memo(function CameraPhone({ camera, isGiantMode }: Pr
     <div
       className="phone-shell relative w-[min(100%,308px)] aspect-[78/163.4] mx-auto rounded-[46px] p-[7px] bg-[linear-gradient(155deg,#353842_0%,#1d1f25_36%,#111215_72%,#262930_100%)] border border-silver/20 shadow-[0_34px_90px_rgba(0,0,0,.66),0_8px_24px_rgba(0,0,0,.46),inset_0_1px_0_rgba(243,241,236,.18)]"
       role="region"
-      aria-label="Interactive Ocular camera on iPhone 18 Pro Max"
+      aria-label={t.a11y.phoneSimulator}
     >
       <HardwareButtons />
 
@@ -164,17 +166,17 @@ export const CameraPhone = memo(function CameraPhone({ camera, isGiantMode }: Pr
                 <Toggle.Root
                   pressed={rawCompare}
                   onPressedChange={toggleRawCompare}
-                  title="Toggle RAW darkroom comparison"
+                  title={t.a11y.toggleRawCompare}
                   className="sensor-badge inline-flex items-center gap-1 h-6 px-2 rounded-full bg-obsidian/68 border border-silver/20 font-mono font-extrabold text-[9px] leading-none tracking-[0.06em] text-silver/92 cursor-pointer transition-[border-color,background-color] duration-180 ease-ocular motion-reduce:transition-none data-[state=on]:border-amber/72 data-[state=on]:bg-amber/20 data-[state=on]:text-amber"
                 >
                   <span className="w-[4.5px] h-[4.5px] rounded-full bg-amber" />
-                  <span>{rawCompare ? 'SPLIT' : 'RAW'}</span>
+                  <span>{rawCompare ? t.phone.split : t.phone.raw}</span>
                 </Toggle.Root>
               )}
               <button
                 type="button"
                 onClick={() => setQOpen((v) => !v)}
-                aria-label="Toggle Ocular Q-Menu"
+                aria-label={t.a11y.toggleQMenu}
                 aria-pressed={qOpen}
                 className={cn(
                   'w-7 h-7 rounded-full bg-obsidian/66 border border-silver/20 flex items-center justify-center p-0 cursor-pointer transition-[border-color,color] duration-180 ease-ocular motion-reduce:transition-none',

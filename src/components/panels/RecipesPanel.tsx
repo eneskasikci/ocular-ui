@@ -3,6 +3,7 @@ import * as m from 'motion/react-m'
 import { ToggleGroup } from 'radix-ui'
 import { RECIPES, type FilmId } from '../../data/recipes'
 import type { CameraController } from '../../hooks/useCameraState'
+import { useI18n } from '../../i18n'
 import { cn } from '../../lib/cn'
 import { SPRING_DETENT } from '../../lib/motion'
 import { HEADING_CLS, LEDE_CLS, PANEL_CLS } from './controls'
@@ -13,15 +14,16 @@ interface Props {
 }
 
 export const RecipesPanel = memo(function RecipesPanel({ headingId, camera }: Props) {
+  const { t, format } = useI18n()
   const { photo, filmId, recipe, selectFilm } = camera
 
   return (
     <div className="flex flex-col gap-3.5">
       <div className="pool-scrim">
         <h2 id={headingId} className={HEADING_CLS}>
-          Twelve stocks. Live in frame.
+          {t.recipes.heading}
         </h2>
-        <p className={LEDE_CLS}>3 free, 9 Pro. Tap any stock to preview on {photo.name}.</p>
+        <p className={LEDE_CLS}>{format(t.recipes.lede, { photo: photo.name })}</p>
       </div>
 
       <div className={PANEL_CLS}>
@@ -31,7 +33,7 @@ export const RecipesPanel = memo(function RecipesPanel({ headingId, camera }: Pr
           onValueChange={(v) => {
             if (v) selectFilm(v as FilmId)
           }}
-          aria-label="Film looks"
+          aria-label={t.a11y.filmLooks}
           className="grid grid-cols-[repeat(auto-fill,minmax(112px,1fr))] gap-2"
         >
           {RECIPES.map((r) => {
@@ -63,7 +65,7 @@ export const RecipesPanel = memo(function RecipesPanel({ headingId, camera }: Pr
                         : 'text-ink-subtle',
                     )}
                   >
-                    {r.tier === 'pro' ? 'PRO' : 'FREE'}
+                    {r.tier === 'pro' ? t.recipes.proBadge : t.recipes.freeBadge}
                   </span>
                 </div>
                 <b className="font-display font-bold text-[0.9rem] leading-[1.15] text-silver">{r.name}</b>
@@ -79,12 +81,12 @@ export const RecipesPanel = memo(function RecipesPanel({ headingId, camera }: Pr
 
         <div className="mt-3 pt-[11px] border-t border-hair flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <span className="font-body font-semibold text-[0.92rem] leading-[1.3] text-silver">
-            {recipe.summary}
+            {t.recipes.summaries[recipe.id]}
           </span>
           <div className="flex flex-wrap gap-2.5 font-mono font-bold text-[0.74rem] leading-none tracking-[0.06em] text-ink-subtle">
             <span>{recipe.wb}</span>
-            <span>7 of 12 shown</span>
-            <span>C1–C7 slots</span>
+            <span>{t.recipes.shownCount}</span>
+            <span>{t.recipes.customSlots}</span>
           </div>
         </div>
       </div>
