@@ -7,7 +7,7 @@ import { Header } from './components/Header'
 import { CameraExperience } from './components/scenes/CameraExperience'
 import { useActiveScene } from './hooks/useActiveScene'
 import { useDesktopDeckNav } from './hooks/useDesktopDeckNav'
-import { I18nProvider, useI18n } from './i18n'
+import { I18nProvider, useI18n, type Locale } from './i18n'
 
 // The deck is driven by wheel and keyboard only, so touch screens get the scrolling flow.
 const DECK_QUERY = '(min-width: 900px) and (pointer: fine)'
@@ -95,9 +95,9 @@ function HomePage() {
   )
 }
 
-export default function App() {
+export default function App({ initialLocale }: { initialLocale?: Locale }) {
   return (
-    <I18nProvider>
+    <I18nProvider initialLocale={initialLocale}>
       <LazyMotion features={() => import('./motionFeatures').then((m) => m.default)} strict>
         <MotionConfig reducedMotion="user">
           <HomePage />
