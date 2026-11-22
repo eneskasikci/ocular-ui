@@ -1,6 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Ocular">
-  <rect width="32" height="32" rx="7" fill="#7A1C2E"/>
-  <path d="M 11.50 23.20 A 8.49 8.49 0 0 1 11.50 8.80" fill="none" stroke="#F3F1EC" stroke-width="2.9" stroke-linecap="round"/>
-  <path d="M 20.50 8.80 A 8.49 8.49 0 0 1 20.50 23.20" fill="none" stroke="#F3F1EC" stroke-width="2.9" stroke-linecap="round"/>
-  <circle cx="16" cy="16" r="2.75" fill="#E8832A"/>
+  <rect width="32" height="32" rx="7" fill="#111215"/>
+  <g stroke="#F3F1EC" stroke-width="1.5" stroke-linecap="round">
+    <line x1="20.17" y1="5.94" x2="19.34" y2="7.96"/>
+    <line x1="23.11" y1="8.89" x2="21.56" y2="10.44"/>
+    <line x1="26.06" y1="11.83" x2="24.04" y2="12.66"/>
+    <line x1="26.90" y1="16.00" x2="24.72" y2="16.00"/>
+    <line x1="26.06" y1="20.17" x2="24.04" y2="19.34"/>
+    <line x1="23.11" y1="23.11" x2="21.56" y2="21.56"/>
+    <line x1="20.17" y1="26.06" x2="19.34" y2="24.04"/>
+    <line x1="16.00" y1="26.90" x2="16.00" y2="24.72"/>
+    <line x1="11.83" y1="26.06" x2="12.66" y2="24.04"/>
+    <line x1="8.89" y1="23.11" x2="10.44" y2="21.56"/>
+    <line x1="5.94" y1="20.17" x2="7.96" y2="19.34"/>
+    <line x1="5.10" y1="16.00" x2="7.28" y2="16.00"/>
+    <line x1="5.94" y1="11.83" x2="7.96" y2="12.66"/>
+    <line x1="8.89" y1="8.89" x2="10.44" y2="10.44"/>
+    <line x1="11.83" y1="5.94" x2="12.66" y2="7.96"/>
+  </g>
+  <polygon points="13.8,4.6 18.2,4.6 16,8.2" fill="#E8832A"/>
+  <circle cx="16" cy="16" r="5.9" fill="none" stroke="#F3F1EC" stroke-width="2.1"/>
+  <circle cx="16" cy="16" r="1.9" fill="#F3F1EC" fill-opacity="0.45"/>
 </svg>
