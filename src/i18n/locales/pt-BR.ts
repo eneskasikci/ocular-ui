@@ -68,14 +68,17 @@ export const ptBR: Messages = {
     privacy: 'Baixar',
   },
   cta: {
-    getApp: 'Baixar o app',
+    getApp: 'Testar grátis no iOS',
     downloadAppStore: 'Baixar na App Store',
   },
   hero: {
-    tagline: 'Receitas de filme e RAW, enquadrados antes do obturador.',
+    headline: 'Receitas de filme ao vivo e câmera RAW para iPhone.',
+    tagline:
+      'Pré-visualize 12 filmes analógicos ao vivo no visor — e fotografe em Bayer RAW (DNG) ou Apple ProRAW para reprocessar depois.',
     subline: 'Comece grátis · Teste Pro de 3 dias · Sem conta',
     inCamera: 'NA CÂMERA',
-    scrollIntoCamera: 'Rolar até a câmera',
+    scrollIntoCamera: 'Testar o visor ao vivo',
+    shotWithOcular: 'Capturado no iPhone com Ocular',
   },
   sim: {
     hud: 'HUD',
@@ -83,12 +86,14 @@ export const ptBR: Messages = {
     pro: 'Pro',
   },
   recipes: {
-    heading: 'Doze filmes. Ao vivo no quadro.',
+    heading: '12 filmes. Ao vivo antes do clique.',
     lede: '3 grátis, 9 Pro. Toque em qualquer filme para ver em {photo}.',
     freeBadge: 'GRÁTIS',
     proBadge: 'PRO',
     shownCount: '7 de 12 exibidos',
     customSlots: 'Slots C1–C7',
+    moreStocks:
+      'Também no Pro: RA Realistic Ambient · ET Ethereal Tone · AS Airy Soft · PNH e PNS Portrait Neutral',
     summaries: {
       std: 'Cor real com pretos nítidos',
       cc: 'Transição suave e alcance dinâmico de cinema',
@@ -100,15 +105,15 @@ export const ptBR: Messages = {
     },
   },
   capture: {
-    heading: 'Ajustado no hardware.',
-    lede: 'Exposição, alcance dinâmico, lentes fixas e óptica antes do clique.',
+    heading: 'Ajuste antes de fotografar.',
+    lede: 'Disco de exposição, proteção de altas-luzes DR400, lentes fixas, granulação 35 mm e halagem — ao vivo antes do obturador.',
     exposureBias: 'Viés de Exposição',
     dynamicRange: 'Alcance Dinâmico',
     framingRatio: 'Proporção',
     filmGrain: 'Granulação do Filme',
     analogOptics: 'Óptica analógica',
     halation: 'HALAGEM',
-    primes: 'Fixas · 13 e 24 mm nativas',
+    primes: 'Fixas · 13 mm a 77 mm',
     grainLevels: {
       off: 'OFF',
       weak: 'FRACO',
@@ -116,8 +121,8 @@ export const ptBR: Messages = {
     },
   },
   raw: {
-    heading: 'Reprocesse qualquer RAW.',
-    lede: 'Bayer RAW (DNG) e Apple ProRAW. Receita salva no EXIF.',
+    heading: 'Nunca fique preso a um visual.',
+    lede: 'Fotografe em Bayer RAW (DNG) ou Apple ProRAW com a receita salva no EXIF e troque o filme sem perdas na câmera escura integrada.',
     wipeLabel: 'RAW ←→ {code} Câmera Escura',
     splitOn: 'DIVISÃO ON',
     splitOff: 'DIVISÃO OFF',
@@ -129,8 +134,8 @@ export const ptBR: Messages = {
     },
   },
   tiers: {
-    heading: 'Comece grátis. Vire Pro quando quiser.',
-    lede: 'Sem necessidade de conta. Preços exibidos no app.',
+    heading: 'Fotografe grátis para sempre. Libere RAW e os 12 filmes no Pro.',
+    lede: 'Sem necessidade de conta. Preços completos exibidos na App Store e no app.',
     freeBadge: 'GRÁTIS',
     proBadge: 'PRO',
     freeRows: [
@@ -149,6 +154,7 @@ export const ptBR: Messages = {
     ],
     trialBadge: 'TESTE GRÁTIS DE 3 DIAS',
     trialCopy: 'Mensal, Anual ou Vitalício. Receitas salvas permanecem no seu dispositivo.',
+    readFaq: 'Dúvidas? Leia as perguntas frequentes',
   },
   privacy: {
     heading: 'Fica no seu dispositivo.',

@@ -72,7 +72,7 @@ Every custom slot (`C1` on Free; `C1–C7` on Ocular Pro) saves a complete analo
 | **Built-In Film Looks** | 3 (`STD`, `CC`, `AC`) | All 12 Film Looks |
 | **Custom Recipe Slots** | 1 Custom Slot (`C1`) | 7 Custom Slots (`C1–C7`) |
 | **Manual Exposure, Primes & Focus Lock** | Full Access | Full Access |
-| **Output Resolution** | Full Sensor Resolution | Full Sensor Resolution |
+| **Output Resolution** | 12 MP (subtle Ocular corner watermark) | Full Sensor Resolution (unmarked) |
 | **Bayer RAW (DNG) & Apple ProRAW** | — | Included |
 | **Non-Destructive RAW Darkroom Re-Develop** | — | Included |
 | **Optical Halation & 65:24 Panoramic Ratio** | — | Included |

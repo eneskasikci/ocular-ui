@@ -68,14 +68,17 @@ export const tr: Messages = {
     privacy: 'Edin',
   },
   cta: {
-    getApp: 'Uygulamayı edin',
+    getApp: 'iOS’ta Ücretsiz Dene',
     downloadAppStore: "App Store'dan İndir",
   },
   hero: {
-    tagline: 'Film tarifleri ve RAW, deklanşörden önce kadrajda.',
+    headline: 'iPhone için canlı film tarifleri ve RAW kamera.',
+    tagline:
+      '12 analog film stilini vizörde canlı önizleyin; sonradan yeniden işleyebileceğiniz saf Bayer RAW (DNG) veya Apple ProRAW çekin.',
     subline: 'Ücretsiz başla · 3 günlük Pro deneme · Hesap yok',
     inCamera: 'KAMERADA',
-    scrollIntoCamera: 'Kameraya kaydır',
+    scrollIntoCamera: 'Canlı vizörü dene',
+    shotWithOcular: 'iPhone’da Ocular ile çekildi',
   },
   sim: {
     hud: 'HUD',
@@ -83,12 +86,14 @@ export const tr: Messages = {
     pro: 'Pro',
   },
   recipes: {
-    heading: 'On iki stok. Canlı kadrajda.',
+    heading: '12 film stoku. Çekmeden önce canlı.',
     lede: '3 ücretsiz, 9 Pro. {photo} üzerinde önizlemek için dokunun.',
     freeBadge: 'ÜCRETSİZ',
     proBadge: 'PRO',
     shownCount: '12 stoktan 7’si',
     customSlots: 'C1–C7 yuvaları',
+    moreStocks:
+      'Pro’da ayrıca: RA Realistic Ambient · ET Ethereal Tone · AS Airy Soft · PNH ve PNS Portrait Neutral',
     summaries: {
       std: 'Canlı siyahlarla gerçekçi renkler',
       cc: 'Yumuşak rol-off ve sinema dinamik aralığı',
@@ -100,15 +105,15 @@ export const tr: Messages = {
     },
   },
   capture: {
-    heading: 'Donanımda ayarlı.',
-    lede: 'Çekimden önce pozlama, dinamik aralık, prime lensler ve optikler.',
+    heading: 'Çekmeden önce ayarlayın.',
+    lede: 'Pozlama kadranı, DR400 parlak alan koruması, prime kadraj, 35 mm gren ve halasyon — deklanşöre basmadan önce canlı.',
     exposureBias: 'Pozlama Sapması',
     dynamicRange: 'Dinamik Aralık',
     framingRatio: 'En/Boy Oranı',
     filmGrain: 'Film Greni',
     analogOptics: 'Analog optik',
     halation: 'HALASYON',
-    primes: 'Prime · 13 ve 24 mm doğal',
+    primes: 'Prime · 13 mm – 77 mm',
     grainLevels: {
       off: 'KAPALI',
       weak: 'ZAYIF',
@@ -116,8 +121,8 @@ export const tr: Messages = {
     },
   },
   raw: {
-    heading: 'Her RAW’ı yeniden geliştir.',
-    lede: 'Bayer RAW (DNG) ve Apple ProRAW. Tarif EXIF içinde saklanır.',
+    heading: 'Tek bir görünüme kilitlenmeyin.',
+    lede: 'Tarifi EXIF’e kaydedilen saf Bayer RAW (DNG) veya Apple ProRAW çekin; ardından yerleşik karanlık odada film stoklarını kayıpsız değiştirin.',
     wipeLabel: 'RAW ←→ {code} Karanlık Oda',
     splitOn: 'BÖLME AÇIK',
     splitOff: 'BÖLME KAPALI',
@@ -129,8 +134,8 @@ export const tr: Messages = {
     },
   },
   tiers: {
-    heading: 'Ücretsiz başla. İstediğinde Pro’ya geç.',
-    lede: 'Hesap gerekmez. Fiyatlar uygulamada gösterilir.',
+    heading: 'Sonsuza dek ücretsiz çekin. Pro ile RAW ve tüm 12 stili açın.',
+    lede: 'Hesap gerekmez. Tüm fiyatlar App Store’da ve uygulama içinde gösterilir.',
     freeBadge: 'ÜCRETSİZ',
     proBadge: 'PRO',
     freeRows: [
@@ -149,6 +154,7 @@ export const tr: Messages = {
     ],
     trialBadge: '3 GÜNLÜK ÜCRETSİZ DENEME',
     trialCopy: 'Aylık, Yıllık veya Ömür Boyu. Kayıtlı tarifler cihazınızda kalır.',
+    readFaq: 'Sorularınız mı var? SSS’yi okuyun',
   },
   privacy: {
     heading: 'Cihazınızda kalır.',

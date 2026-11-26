@@ -68,14 +68,17 @@ export const ja: Messages = {
     privacy: '入手',
   },
   cta: {
-    getApp: 'アプリを入手',
+    getApp: 'iOSで無料体験',
     downloadAppStore: 'App Storeでダウンロード',
   },
   hero: {
-    tagline: 'フィルムレシピとRAWを、シャッターの前にファインダーで。',
+    headline: 'iPhone用ライブフィルムレシピ & RAWカメラ。',
+    tagline:
+      '12種類のアナログフィルムをファインダーでリアルタイムプレビュー。Bayer RAW (DNG) や Apple ProRAWで撮影して、後から再現像もできます。',
     subline: '無料で始める · 3日間Proトライアル · アカウント不要',
     inCamera: 'カメラ内',
-    scrollIntoCamera: 'カメラへスクロール',
+    scrollIntoCamera: 'ライブファインダーを試す',
+    shotWithOcular: 'iPhoneのOcularで撮影',
   },
   sim: {
     hud: 'HUD',
@@ -83,12 +86,14 @@ export const ja: Messages = {
     pro: 'Pro',
   },
   recipes: {
-    heading: '12種類のフィルム。ライブで描写。',
+    heading: '12種類のフィルム。撮る前からライブで。',
     lede: '無料3種・Pro 9種。タップして「{photo}」でプレビュー。',
     freeBadge: '無料',
     proBadge: 'PRO',
     shownCount: '12種中7種を表示',
     customSlots: 'C1〜C7 スロット',
+    moreStocks:
+      'Proで使えるその他のフィルム：RA Realistic Ambient · ET Ethereal Tone · AS Airy Soft · PNH & PNS Portrait Neutral',
     summaries: {
       std: 'シャープな黒を伴う真実の色',
       cc: 'ソフトロールオフ＆シネマダイナミックレンジ',
@@ -100,15 +105,15 @@ export const ja: Messages = {
     },
   },
   capture: {
-    heading: 'ハードウェアで操る。',
-    lede: '撮影前に露出、ダイナミックレンジ、単焦点、光学系を設定。',
+    heading: '撮る前に仕上げる。',
+    lede: '露出ダイヤル、DR400ハイライト保護、単焦点画角、35mmグレイン、ハレーションをシャッター前にリアルタイム調整。',
     exposureBias: '露出バイアス',
     dynamicRange: 'ダイナミックレンジ',
     framingRatio: '縦横比',
     filmGrain: 'フィルムグレイン',
     analogOptics: 'アナログ光学',
     halation: 'ハレーション',
-    primes: '単焦点 · 13 & 24 mm ネイティブ',
+    primes: '単焦点 · 13mm〜77mm',
     grainLevels: {
       off: 'オフ',
       weak: '弱',
@@ -116,8 +121,8 @@ export const ja: Messages = {
     },
   },
   raw: {
-    heading: 'あらゆるRAWを再現像。',
-    lede: 'Bayer RAW (DNG) と Apple ProRAW。レシピはEXIFに保存。',
+    heading: 'ひとつのルックに縛られない。',
+    lede: 'レシピ情報をEXIFに保存した純粋な Bayer RAW (DNG) や Apple ProRAW で撮影。内蔵ダークルームで後から非破壊でフィルムを切り替えられます。',
     wipeLabel: 'RAW ←→ {code} ダークルーム',
     splitOn: '分割 オン',
     splitOff: '分割 オフ',
@@ -129,8 +134,8 @@ export const ja: Messages = {
     },
   },
   tiers: {
-    heading: '無料で始める。いつでもProへ。',
-    lede: 'アカウント不要。価格はアプリ内で確認できます。',
+    heading: 'ずっと無料で撮影。ProでRAWと全12種を解放。',
+    lede: 'アカウント不要。正確な価格はApp Storeおよびアプリ内で確認できます。',
     freeBadge: '無料',
     proBadge: 'PRO',
     freeRows: [
@@ -149,6 +154,7 @@ export const ja: Messages = {
     ],
     trialBadge: '3日間無料トライアル',
     trialCopy: '月額・年間・永久プラン。保存したレシピはデバイスに残ります。',
+    readFaq: 'よくある質問を読む',
   },
   privacy: {
     heading: 'デバイス内だけで完結。',

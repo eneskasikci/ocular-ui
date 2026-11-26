@@ -56,7 +56,7 @@ export interface CameraController {
 
 /** Shared camera state and actions driving the interactive phone, panels, and hero. */
 export function useCameraState(isRawActive: boolean): CameraController {
-  const [photoId, setPhotoId] = useState<PhotoId>('reine')
+  const [photoId, setPhotoId] = useState<PhotoId>('boulevard')
   const [filmId, setFilmId] = useState<FilmId>('std')
   const [lens, setLens] = useState<LensMm>(24)
   const [ev, setEv] = useState<number>(0)

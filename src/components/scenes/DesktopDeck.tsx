@@ -132,6 +132,7 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
             <HeroSlideshow
               photoId={camera.photo.id}
               paused={!isHero}
+              inDeck
               onSelectPhoto={camera.selectPhoto}
               onEnterCamera={enterCamera}
             />

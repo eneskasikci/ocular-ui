@@ -8,10 +8,6 @@
       name="description"
       content="Ocular Camera is a tactile film-recipe and RAW rangefinder camera app for iPhone and iPad. Preview 12 live analog film looks before the shutter, dial custom recipes, shoot Bayer RAW or Apple ProRAW, and re-develop in the darkroom. No account required."
     />
-    <meta
-      name="keywords"
-      content="film camera app iPhone, film recipe camera app, iPhone RAW camera app, Bayer RAW DNG iPhone, Apple ProRAW camera, rangefinder camera app iOS, custom film recipes, film grain halation camera, darkroom RAW editor iOS, Ocular Camera"
-    />
     <link rel="canonical" href="https://ocularcamera.com/" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="Ocular Camera LLM Summary" />
     <link rel="alternate" type="text/plain" href="/llms-full.txt" title="Ocular Camera Full LLM Specification" />
@@ -23,7 +19,7 @@
     <meta property="og:title" content="Ocular Camera for iPhone &amp; iPad — Film Recipe &amp; RAW Camera App" />
     <meta
       property="og:description"
-      content="Film before the shutter. Preview 12 live film looks, dial custom film recipes, shoot RAW or ProRAW, and re-develop in the darkroom on iPhone and iPad."
+      content="Live film recipes &amp; RAW camera for iPhone. Preview 12 analog film looks in your viewfinder, dial custom recipes, shoot Bayer RAW or ProRAW, and re-develop later in the darkroom."
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -35,7 +31,7 @@
       as="image"
       type="image/avif"
       fetchpriority="high"
-      imagesrcset="/photos/nusfjord-lofoten-fishing-cabins-640.avif 640w, /photos/nusfjord-lofoten-fishing-cabins-720.avif 720w"
+      imagesrcset="/photos/golden-clouds-boulevard-640.avif 640w, /photos/golden-clouds-boulevard-768.avif 768w"
       imagesizes="(min-width: 1438px) 460px, (min-width: 875px) 32vw, (min-width: 560px) 280px, 78vw"
     />
     <meta property="og:url" content="https://ocularcamera.com/" />
@@ -46,7 +42,7 @@
     <meta name="twitter:title" content="Ocular Camera for iPhone &amp; iPad — Film Recipe &amp; RAW Camera App" />
     <meta
       name="twitter:description"
-      content="Film before the shutter. Live custom film recipes, rangefinder controls, and RAW darkroom re-development for iPhone and iPad."
+      content="Live film recipes &amp; RAW camera for iPhone. Preview 12 analog film stocks in your viewfinder and re-develop Bayer RAW or ProRAW anytime."
     />
     <meta name="twitter:image" content="https://ocularcamera.com/og-image.jpg" />
     <script type="application/ld+json">
@@ -54,12 +50,21 @@
         "@context": "https://schema.org",
         "@graph": [
           {
+            "@type": "Organization",
+            "@id": "https://ocularcamera.com/#organization",
+            "name": "Ocular Camera",
+            "url": "https://ocularcamera.com/",
+            "logo": "https://ocularcamera.com/apple-touch-icon.png",
+            "email": "mailto:ocular.camera@icloud.com"
+          },
+          {
             "@type": "WebSite",
             "@id": "https://ocularcamera.com/#website",
             "url": "https://ocularcamera.com/",
             "name": "Ocular Camera",
             "alternateName": ["Ocular", "Ocular Camera for iPhone", "Ocular RAW & Film Camera"],
-            "description": "Official website for Ocular Camera, a film-recipe and RAW rangefinder camera app for iPhone and iPad."
+            "description": "Official website for Ocular Camera, a film-recipe and RAW rangefinder camera app for iPhone and iPad.",
+            "publisher": { "@id": "https://ocularcamera.com/#organization" }
           },
           {
             "@type": ["MobileApplication", "SoftwareApplication"],
@@ -70,6 +75,8 @@
             "operatingSystem": "iOS, iPadOS",
             "applicationCategory": "PhotographyApplication",
             "applicationSubCategory": "Camera & RAW Photo Editor",
+            "author": { "@id": "https://ocularcamera.com/#organization" },
+            "publisher": { "@id": "https://ocularcamera.com/#organization" },
             "description": "Ocular Camera is a film-recipe and RAW rangefinder camera app for iPhone and iPad. Preview 12 analog film looks live in the viewfinder before capture, customize film recipes (white balance Kelvin & Red/Blue shift, highlight/shadow tone curves, dynamic range DR100/DR200/DR400, 35mm film grain, and optical halation), shoot Bayer RAW (DNG) or Apple ProRAW, and non-destructively re-develop RAW photos in the built-in darkroom. Zero tracking and no account required.",
             "featureList": [
               "12 live viewfinder analog film looks (STD, CC, AC, CN, NN, RA, ET, VV, AS, PNH, PNS, SEP)",
@@ -84,46 +91,8 @@
               "@type": "Offer",
               "price": "0",
               "priceCurrency": "USD",
-              "description": "Free to download and shoot (includes 3 film looks, custom recipe slot C1, and full manual controls). Optional Ocular Pro unlock available via Monthly or Annual (each with a 3-day free trial for eligible accounts), or a one-time Lifetime purchase."
+              "description": "Free to download and shoot (includes 3 film looks, custom recipe slot C1, full manual controls, and a subtle Ocular corner watermark). Optional Ocular Pro unlock removes the watermark at full resolution and adds all 12 looks, C1-C7, RAW darkroom, halation, and 65:24 panoramic framing via Monthly, Annual (3-day free trial for eligible accounts), or a one-time Lifetime purchase."
             }
-          },
-          {
-            "@type": "FAQPage",
-            "@id": "https://ocularcamera.com/#faq",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "What is Ocular Camera for iPhone and iPad?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Ocular Camera is a native iOS and iPadOS rangefinder camera app that lets you preview custom analog film recipes live in the viewfinder before pressing the shutter, capture Bayer RAW (DNG) or Apple ProRAW photos, and non-destructively re-develop any RAW shot in a built-in darkroom without requiring a user account."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "How do custom film recipes work in Ocular Camera?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "You can choose from 12 built-in analog film looks (identified by standard 2-3 letter rangefinder HUD codes: STD, CC, AC, CN, NN, RA, ET, VV, AS, PNH, PNS, SEP) and customize white balance Kelvin, Red/Blue tint shift, highlight and shadow tone curves, dynamic range modes (DR100, DR200, DR400), 35mm film grain, and optical halation. Recipes save to custom slots C1 through C7."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Can I shoot RAW or Apple ProRAW and re-develop the film look later?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Yes. Ocular Pro captures Bayer RAW (DNG) and Apple ProRAW while recording your active film recipe in EXIF metadata. Inside the built-in RAW Darkroom, you can scrub a live split comparison between the flat RAW sensor data and your developed film look, or re-develop the RAW file with any other film recipe non-destructively."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Is Ocular Camera free to use, and does it require an account?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Ocular Camera requires no account, no login, and includes zero tracking. The Free tier includes full-resolution capture, full manual exposure and prime lens controls, 3 film looks (Standard STD, Calm Chrome CC, Ash Charcoal AC), and 1 custom recipe slot (C1). Ocular Pro unlocks all 12 film looks, 7 custom slots (C1-C7), RAW and ProRAW darkroom re-development, halation, and 65:24 panoramic framing via Monthly or Annual (each with a 3-day free trial for eligible accounts), or a one-time Lifetime option."
-                }
-              }
-            ]
           }
         ]
       }
@@ -134,14 +103,14 @@
     <noscript>
       <main style="max-width:760px;margin:0 auto;padding:96px 20px 64px;color:#f3f1ec;font-family:system-ui,-apple-system,sans-serif;line-height:1.6">
         <h1>Ocular Camera for iPhone &amp; iPad — Film Recipe &amp; RAW Rangefinder Camera App</h1>
-        <p><strong>Film recipes and RAW, framed before the shutter.</strong> Ocular Camera turns your iPhone and iPad into a tactile digital rangefinder where you preview custom analog film looks live in the viewfinder, capture Bayer RAW (DNG) or Apple ProRAW, and re-develop any RAW shot non-destructively in the built-in darkroom.</p>
+        <p><strong>Live film recipes &amp; RAW camera for iPhone.</strong> Ocular Camera turns your iPhone and iPad into a tactile digital rangefinder where you preview custom analog film looks live in the viewfinder, capture Bayer RAW (DNG) or Apple ProRAW, and re-develop any RAW shot non-destructively in the built-in darkroom.</p>
         <h2>Key Features</h2>
         <ul>
           <li><strong>12 Live Analog Film Looks:</strong> Standard (<code>STD</code>), Calm Chrome (<code>CC</code>), Ash Charcoal Monochrome (<code>AC</code>), Color Negative (<code>CN</code>), Nouveau Negative (<code>NN</code>), Realistic Ambient (<code>RA</code>), Ethereal Tone (<code>ET</code>), Vivid Valley (<code>VV</code>), Airy Soft (<code>AS</code>), Portrait Neutral High (<code>PNH</code>), Portrait Neutral Standard (<code>PNS</code>), and Sepia Warm (<code>SEP</code>).</li>
           <li><strong>Custom Film Recipes (Slots C1–C7):</strong> Dial in White Balance Kelvin + Red/Blue matrix shift, Highlight &amp; Shadow tone curves, Dynamic Range protection (<code>DR100</code>, <code>DR200</code>, <code>DR400</code>), organic 35mm film grain, and optical highlight halation.</li>
           <li><strong>Rangefinder Hardware Controls:</strong> Tactile Exposure Compensation (<code>-3.0 to +3.0 EV</code>), prime lens focal lengths (<code>13mm</code>, <code>24mm</code>, <code>28mm</code>, <code>35mm</code>, <code>50mm</code>, <code>77mm</code>), AF/AE lock, customizable <code>F1–F4</code> function keys, and aspect ratios including <code>4:3</code>, <code>3:2</code>, <code>1:1</code>, <code>16:9</code>, and <code>65:24</code> panoramic framing.</li>
           <li><strong>RAW &amp; ProRAW Darkroom:</strong> Capture pure sensor Bayer RAW (DNG) or Apple ProRAW with recipe telemetry preserved in EXIF, and re-develop any RAW photo with a new film look after capture.</li>
-          <li><strong>Free &amp; Pro Tiers · Zero Accounts · 100% On-Device:</strong> Start free with 3 film stocks, custom slot <code>C1</code>, and full manual controls. Upgrade to Ocular Pro via Monthly or Annual (each with a 3-day free trial), or a one-time Lifetime unlock.</li>
+          <li><strong>Free &amp; Pro Tiers · Zero Accounts · 100% On-Device:</strong> Start free with 3 film stocks, custom slot <code>C1</code>, manual controls, and a subtle Ocular corner watermark. Upgrade to Ocular Pro for unmarked full-res output and all Pro tools via Monthly, Annual (3-day free trial), or a one-time Lifetime unlock.</li>
         </ul>
         <p><a href="/support" style="color:#e8832a">Support &amp; FAQ</a> · <a href="/privacy" style="color:#e8832a">Privacy Policy</a> · <a href="/llms.txt" style="color:#e8832a">LLM Specification</a></p>
       </main>

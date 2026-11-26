@@ -68,14 +68,17 @@ export const en: Messages = {
     privacy: 'Get it',
   },
   cta: {
-    getApp: 'Get the app',
+    getApp: 'Try Free on iOS',
     downloadAppStore: 'Download on the App Store',
   },
   hero: {
-    tagline: 'Film recipes and RAW, framed before the shutter.',
+    headline: 'Live film recipes & RAW camera for iPhone.',
+    tagline:
+      'Preview 12 analog film stocks live in your viewfinder—and shoot pure Bayer RAW or ProRAW you can re-develop later.',
     subline: 'Free to start · 3-day Pro trial · No account',
     inCamera: 'IN CAMERA',
-    scrollIntoCamera: 'Scroll into camera',
+    scrollIntoCamera: 'Try the live viewfinder',
+    shotWithOcular: 'Shot on iPhone with Ocular',
   },
   sim: {
     hud: 'HUD',
@@ -83,12 +86,14 @@ export const en: Messages = {
     pro: 'Pro',
   },
   recipes: {
-    heading: 'Twelve stocks. Live in frame.',
+    heading: '12 film stocks. Live before you shoot.',
     lede: '3 free, 9 Pro. Tap any stock to preview on {photo}.',
     freeBadge: 'FREE',
     proBadge: 'PRO',
     shownCount: '7 of 12 shown',
     customSlots: 'C1–C7 slots',
+    moreStocks:
+      'Also in Pro: RA Realistic Ambient · ET Ethereal Tone · AS Airy Soft · PNH & PNS Portrait Neutral',
     summaries: {
       std: 'True-to-life color with crisp blacks',
       cc: 'Soft roll-off & cinema dynamic range',
@@ -100,15 +105,15 @@ export const en: Messages = {
     },
   },
   capture: {
-    heading: 'Set in hardware.',
-    lede: 'Exposure, dynamic range, primes, and optics before the shot.',
+    heading: 'Dial it in before you shoot.',
+    lede: 'Exposure dial, DR400 highlight protection, prime framing, 35mm grain, and halation—live before you press the shutter.',
     exposureBias: 'Exposure bias',
     dynamicRange: 'Dynamic range',
     framingRatio: 'Framing ratio',
     filmGrain: 'Film grain',
     analogOptics: 'Analog optics',
     halation: 'HALATION',
-    primes: 'Primes · 13 & 24 mm native',
+    primes: 'Primes · 13mm to 77mm',
     grainLevels: {
       off: 'OFF',
       weak: 'WEAK',
@@ -116,8 +121,8 @@ export const en: Messages = {
     },
   },
   raw: {
-    heading: 'Re-develop any RAW.',
-    lede: 'Bayer RAW (DNG) and Apple ProRAW. Recipe saved in EXIF.',
+    heading: 'Never get locked into a look.',
+    lede: 'Shoot pure Bayer RAW (DNG) or Apple ProRAW with your recipe saved in EXIF—then swap film stocks non-destructively in the built-in darkroom.',
     wipeLabel: 'RAW ←→ {code} Darkroom Wipe',
     splitOn: 'SPLIT ON',
     splitOff: 'SPLIT OFF',
@@ -129,8 +134,8 @@ export const en: Messages = {
     },
   },
   tiers: {
-    heading: 'Start free. Go Pro anytime.',
-    lede: 'No account required. Prices show in the app.',
+    heading: 'Shoot free forever. Unlock RAW & all 12 looks with Pro.',
+    lede: 'No account required. Full pricing shown in the App Store and in-app.',
     freeBadge: 'FREE',
     proBadge: 'PRO',
     freeRows: [
@@ -149,6 +154,7 @@ export const en: Messages = {
     ],
     trialBadge: '3-DAY FREE TRIAL',
     trialCopy: 'Monthly, annual, or Lifetime. Saved recipes stay on your device.',
+    readFaq: 'Questions? Read the FAQ',
   },
   privacy: {
     heading: 'Stays on your device.',

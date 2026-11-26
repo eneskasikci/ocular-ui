@@ -199,10 +199,12 @@ export interface Messages {
     downloadAppStore: string
   }
   hero: {
+    headline: string
     tagline: string
     subline: string
     inCamera: string
     scrollIntoCamera: string
+    shotWithOcular: string
   }
   sim: {
     hud: string
@@ -216,6 +218,7 @@ export interface Messages {
     proBadge: string
     shownCount: string
     customSlots: string
+    moreStocks: string
     summaries: Record<FilmId, string>
   }
   capture: {
@@ -252,6 +255,7 @@ export interface Messages {
     proRows: readonly [string, string][]
     trialBadge: string
     trialCopy: string
+    readFaq: string
   }
   privacy: {
     heading: string

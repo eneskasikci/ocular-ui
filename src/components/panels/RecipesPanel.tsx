@@ -89,6 +89,9 @@ export const RecipesPanel = memo(function RecipesPanel({ headingId, camera }: Pr
             <span>{t.recipes.customSlots}</span>
           </div>
         </div>
+        <p className="mt-2.5 mb-0 pt-2 border-t border-hair/60 font-mono text-[0.72rem] leading-[1.45] tracking-[0.02em] text-ink-subtle">
+          {t.recipes.moreStocks}
+        </p>
       </div>
     </div>
   )

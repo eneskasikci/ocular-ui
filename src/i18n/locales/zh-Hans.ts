@@ -68,14 +68,17 @@ export const zhHans: Messages = {
     privacy: '获取',
   },
   cta: {
-    getApp: '获取应用',
+    getApp: 'iOS 免费试用',
     downloadAppStore: '在 App Store 下载',
   },
   hero: {
-    tagline: '胶片配方与 RAW，快门之前尽在取景框中。',
+    headline: '专为 iPhone 打造的实时胶片配方与 RAW 相机。',
+    tagline:
+      '在取景器中实时预览 12 款模拟胶片风格——同时支持拍摄纯正 Bayer RAW (DNG) 或 Apple ProRAW，随时在暗房重新冲洗。',
     subline: '免费开始 · 3 天 Pro 试用 · 无需账户',
     inCamera: '相机预览中',
-    scrollIntoCamera: '向下进入相机',
+    scrollIntoCamera: '体验实时取景器',
+    shotWithOcular: '使用 iPhone 上的 Ocular 拍摄',
   },
   sim: {
     hud: 'HUD',
@@ -83,12 +86,14 @@ export const zhHans: Messages = {
     pro: 'Pro',
   },
   recipes: {
-    heading: '十二款胶片，实时入画。',
+    heading: '12 款胶片，拍摄前实时呈现。',
     lede: '3 款免费，9 款 Pro。轻点任意胶片在「{photo}」上预览。',
     freeBadge: '免费',
     proBadge: 'PRO',
     shownCount: '显示 12 款中的 7 款',
     customSlots: 'C1–C7 槽位',
+    moreStocks:
+      'Pro 还包含：RA Realistic Ambient · ET Ethereal Tone · AS Airy Soft · PNH 与 PNS Portrait Neutral',
     summaries: {
       std: '真实色彩，纯净黑场',
       cc: '柔和过渡与电影动态范围',
@@ -100,15 +105,15 @@ export const zhHans: Messages = {
     },
   },
   capture: {
-    heading: '硬件级操控。',
-    lede: '在拍摄前设定曝光、动态范围、定焦与光学效果。',
+    heading: '按下快门前即调即得。',
+    lede: '曝光拨盘、DR400 高光保护、定焦构图、35mm 颗粒与光晕——在按下快门前实时呈现。',
     exposureBias: '曝光偏差',
     dynamicRange: '动态范围',
     framingRatio: '宽高比',
     filmGrain: '胶片颗粒',
     analogOptics: '模拟光学',
     halation: '光晕',
-    primes: '定焦 · 13 & 24 mm 原生',
+    primes: '定焦 · 13mm 至 77mm',
     grainLevels: {
       off: '关闭',
       weak: '弱',
@@ -116,8 +121,8 @@ export const zhHans: Messages = {
     },
   },
   raw: {
-    heading: '重现任意 RAW。',
-    lede: '支持 Bayer RAW (DNG) 与 Apple ProRAW。配方写入 EXIF。',
+    heading: '不再被单一色调锁死。',
+    lede: '拍摄将配方写入 EXIF 的纯正 Bayer RAW (DNG) 或 Apple ProRAW，随后在内置暗房无损切换任何胶片风格。',
     wipeLabel: 'RAW ←→ {code} 暗房对比',
     splitOn: '分屏开启',
     splitOff: '分屏关闭',
@@ -129,8 +134,8 @@ export const zhHans: Messages = {
     },
   },
   tiers: {
-    heading: '免费开始，随时升级 Pro。',
-    lede: '无需账户。价格在应用内显示。',
+    heading: '永久免费拍摄。升级 Pro 解锁 RAW 与全部 12 款胶片。',
+    lede: '无需账户。完整价格见 App Store 与应用内说明。',
     freeBadge: '免费',
     proBadge: 'PRO',
     freeRows: [
@@ -149,6 +154,7 @@ export const zhHans: Messages = {
     ],
     trialBadge: '3 天免费试用',
     trialCopy: '月度、年度或终身买断。已保存的配方保留在您的设备上。',
+    readFaq: '有疑问？查看常见问题',
   },
   privacy: {
     heading: '仅留在您的设备上。',

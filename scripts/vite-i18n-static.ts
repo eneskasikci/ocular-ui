@@ -172,6 +172,7 @@ function buildLocalizedNoscript(locale: Locale, messages: Messages, baseHtml: st
   }
 
   const title = escapeHtml(messages.meta.title)
+  const headline = escapeHtml(messages.hero.headline)
   const tagline = escapeHtml(messages.hero.tagline)
   const subline = escapeHtml(messages.hero.subline)
   const privacyChips = messages.privacy.chips.map((c) => escapeHtml(c)).join(' · ')
@@ -179,7 +180,7 @@ function buildLocalizedNoscript(locale: Locale, messages: Messages, baseHtml: st
   return `<noscript>
       <main style="max-width:760px;margin:0 auto;padding:96px 20px 64px;color:#f3f1ec;font-family:system-ui,-apple-system,sans-serif;line-height:1.6">
         <h1>${title}</h1>
-        <p><strong>${tagline}</strong> ${subline}</p>
+        <p><strong>${headline}</strong> ${tagline} ${subline}</p>
         <ul>
           <li><strong>${escapeHtml(messages.recipes.heading)}</strong> — ${escapeHtml(messages.recipes.customSlots)}</li>
           <li><strong>${escapeHtml(messages.capture.heading)}</strong> — ${escapeHtml(messages.capture.lede)}</li>
@@ -213,14 +214,6 @@ function renderLocaleHtml(
     `<meta name="description" content="${escapedDescription}" />`,
     'meta[name="description"]',
   )
-  if (locale !== 'en') {
-    html = assertReplace(
-      html,
-      /\s*<meta\s+name="keywords"\s+content="[^"]*"\s*\/>/,
-      '',
-      'meta[name="keywords"]',
-    )
-  }
   html = assertReplace(
     html,
     /<link rel="canonical" href="https:\/\/ocularcamera\.com\/" \/>/,

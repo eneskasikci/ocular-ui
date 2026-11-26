@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { useI18n } from '../../i18n'
 import { cn } from '../../lib/cn'
+import { GetItButton } from '../GetItButton'
 import { Reveal } from '../Reveal'
 
 interface TiersStageProps {
@@ -82,7 +83,16 @@ export const TiersStage = memo(function TiersStage({ headingId }: TiersStageProp
           </b>
           <span>{t.tiers.trialCopy}</span>
         </div>
+        <GetItButton className="shrink-0 w-full xs:w-auto" />
       </div>
+
+      <a
+        className="self-start inline-flex items-center gap-1.5 min-h-[36px] text-[0.9rem] font-semibold"
+        href="/support/#faq-heading"
+      >
+        <span>{t.tiers.readFaq}</span>
+        <span aria-hidden="true">→</span>
+      </a>
     </div>
   )
 })

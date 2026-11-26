@@ -68,14 +68,17 @@ export const ko: Messages = {
     privacy: '받기',
   },
   cta: {
-    getApp: '앱 받기',
+    getApp: 'iOS 무료 체험',
     downloadAppStore: 'App Store에서 다운로드',
   },
   hero: {
-    tagline: '필름 레시피와 RAW, 셔터 전에 프레임으로 담다.',
+    headline: 'iPhone용 실시간 필름 레시피 & RAW 카메라.',
+    tagline:
+      '12가지 아날로그 필름을 뷰파인더에서 실시간으로 미리 보고, 나중에 다시 현상할 수 있는 순수 Bayer RAW (DNG) 또는 Apple ProRAW로 촬영하세요.',
     subline: '무료로 시작 · 3일 Pro 체험 · 계정 불필요',
     inCamera: '카메라 적용 중',
-    scrollIntoCamera: '카메라로 스크롤',
+    scrollIntoCamera: '라이브 뷰파인더 체험하기',
+    shotWithOcular: 'iPhone Ocular로 촬영',
   },
   sim: {
     hud: 'HUD',
@@ -83,12 +86,14 @@ export const ko: Messages = {
     pro: 'Pro',
   },
   recipes: {
-    heading: '12가지 필름. 프레임 속 실시간.',
+    heading: '12가지 필름. 촬영 전 실시간 미리보기.',
     lede: '무료 3종, Pro 9종. 탭하여 {photo}에서 미리 보세요.',
     freeBadge: '무료',
     proBadge: 'PRO',
     shownCount: '12종 중 7종 표시',
     customSlots: 'C1–C7 슬롯',
+    moreStocks:
+      'Pro에 추가 포함: RA Realistic Ambient · ET Ethereal Tone · AS Airy Soft · PNH & PNS Portrait Neutral',
     summaries: {
       std: '선명한 블랙의 사실적인 색감',
       cc: '부드러운 롤오프 & 시네마 다이나믹 레인지',
@@ -100,15 +105,15 @@ export const ko: Messages = {
     },
   },
   capture: {
-    heading: '하드웨어로 제어.',
-    lede: '촬영 전 노출, 다이나믹 레인지, 단렌즈 및 광학 설정.',
+    heading: '셔터 전에 완성하세요.',
+    lede: '노출 다이얼, DR400 하이라이트 보호, 단렌즈 프레이밍, 35mm 그레인, 할레이션까지 셔터를 누르기 전에 실시간으로 조절하세요.',
     exposureBias: '노출 바이어스',
     dynamicRange: '다이나믹 레인지',
     framingRatio: '종횡비',
     filmGrain: '필름 그레인',
     analogOptics: '아날로그 광학',
     halation: '할레이션',
-    primes: '단렌즈 · 13 & 24 mm 네이티브',
+    primes: '단렌즈 · 13mm ~ 77mm',
     grainLevels: {
       off: '끔',
       weak: '약하게',
@@ -116,8 +121,8 @@ export const ko: Messages = {
     },
   },
   raw: {
-    heading: '모든 RAW를 다시 현상.',
-    lede: 'Bayer RAW (DNG) 및 Apple ProRAW. 레시피는 EXIF에 저장.',
+    heading: '하나의 색감에 갇히지 마세요.',
+    lede: '레시피가 EXIF에 기록된 Bayer RAW (DNG) 또는 Apple ProRAW로 촬영하고, 내장 다크룸에서 손실 없이 필름 스톡을 바꿔 보세요.',
     wipeLabel: 'RAW ←→ {code} 다크룸',
     splitOn: '분할 켜짐',
     splitOff: '분할 꺼짐',
@@ -129,8 +134,8 @@ export const ko: Messages = {
     },
   },
   tiers: {
-    heading: '무료로 시작. 언제든 Pro로.',
-    lede: '계정이 필요하지 않습니다. 가격은 앱에서 확인하세요.',
+    heading: '평생 무료로 촬영. Pro로 RAW와 12종 전체 잠금 해제.',
+    lede: '계정 필요 없음. 전체 가격은 App Store와 앱 내에서 확인할 수 있습니다.',
     freeBadge: '무료',
     proBadge: 'PRO',
     freeRows: [
@@ -149,6 +154,7 @@ export const ko: Messages = {
     ],
     trialBadge: '3일 무료 체험',
     trialCopy: '월간, 연간 또는 평생 이용권. 저장된 레시피는 기기에 유지됩니다.',
+    readFaq: '궁금한 점이 있나요? FAQ 보기',
   },
   privacy: {
     heading: '기기에만 안전하게.',

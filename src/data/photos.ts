@@ -1,18 +1,19 @@
 export type PhotoId =
-  | 'reine'
-  | 'kotor'
-  | 'aurora'
-  | 'sveti'
-  | 'lanterns'
-  | 'summit'
-  | 'meadow'
-  | 'dome'
-  | 'village'
+  | 'boulevard'
+  | 'canal'
+  | 'neon'
+  | 'brick'
+  | 'warship'
+  | 'corner'
+  | 'alley'
+  | 'ferry'
+  | 'twilight'
 
 export interface PhotoAsset {
   id: PhotoId
   name: string
   region: string
+  exif: string
   /** Single WebP (≤960w) shared by the small phone/viewfinder renders so they hit one cached file. */
   src: string
   avifSrcSet: string
@@ -46,79 +47,88 @@ function photo(
 export const HERO_SIZES = '(min-width: 1438px) 460px, (min-width: 875px) 32vw, (min-width: 560px) 280px, 78vw'
 
 export const PHOTOS: readonly PhotoAsset[] = [
-  photo('nusfjord-lofoten-fishing-cabins', 720, {
-    id: 'reine',
-    name: 'Nusfjord',
-    region: 'Lofoten',
-    objectPosition: '50% 62%',
-    alt: 'Red and ochre fishing cabins beside calm harbor water beneath rugged granite peaks in Nusfjord, Lofoten.',
-  }),
-  photo('bay-of-kotor-sunset', 720, {
-    id: 'kotor',
-    name: 'Bay of Kotor',
-    region: 'Sunset',
-    objectPosition: '52% 52%',
-    alt: 'Highland view over the Bay of Kotor at sunset, with amber and magenta clouds reflecting across the water.',
-  }),
-  photo('lofoten-northern-lights', 960, {
-    id: 'aurora',
-    name: 'Northern Lights',
-    region: 'Lofoten',
+  photo('golden-clouds-boulevard', 768, {
+    id: 'boulevard',
+    name: 'Golden Boulevard',
+    region: 'Calm Chrome',
+    exif: 'CC · 50mm · Golden Skin',
     objectPosition: '50% 56%',
-    alt: 'Green northern lights glowing above a dark mountain ridge and softly lit harbor cabins in Lofoten at night.',
+    alt: 'Glowing warm dusk clouds over autumn trees lining a quiet boulevard, shot on iPhone with Ocular Calm Chrome at 50mm.',
   }),
-  photo('sveti-stefan-island-montenegro', 1280, {
-    id: 'sveti',
-    name: 'Sveti Stefan',
-    region: 'Adriatic',
-    objectPosition: '62% 46%',
-    alt: 'Sveti Stefan island village with terracotta rooftops, linked by a narrow causeway over deep blue Adriatic water.',
+  photo('autumn-canal-reflection', 1148, {
+    id: 'canal',
+    name: 'Autumn Canal',
+    region: 'Color Negative',
+    exif: 'CN · 24mm · DR400',
+    objectPosition: '50% 54%',
+    alt: 'Calm tree-lined canal reflecting autumn foliage and sunlit clouds, shot on iPhone with Ocular Color Negative at 24mm.',
   }),
-  photo('lantern-alley-blue-hour', 1086, {
-    id: 'lanterns',
-    name: 'Lantern Alley',
-    region: 'Blue Hour',
-    objectPosition: '50% 50%',
-    alt: 'Warm golden string bulbs and paper lanterns illuminating a cobblestone courtyard archway during blue hour.',
-  }),
-  photo('reinebringen-lofoten-summit-view', 886, {
-    id: 'summit',
-    name: 'Reinebringen',
-    region: 'Summit',
+  photo('rainy-night-neon-street', 1280, {
+    id: 'neon',
+    name: 'Rainy Neon',
+    region: 'Amber Street',
+    exif: 'CN · 35mm · DR400',
     objectPosition: '50% 55%',
-    alt: 'View from the Reinebringen summit over coastal islands, bridges, and deep blue Lofoten fjord water under clear sky.',
+    alt: 'Rain-slicked city street at night reflecting crimson signage and streetlamps, shot on iPhone with Ocular Amber Street at 35mm.',
   }),
-  photo('lofoten-horses-arctic-meadow', 960, {
-    id: 'meadow',
-    name: 'Arctic Meadow',
-    region: 'Lofoten',
-    objectPosition: '50% 66%',
-    alt: 'Horses grazing on a green seaside pasture in Lofoten, with a coastal mountain ridge and fjord behind.',
+  photo('waterfront-sunset-brick', 1280, {
+    id: 'brick',
+    name: 'Brick Sunset',
+    region: 'Halation',
+    exif: 'CC · 24mm · Halation',
+    objectPosition: '50% 48%',
+    alt: 'Red-brick Nordic waterfront buildings silhouetted beneath glowing sunset clouds, shot on iPhone with Ocular Calm Chrome and halation at 24mm.',
   }),
-  photo('copenhagen-marble-church-dome', 768, {
-    id: 'dome',
-    name: 'Marble Dome',
-    region: 'Copenhagen',
-    objectPosition: '50% 42%',
-    alt: "Patina-green dome of Copenhagen's Marble Church with limestone columns framed against a crisp blue sky.",
+  photo('historic-timber-warship', 768, {
+    id: 'warship',
+    name: 'Timber Hull',
+    region: 'Golden Skin',
+    exif: 'CC · 24mm · −0.5 EV',
+    objectPosition: '50% 52%',
+    alt: 'Carved oak hull and rigging of a historic wooden warship in dramatic low light, shot on iPhone with Ocular Calm Chrome at 24mm.',
   }),
-  photo('lofoten-village-arctic-night', 960, {
-    id: 'village',
-    name: 'Arctic Night',
-    region: 'Lofoten',
-    objectPosition: '50% 68%',
-    alt: 'Wooden Lofoten houses glowing warmly under moonlight and silver clouds at night.',
+  photo('blue-hour-street-corner', 665, {
+    id: 'corner',
+    name: 'Blue Hour Corner',
+    region: 'Halation',
+    exif: 'CC · 24mm · DR400',
+    objectPosition: '50% 54%',
+    alt: 'Quiet European stone street corner and wet crosswalk at blue hour, shot on iPhone with Ocular Calm Chrome at 24mm.',
+  }),
+  photo('rainy-alley-string-lights', 724, {
+    id: 'alley',
+    name: 'Lantern Alley',
+    region: 'Amber Street',
+    exif: 'CN · 35mm · Amber Street',
+    objectPosition: '50% 52%',
+    alt: 'Rainy cobblestone alley illuminated by warm overhead string lights at night, shot on iPhone with Ocular Amber Street at 35mm.',
+  }),
+  photo('ferry-window-skyline', 768, {
+    id: 'ferry',
+    name: 'Ferry Window',
+    region: 'Golden Skin',
+    exif: 'CC · 77mm · −1.9 EV',
+    objectPosition: '46% 52%',
+    alt: 'City skyline and spire framed through a dark commuter ferry window at dusk, shot on iPhone with Ocular Calm Chrome at 77mm.',
+  }),
+  photo('twilight-promenade-halation', 768, {
+    id: 'twilight',
+    name: 'Frosty Twilight',
+    region: 'Halation',
+    exif: 'CC · 24mm · Halation',
+    objectPosition: '50% 50%',
+    alt: 'Snow-dusted waterfront promenade under glowing streetlamp halation at blue hour, shot on iPhone with Ocular Calm Chrome at 24mm.',
   }),
 ] as const
 
 export const PHOTO_MAP: Record<PhotoId, PhotoAsset> = {
-  reine: PHOTOS[0],
-  kotor: PHOTOS[1],
-  aurora: PHOTOS[2],
-  sveti: PHOTOS[3],
-  lanterns: PHOTOS[4],
-  summit: PHOTOS[5],
-  meadow: PHOTOS[6],
-  dome: PHOTOS[7],
-  village: PHOTOS[8],
+  boulevard: PHOTOS[0],
+  canal: PHOTOS[1],
+  neon: PHOTOS[2],
+  brick: PHOTOS[3],
+  warship: PHOTOS[4],
+  corner: PHOTOS[5],
+  alley: PHOTOS[6],
+  ferry: PHOTOS[7],
+  twilight: PHOTOS[8],
 }

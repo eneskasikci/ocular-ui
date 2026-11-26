@@ -68,14 +68,17 @@ export const it: Messages = {
     privacy: 'Ottieni',
   },
   cta: {
-    getApp: 'Ottieni l’app',
+    getApp: 'Prova gratis su iOS',
     downloadAppStore: 'Scarica su App Store',
   },
   hero: {
-    tagline: 'Ricette pellicola e RAW, inquadrati prima dello scatto.',
+    headline: 'Ricette pellicola dal vivo e fotocamera RAW per iPhone.',
+    tagline:
+      'Anteprima di 12 pellicole analogiche dal vivo nel mirino — e scatta in Bayer RAW (DNG) o Apple ProRAW per rielaborare in seguito.',
     subline: 'Inizia gratis · Prova Pro 3 giorni · Nessun account',
     inCamera: 'IN CAMERA',
-    scrollIntoCamera: 'Scorri nella fotocamera',
+    scrollIntoCamera: 'Prova il mirino dal vivo',
+    shotWithOcular: 'Scattato su iPhone con Ocular',
   },
   sim: {
     hud: 'HUD',
@@ -83,12 +86,14 @@ export const it: Messages = {
     pro: 'Pro',
   },
   recipes: {
-    heading: 'Dodici pellicole. Dal vivo.',
+    heading: '12 pellicole. Dal vivo prima dello scatto.',
     lede: '3 gratuite, 9 Pro. Tocca una pellicola per l’anteprima su {photo}.',
     freeBadge: 'GRATIS',
     proBadge: 'PRO',
     shownCount: '7 di 12 mostrate',
     customSlots: 'Slot C1–C7',
+    moreStocks:
+      'Anche in Pro: RA Realistic Ambient · ET Ethereal Tone · AS Airy Soft · PNH e PNS Portrait Neutral',
     summaries: {
       std: 'Colore fedele alla realtà con neri nitidi',
       cc: 'Roll-off morbido e gamma dinamica cinema',
@@ -100,15 +105,15 @@ export const it: Messages = {
     },
   },
   capture: {
-    heading: 'Impostato in hardware.',
-    lede: 'Esposizione, gamma dinamica, ottiche fisse e alazione prima dello scatto.',
+    heading: 'Regola tutto prima di scattare.',
+    lede: 'Ghiera di esposizione, protezione alte luci DR400, ottiche fisse, grana 35 mm e alazione — dal vivo prima dello scatto.',
     exposureBias: 'Bias di esposizione',
     dynamicRange: 'Gamma dinamica',
     framingRatio: 'Proporzioni',
     filmGrain: 'Grana Film',
     analogOptics: 'Ottica analogica',
     halation: 'ALAZIONE',
-    primes: 'Fissi · 13 e 24 mm nativi',
+    primes: 'Fissi · 13 mm a 77 mm',
     grainLevels: {
       off: 'OFF',
       weak: 'LIEVE',
@@ -116,8 +121,8 @@ export const it: Messages = {
     },
   },
   raw: {
-    heading: 'Rielabora ogni RAW.',
-    lede: 'Bayer RAW (DNG) e Apple ProRAW. Ricetta salvata in EXIF.',
+    heading: 'Non restare mai bloccato su un look.',
+    lede: 'Scatta in puro Bayer RAW (DNG) o Apple ProRAW con la ricetta salvata in EXIF, poi cambia pellicola senza perdita nella camera oscura integrata.',
     wipeLabel: 'RAW ←→ {code} Camera oscura',
     splitOn: 'DIVIDI ON',
     splitOff: 'DIVIDI OFF',
@@ -129,8 +134,8 @@ export const it: Messages = {
     },
   },
   tiers: {
-    heading: 'Inizia gratis. Passa a Pro quando vuoi.',
-    lede: 'Nessun account richiesto. Prezzi mostrati nell’app.',
+    heading: 'Scatta gratis per sempre. Sblocca RAW e tutte le 12 pellicole con Pro.',
+    lede: 'Nessun account richiesto. Prezzi completi mostrati su App Store e nell’app.',
     freeBadge: 'GRATIS',
     proBadge: 'PRO',
     freeRows: [
@@ -149,6 +154,7 @@ export const it: Messages = {
     ],
     trialBadge: 'PROVA GRATUITA DI 3 GIORNI',
     trialCopy: 'Mensile, Annuale o A vita. Le ricette salvate restano sul dispositivo.',
+    readFaq: 'Domande? Leggi le FAQ',
   },
   privacy: {
     heading: 'Resta sul tuo dispositivo.',

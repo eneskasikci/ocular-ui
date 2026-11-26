@@ -9,6 +9,7 @@ import { MeniscusMark } from './MeniscusMark'
 interface Props {
   photoId: PhotoId
   paused?: boolean
+  inDeck?: boolean
   onSelectPhoto: (id: PhotoId) => void
   onEnterCamera?: () => void
 }
@@ -91,8 +92,13 @@ function SlideCard({
         >
           {num}
         </span>
-        <span className="font-display font-bold text-[0.96rem] leading-[1.15] text-silver whitespace-nowrap overflow-hidden text-ellipsis">
-          {photo.name}
+        <span className="flex flex-col min-w-0 items-end text-right">
+          <span className="font-display font-bold text-[0.94rem] leading-[1.15] text-silver whitespace-nowrap overflow-hidden text-ellipsis max-w-full">
+            {photo.name}
+          </span>
+          <span className="font-mono font-semibold text-[0.68rem] leading-[1.2] tracking-[0.06em] text-ink-muted uppercase whitespace-nowrap">
+            {photo.exif}
+          </span>
         </span>
       </span>
     </button>
@@ -102,6 +108,7 @@ function SlideCard({
 export const HeroSlideshow = memo(function HeroSlideshow({
   photoId,
   paused = false,
+  inDeck = false,
   onSelectPhoto,
   onEnterCamera,
 }: Props) {
@@ -127,7 +134,17 @@ export const HeroSlideshow = memo(function HeroSlideshow({
   }
 
   return (
-    <section ref={sectionRef} className="relative h-svh min-h-[580px] overflow-hidden" id="top" aria-labelledby="h-hero">
+    <section
+      ref={sectionRef}
+      className={cn(
+        'relative overflow-hidden',
+        inDeck
+          ? 'h-svh min-h-[580px]'
+          : 'h-[82svh] min-h-[560px] max-h-[760px] deck:h-svh deck:min-h-[580px] deck:max-h-none',
+      )}
+      id="top"
+      aria-labelledby="h-hero"
+    >
       <div
         className="absolute inset-0 z-1 overflow-hidden"
         role="region"
@@ -172,31 +189,36 @@ export const HeroSlideshow = memo(function HeroSlideshow({
           aria-hidden="true"
         />
 
-        <div className="my-auto flex flex-col items-center text-center gap-3 max-w-[560px] mx-auto px-3 py-5">
-          <div className="hero-in inline-flex items-center gap-3.5" style={{ '--i': 0 } as CSSProperties}>
-            <MeniscusMark className="w-[clamp(34px,4.2vw,46px)] h-[clamp(34px,4.2vw,46px)] shrink-0" />
-            <h1
-              id="h-hero"
-              className="font-wordmark font-bold text-[clamp(2.25rem,5vw,3.85rem)] leading-[0.94] tracking-[0.1em] text-silver [text-shadow:0_4px_28px_rgba(0,0,0,.55)]"
-            >
+        <div className="my-auto flex flex-col items-center text-center gap-3 max-w-[640px] mx-auto px-3 py-5">
+          <div className="hero-in inline-flex items-center gap-2.5" style={{ '--i': 0 } as CSSProperties}>
+            <MeniscusMark className="w-6 h-6 xs:w-7 xs:h-7 shrink-0" />
+            <span className="font-wordmark font-bold text-[0.98rem] xs:text-[1.15rem] leading-none tracking-[0.16em] text-silver/95 [text-shadow:0_2px_16px_rgba(0,0,0,.6)]">
               OCULAR
-            </h1>
+            </span>
           </div>
 
-          <p
-            className="hero-in font-body font-normal text-[clamp(1.04rem,2vw,1.26rem)] leading-[1.45] text-silver max-w-[36ch] mt-0.5 mb-1.5 tracking-[-0.01em] [text-shadow:0_2px_16px_rgba(0,0,0,.65)]"
+          <h1
+            id="h-hero"
+            className="hero-in font-display font-bold text-[clamp(1.75rem,4.6vw,3rem)] leading-[1.04] tracking-[-0.025em] text-silver max-w-[18ch] [text-shadow:0_4px_28px_rgba(0,0,0,.6)]"
             style={{ '--i': 1 } as CSSProperties}
+          >
+            {t.hero.headline}
+          </h1>
+
+          <p
+            className="hero-in font-body font-normal text-[clamp(0.98rem,1.9vw,1.18rem)] leading-[1.45] text-silver max-w-[44ch] mt-0.5 mb-1.5 tracking-[-0.01em] [text-shadow:0_2px_16px_rgba(0,0,0,.65)]"
+            style={{ '--i': 2 } as CSSProperties}
           >
             {t.hero.tagline}
           </p>
 
-          <div className="hero-in pointer-events-auto flex justify-center" style={{ '--i': 2 } as CSSProperties}>
+          <div className="hero-in pointer-events-auto flex justify-center" style={{ '--i': 3 } as CSSProperties}>
             <GetItButton />
           </div>
 
           <p
             className="hero-in mt-0.5 mb-0 font-mono font-medium text-[0.78rem] leading-[1.5] tracking-[0.04em] text-silver/84 [text-shadow:0_1px_10px_rgba(0,0,0,.7)]"
-            style={{ '--i': 3 } as CSSProperties}
+            style={{ '--i': 4 } as CSSProperties}
           >
             {t.hero.subline}
           </p>
@@ -204,7 +226,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
 
         <div
           className="hero-in w-full max-w-[1100px] mx-auto flex flex-wrap items-center justify-between gap-3"
-          style={{ '--i': 4 } as CSSProperties}
+          style={{ '--i': 5 } as CSSProperties}
         >
           <div className="inline-flex items-center gap-3">
             <div className="inline-flex gap-1.5 pointer-events-auto" role="group" aria-label={t.a11y.stepPhotos}>
@@ -237,12 +259,18 @@ export const HeroSlideshow = memo(function HeroSlideshow({
                 </button>
               )}
             </div>
-            <span className="font-mono font-bold text-[0.75rem] leading-[1.2] tracking-[0.08em] text-silver [text-shadow:0_1px_10px_rgba(0,0,0,.75)]">
-              <strong className="text-amber">
-                {String(activeIndex + 1).padStart(2, '0')} / {String(PHOTOS.length).padStart(2, '0')}
-              </strong>
-              <span> · {activePhoto.name.toUpperCase()}</span>
-            </span>
+            <div className="flex flex-col gap-0.5 font-mono font-bold text-[0.72rem] xs:text-[0.75rem] leading-[1.2] tracking-[0.08em] text-silver [text-shadow:0_1px_10px_rgba(0,0,0,.75)]">
+              <span>
+                <strong className="text-amber">
+                  {String(activeIndex + 1).padStart(2, '0')} / {String(PHOTOS.length).padStart(2, '0')}
+                </strong>
+                <span> · {activePhoto.name.toUpperCase()}</span>
+                <span className="hidden xs:inline text-ink-muted"> · {activePhoto.exif}</span>
+              </span>
+              <span className="text-[0.68rem] font-medium tracking-[0.06em] text-silver/82 uppercase">
+                {t.hero.shotWithOcular}
+              </span>
+            </div>
           </div>
 
           <a

@@ -68,14 +68,17 @@ export const de: Messages = {
     privacy: 'Holen',
   },
   cta: {
-    getApp: 'App laden',
+    getApp: 'Kostenlos für iOS',
     downloadAppStore: 'Im App Store laden',
   },
   hero: {
-    tagline: 'Filmrezepte und RAW, schon vor dem Auslösen im Bild.',
+    headline: 'Live-Filmrezepte & RAW-Kamera fürs iPhone.',
+    tagline:
+      '12 analoge Film-Looks live im Sucher ansehen – und echtes Bayer RAW oder Apple ProRAW für spätere Dunkelkammer-Bearbeitung aufnehmen.',
     subline: 'Kostenlos starten · 3 Tage Pro-Test · Kein Konto',
     inCamera: 'IN KAMERA',
-    scrollIntoCamera: 'Zur Kamera scrollen',
+    scrollIntoCamera: 'Live-Sucher testen',
+    shotWithOcular: 'Mit Ocular auf dem iPhone fotografiert',
   },
   sim: {
     hud: 'HUD',
@@ -83,12 +86,14 @@ export const de: Messages = {
     pro: 'Pro',
   },
   recipes: {
-    heading: 'Zwölf Filme. Live im Sucher.',
+    heading: '12 Film-Looks. Live vor dem Auslösen.',
     lede: '3 kostenlos, 9 Pro. Tippe auf einen Look für die Vorschau auf {photo}.',
     freeBadge: 'FREI',
     proBadge: 'PRO',
     shownCount: '7 von 12 gezeigt',
     customSlots: 'C1–C7 Slots',
+    moreStocks:
+      'Außerdem in Pro: RA Realistic Ambient · ET Ethereal Tone · AS Airy Soft · PNH & PNS Portrait Neutral',
     summaries: {
       std: 'Lebensgetreue Farben mit klaren Schwarztönen',
       cc: 'Weicher Roll-off & Kinodynamik',
@@ -100,15 +105,15 @@ export const de: Messages = {
     },
   },
   capture: {
-    heading: 'In Hardware gesetzt.',
-    lede: 'Belichtung, Dynamikumfang, Festbrennweiten und Optik vor dem Auslösen.',
+    heading: 'Vor dem Auslösen einstellen.',
+    lede: 'Belichtungsrad, DR400-Lichterschutz, Brennweiten, 35-mm-Korn und Halation – live vor der Aufnahme.',
     exposureBias: 'Belichtungsbias',
     dynamicRange: 'Dynamikumfang',
     framingRatio: 'Seitenverhältnis',
     filmGrain: 'Filmkörnung',
     analogOptics: 'Analoge Optik',
     halation: 'HALATION',
-    primes: 'Festbrennweiten · 13 & 24 mm nativ',
+    primes: 'Festbrennweiten · 13 bis 77 mm',
     grainLevels: {
       off: 'AUS',
       weak: 'LEICHT',
@@ -116,8 +121,8 @@ export const de: Messages = {
     },
   },
   raw: {
-    heading: 'Jedes RAW neu entwickeln.',
-    lede: 'Bayer RAW (DNG) und Apple ProRAW. Rezept in EXIF gespeichert.',
+    heading: 'Nie auf einen Look festgelegt.',
+    lede: 'Bayer RAW (DNG) oder Apple ProRAW mit Rezept in den EXIF-Daten aufnehmen – und Film-Looks verlustfrei in der Dunkelkammer wechseln.',
     wipeLabel: 'RAW ←→ {code} Dunkelkammer',
     splitOn: 'TEILUNG AN',
     splitOff: 'TEILUNG AUS',
@@ -129,8 +134,8 @@ export const de: Messages = {
     },
   },
   tiers: {
-    heading: 'Kostenlos starten. Jederzeit Pro.',
-    lede: 'Kein Konto erforderlich. Preise in der App.',
+    heading: 'Dauerhaft kostenlos nutzen. RAW & alle 12 Looks mit Pro.',
+    lede: 'Kein Konto nötig. Alle Preise direkt im App Store und in der App.',
     freeBadge: 'FREI',
     proBadge: 'PRO',
     freeRows: [
@@ -149,6 +154,7 @@ export const de: Messages = {
     ],
     trialBadge: '3 TAGE KOSTENLOS TESTEN',
     trialCopy: 'Monatlich, Jährlich oder Lebenslang. Gespeicherte Rezepte bleiben auf dem Gerät.',
+    readFaq: 'Fragen? Zur FAQ',
   },
   privacy: {
     heading: 'Bleibt auf deinem Gerät.',
