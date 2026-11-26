@@ -3,13 +3,16 @@ import { SCENES } from '../config'
 
 // Single-spring deck controller: instant scroll-anchor jumps let DesktopDeck's
 // useSpring(scrollYProgress) own all motion, eliminating smooth-scroll fighting and tab bounce.
-const STEP_COOLDOWN_MS = 520
-const REVERSE_COOLDOWN_MS = 220
-const GESTURE_IDLE_MS = 160
-const STEP_THRESHOLD_PX = 18
-const REVERSE_THRESHOLD_PX = 24
-const RETRIGGER_SURGE_MIN_PX = 36
-const RETRIGGER_SURGE_RATIO = 2.5
+const STEP_COOLDOWN_MS = 280
+const IDLE_UNLOCK_MS = 100
+const MIN_STEP_GAP_MS = 180
+const REVERSE_COOLDOWN_MS = 120
+const DECAY_TRACK_DELAY_MS = 140
+const STEP_THRESHOLD_PX = 8
+const REVERSE_THRESHOLD_PX = 12
+const SURGE_ACCUM_THRESHOLD_PX = 12
+const DISCRETE_WHEEL_MIN_PX = 48
+const DISCRETE_WHEEL_GAP_MS = 50
 const STOP_EPS_PX = 3
 
 const DEFAULT_SCENE_IDS = SCENES.map((s) => s.id)
@@ -143,20 +146,49 @@ export function createDeckNavStore(sceneIds: readonly string[] = DEFAULT_SCENE_I
     }
 
     let lastEventTime = 0
+    let lastAbsDelta = 0
     let lastStepTime = -Infinity
+    let lastStepDir: -1 | 0 | 1 = 0
     let gestureLocked = false
     let lockedDir: -1 | 0 | 1 = 0
+    let peakDelta = 0
     let trailingMin = Infinity
+    let surgeAccum = 0
     let accumDelta = 0
     let accumDir: -1 | 0 | 1 = 0
 
-    const triggerWheelStep = (targetStep: number, triggerDir: -1 | 1, now: number) => {
+    const resetGestureLock = () => {
+      gestureLocked = false
+      lockedDir = 0
+      peakDelta = 0
+      trailingMin = Infinity
+      surgeAccum = 0
+      accumDelta = 0
+      accumDir = 0
+    }
+
+    const triggerWheelStep = (
+      targetStep: number,
+      triggerDir: -1 | 1,
+      now: number,
+      initialDelta: number,
+    ) => {
+      if (
+        typeof document !== 'undefined' &&
+        document.activeElement instanceof HTMLElement &&
+        document.activeElement.classList.contains('feature-tab')
+      ) {
+        document.activeElement.blur()
+      }
       goToStep(targetStep)
       gestureLocked = true
       lockedDir = triggerDir
       lastStepTime = now
+      lastStepDir = triggerDir
       lockUntil = now + STEP_COOLDOWN_MS
+      peakDelta = initialDelta
       trailingMin = Infinity
+      surgeAccum = 0
       accumDelta = 0
       accumDir = 0
     }
@@ -180,7 +212,9 @@ export function createDeckNavStore(sceneIds: readonly string[] = DEFAULT_SCENE_I
       const now = performance.now()
       const absDelta = Math.abs(delta)
       const gap = now - lastEventTime
+      const prevAbsDelta = lastAbsDelta
       lastEventTime = now
+      lastAbsDelta = absDelta
 
       const nextStep = step + dir
       if (nextStep < 0 || nextStep >= sceneIds.length) {
@@ -191,45 +225,72 @@ export function createDeckNavStore(sceneIds: readonly string[] = DEFAULT_SCENE_I
 
       e.preventDefault()
 
-      if (gestureLocked) {
-        if (gap >= GESTURE_IDLE_MS && now >= lockUntil) {
-          gestureLocked = false
-          lockedDir = 0
-          trailingMin = Infinity
-          accumDelta = 0
-          accumDir = 0
-        } else if (dir === lockedDir) {
-          if (now >= lastStepTime + 180) {
-            trailingMin = Math.min(trailingMin, absDelta)
-          }
-          const isSurge =
-            now >= lockUntil &&
-            absDelta >= RETRIGGER_SURGE_MIN_PX &&
-            trailingMin < Infinity &&
-            absDelta >= trailingMin * RETRIGGER_SURGE_RATIO
-          if (!isSurge) return
-          triggerWheelStep(nextStep, dir, now)
-          return
-        } else {
-          if (now < lastStepTime + REVERSE_COOLDOWN_MS) return
-          if (accumDir !== dir) {
-            accumDir = dir
-            accumDelta = 0
-          }
-          accumDelta += absDelta
-          if (accumDelta < REVERSE_THRESHOLD_PX) return
-          triggerWheelStep(nextStep, dir, now)
-          return
-        }
+      if (gestureLocked && gap >= IDLE_UNLOCK_MS) {
+        resetGestureLock()
       }
 
-      if (gap >= GESTURE_IDLE_MS || accumDir !== dir) {
+      if (gestureLocked) {
+        if (dir === lockedDir) {
+          accumDelta = 0
+          accumDir = 0
+
+          const isDiscreteNotch =
+            e.deltaMode !== 0 ||
+            (absDelta >= DISCRETE_WHEEL_MIN_PX &&
+              gap >= DISCRETE_WHEEL_GAP_MS &&
+              absDelta === prevAbsDelta)
+          if (isDiscreteNotch && now >= lockUntil) {
+            triggerWheelStep(nextStep, dir, now, absDelta)
+            return
+          }
+
+          if (
+            now < lockUntil &&
+            absDelta > peakDelta &&
+            (trailingMin === Infinity || trailingMin >= peakDelta * 0.5)
+          ) {
+            peakDelta = absDelta
+            trailingMin = Infinity
+          } else if (now >= lastStepTime + DECAY_TRACK_DELAY_MS) {
+            trailingMin = Math.min(trailingMin, absDelta)
+          }
+
+          if (now >= lockUntil && trailingMin < Infinity) {
+            const surgeFloor = trailingMin * 2 + 4
+            if (absDelta >= surgeFloor) {
+              surgeAccum += absDelta
+              if (surgeAccum >= SURGE_ACCUM_THRESHOLD_PX) {
+                triggerWheelStep(nextStep, dir, now, absDelta)
+              }
+              return
+            }
+            if (absDelta <= trailingMin + 2) {
+              surgeAccum = 0
+            }
+          }
+          return
+        }
+
+        if (now < lastStepTime + REVERSE_COOLDOWN_MS) return
+        if (accumDir !== dir) {
+          accumDir = dir
+          accumDelta = 0
+        }
+        accumDelta += absDelta
+        if (accumDelta < REVERSE_THRESHOLD_PX) return
+        triggerWheelStep(nextStep, dir, now, absDelta)
+        return
+      }
+
+      const minStepGap = dir === lastStepDir ? MIN_STEP_GAP_MS : REVERSE_COOLDOWN_MS
+      if (now < lastStepTime + minStepGap) return
+      if (gap >= IDLE_UNLOCK_MS || accumDir !== dir) {
         accumDir = dir
         accumDelta = 0
       }
       accumDelta += absDelta
       if (accumDelta < STEP_THRESHOLD_PX) return
-      triggerWheelStep(nextStep, dir, now)
+      triggerWheelStep(nextStep, dir, now, absDelta)
     }
 
     const onKeyDown = (e: KeyboardEvent) => {

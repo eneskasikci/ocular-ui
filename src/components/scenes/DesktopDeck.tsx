@@ -218,7 +218,10 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
                         <Tabs.Trigger
                           key={tab.id}
                           value={tab.id}
-                          className="feature-tab relative min-h-10 px-3 border-0 rounded-[10px] bg-transparent inline-flex items-center gap-1.5 font-mono font-bold text-[0.75rem] leading-none tracking-[0.06em] text-ink-muted cursor-pointer z-1 whitespace-nowrap hover:text-silver data-[state=active]:text-amber"
+                          onClick={(e) => {
+                            if (e.detail > 0) e.currentTarget.blur()
+                          }}
+                          className="feature-tab relative min-h-10 px-3 border-0 rounded-[10px] bg-transparent outline-none focus-visible:outline-none inline-flex items-center gap-1.5 font-mono font-bold text-[0.75rem] leading-none tracking-[0.06em] text-ink-muted cursor-pointer z-1 whitespace-nowrap hover:text-silver data-[state=active]:text-amber"
                         >
                           {isCurrent && (
                             <m.span

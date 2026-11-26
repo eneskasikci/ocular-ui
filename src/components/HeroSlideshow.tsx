@@ -140,7 +140,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
           ? 'h-svh min-h-[580px]'
           : 'h-[82svh] min-h-[560px] max-h-[760px] deck:h-svh deck:min-h-[580px] deck:max-h-none',
       )}
-      id="top"
+      id={inDeck ? undefined : 'top'}
       aria-labelledby="h-hero"
     >
       <div
