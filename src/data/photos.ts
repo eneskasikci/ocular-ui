@@ -13,84 +13,102 @@ export interface PhotoAsset {
   id: PhotoId
   name: string
   region: string
+  /** Single WebP (≤960w) shared by the small phone/viewfinder renders so they hit one cached file. */
   src: string
+  avifSrcSet: string
+  webpSrcSet: string
   objectPosition: string
   alt: string
 }
 
+/** Same rule as scripts/build-photos.sh: 640/960/1280 below the source width, plus the source width. */
+const variantWidths = (width: number) => [640, 960, 1280].filter((w) => w < width).concat(width)
+
+const srcSet = (slug: string, width: number, ext: 'avif' | 'webp') =>
+  variantWidths(width)
+    .map((w) => `/photos/${slug}-${w}.${ext} ${w}w`)
+    .join(', ')
+
+function photo(
+  slug: string,
+  width: number,
+  meta: Omit<PhotoAsset, 'src' | 'avifSrcSet' | 'webpSrcSet'>,
+): PhotoAsset {
+  return {
+    ...meta,
+    src: `/photos/${slug}-${Math.min(960, width)}.webp`,
+    avifSrcSet: srcSet(slug, width, 'avif'),
+    webpSrcSet: srcSet(slug, width, 'webp'),
+  }
+}
+
+/** Matches the hero card widths: w-[78vw] below xs (35rem), clamp(280px,32vw,460px) above. */
+export const HERO_SIZES = '(min-width: 1438px) 460px, (min-width: 875px) 32vw, (min-width: 560px) 280px, 78vw'
+
 export const PHOTOS: readonly PhotoAsset[] = [
-  {
+  photo('nusfjord-lofoten-fishing-cabins', 720, {
     id: 'reine',
     name: 'Nusfjord',
     region: 'Lofoten',
-    src: '/photos/4A5DC539-F46C-400C-A8A9-A31D373D068F_1_102_a.jpeg',
     objectPosition: '50% 62%',
-    alt: 'Red and ochre fishing cabins beside calm harbor water beneath rugged granite mountain peaks in Reine, Lofoten.',
-  },
-  {
+    alt: 'Red and ochre fishing cabins beside calm harbor water beneath rugged granite peaks in Nusfjord, Lofoten.',
+  }),
+  photo('bay-of-kotor-sunset', 720, {
     id: 'kotor',
     name: 'Bay of Kotor',
     region: 'Sunset',
-    src: '/photos/E681E4EC-934C-4E6D-9D08-A42D9979AC8D_1_102_a.jpeg',
     objectPosition: '52% 52%',
-    alt: 'Highland view overlooking a calm coastal bay at sunset with amber and magenta clouds reflecting across the water.',
-  },
-  {
+    alt: 'Highland view over the Bay of Kotor at sunset, with amber and magenta clouds reflecting across the water.',
+  }),
+  photo('lofoten-northern-lights', 960, {
     id: 'aurora',
     name: 'Northern Lights',
     region: 'Lofoten',
-    src: '/photos/EDEF1BF6-4742-43EE-8FB9-EF89C086E5D6_1_102_o.jpeg',
     objectPosition: '50% 56%',
-    alt: 'Green aurora borealis ribbons glowing above a dark mountain ridge and softly lit Nordic harbor cabins at night.',
-  },
-  {
+    alt: 'Green northern lights glowing above a dark mountain ridge and softly lit harbor cabins in Lofoten at night.',
+  }),
+  photo('sveti-stefan-island-montenegro', 1280, {
     id: 'sveti',
     name: 'Sveti Stefan',
     region: 'Adriatic',
-    src: '/photos/8F673B74-8062-4B02-8B45-76BE98863CEC_1_102_a.jpeg',
     objectPosition: '62% 46%',
-    alt: 'Stone island village with terracotta rooftops connected by a narrow causeway over deep blue Adriatic water.',
-  },
-  {
+    alt: 'Sveti Stefan island village with terracotta rooftops, linked by a narrow causeway over deep blue Adriatic water.',
+  }),
+  photo('lantern-alley-blue-hour', 1086, {
     id: 'lanterns',
     name: 'Lantern Alley',
     region: 'Blue Hour',
-    src: '/photos/96AC2624-1A29-437B-A572-DDFDE1B99FB9_1_105_c.jpeg',
     objectPosition: '50% 50%',
     alt: 'Warm golden string bulbs and paper lanterns illuminating a cobblestone courtyard archway during blue hour.',
-  },
-  {
+  }),
+  photo('reinebringen-lofoten-summit-view', 886, {
     id: 'summit',
     name: 'Reinebringen',
     region: 'Summit',
-    src: '/photos/07360E28-9D3D-40CD-8D53-EA0F4A4553E6_1_105_c.jpeg',
     objectPosition: '50% 55%',
-    alt: 'Aerial summit perspective above coastal islands, bridges, and deep blue Norwegian fjord waters under clear sky.',
-  },
-  {
+    alt: 'View from the Reinebringen summit over coastal islands, bridges, and deep blue Lofoten fjord water under clear sky.',
+  }),
+  photo('lofoten-horses-arctic-meadow', 960, {
     id: 'meadow',
     name: 'Arctic Meadow',
     region: 'Lofoten',
-    src: '/photos/AF336D00-8C60-4C0B-B81A-E50A66201264_1_102_a.jpeg',
     objectPosition: '50% 66%',
-    alt: 'Herd of horses grazing on seaside green pasture with a coastal mountain ridge and fjord in the background.',
-  },
-  {
+    alt: 'Horses grazing on a green seaside pasture in Lofoten, with a coastal mountain ridge and fjord behind.',
+  }),
+  photo('copenhagen-marble-church-dome', 768, {
     id: 'dome',
     name: 'Marble Dome',
     region: 'Copenhagen',
-    src: '/photos/AAA8B6B1-EC53-4E54-89E6-848808EF79FF_1_105_c.jpeg',
     objectPosition: '50% 42%',
-    alt: 'Patina-green neoclassical church dome with limestone columns framed against a crisp blue sky.',
-  },
-  {
+    alt: "Patina-green dome of Copenhagen's Marble Church with limestone columns framed against a crisp blue sky.",
+  }),
+  photo('lofoten-village-arctic-night', 960, {
     id: 'village',
     name: 'Arctic Night',
     region: 'Lofoten',
-    src: '/photos/FA2DA4C7-D3EB-4A8B-A773-61085EBF56D9_1_102_o.jpeg',
     objectPosition: '50% 68%',
-    alt: 'Moody Nordic wooden houses glowing warmly under moonlight and silver clouds at night.',
-  },
+    alt: 'Wooden Lofoten houses glowing warmly under moonlight and silver clouds at night.',
+  }),
 ] as const
 
 export const PHOTO_MAP: Record<PhotoId, PhotoAsset> = {

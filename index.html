@@ -29,6 +29,15 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preload" href="/fonts/ArchivoSemiExpanded-Bold.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/SpaceGrotesk-Medium.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- LCP: first hero card (PHOTOS[0]). Keep srcset/sizes in sync with src/data/photos.ts and HERO_SIZES. -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      fetchpriority="high"
+      imagesrcset="/photos/nusfjord-lofoten-fishing-cabins-640.avif 640w, /photos/nusfjord-lofoten-fishing-cabins-720.avif 720w"
+      imagesizes="(min-width: 1438px) 460px, (min-width: 875px) 32vw, (min-width: 560px) 280px, 78vw"
+    />
     <meta property="og:url" content="https://ocularcamera.com/" />
     <meta property="og:image" content="https://ocularcamera.com/og-image.jpg" />
     <meta property="og:image:width" content="1200" />

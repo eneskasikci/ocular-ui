@@ -38,3 +38,6 @@ docs/
 public/photos/
 deploy.sh
 .wrangler/
+
+# Original photo sources for scripts/build-photos.sh (personal, excluded from git)
+photos-src/

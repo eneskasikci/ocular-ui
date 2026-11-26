@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useReducedMotion } from 'motion/react'
-import { PHOTOS, type PhotoAsset, type PhotoId } from '../data/photos'
+import { HERO_SIZES, PHOTOS, type PhotoAsset, type PhotoId } from '../data/photos'
 import { useI18n } from '../i18n'
 import { cn } from '../lib/cn'
 import { GetItButton } from './GetItButton'
@@ -46,16 +46,21 @@ function SlideCard({
           : format(t.a11y.selectPhotoForCamera, { name: photo.name, region: photo.region })
       }
     >
-      <img
-        src={photo.src}
-        alt={isDuplicate ? '' : photo.alt}
-        className="absolute inset-0 w-full h-full object-cover block select-none [-webkit-user-drag:none] transition-transform duration-600 ease-ocular group-hover:scale-[1.03]"
-        style={{ objectPosition: photo.objectPosition }}
-        fetchPriority={!isDuplicate && index === 0 ? 'high' : undefined}
-        loading={isDuplicate || index > 3 ? 'lazy' : 'eager'}
-        decoding="async"
-        draggable={false}
-      />
+      <picture>
+        <source type="image/avif" srcSet={photo.avifSrcSet} sizes={HERO_SIZES} />
+        <img
+          src={photo.src}
+          srcSet={photo.webpSrcSet}
+          sizes={HERO_SIZES}
+          alt={isDuplicate ? '' : photo.alt}
+          className="absolute inset-0 w-full h-full object-cover block select-none [-webkit-user-drag:none] transition-transform duration-600 ease-ocular group-hover:scale-[1.03]"
+          style={{ objectPosition: photo.objectPosition }}
+          fetchPriority={!isDuplicate && index === 0 ? 'high' : undefined}
+          loading={isDuplicate || index > 2 ? 'lazy' : 'eager'}
+          decoding="async"
+          draggable={false}
+        />
+      </picture>
       <span
         className="absolute inset-0 pointer-events-none bg-[linear-gradient(180deg,rgba(11,12,14,.54)_0%,rgba(11,12,14,.16)_28%,rgba(11,12,14,.16)_66%,rgba(11,12,14,.84)_100%)]"
         aria-hidden="true"
