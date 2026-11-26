@@ -34,6 +34,16 @@ export function detectBrowserLocale(): Locale | null {
   return null
 }
 
+export function applyDocumentMeta(locale: Locale, messages: Messages): void {
+  if (typeof document === 'undefined') return
+  document.documentElement.lang = LOCALE_META[locale].htmlLang
+  document.title = messages.meta.title
+  const desc = document.querySelector('meta[name="description"]')
+  if (desc) {
+    desc.setAttribute('content', messages.meta.description)
+  }
+}
+
 export function resolveInitialLocale(): Locale {
   if (typeof window === 'undefined') return 'en'
   return localeFromPathname(window.location.pathname) ?? 'en'

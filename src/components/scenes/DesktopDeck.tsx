@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useLayoutEffect, useRef, useSyncExternalStore } from 'react'
 import { useScroll, useSpring, useTransform } from 'motion/react'
 import * as m from 'motion/react-m'
 import { Tabs } from 'radix-ui'
@@ -30,6 +30,40 @@ const FEATURE_TABS: readonly { id: FeatureKey; step: number; num: string }[] = [
 
 const PHONE_BASE_W = 308
 const PHONE_BASE_H = 645
+
+const DEFAULT_VIEWPORT = { w: 1280, h: 800 }
+let cachedViewport =
+  typeof window !== 'undefined'
+    ? { w: window.innerWidth, h: window.innerHeight }
+    : DEFAULT_VIEWPORT
+
+function getViewportSnapshot() {
+  if (typeof window === 'undefined') return DEFAULT_VIEWPORT
+  const w = window.innerWidth
+  const h = window.innerHeight
+  if (cachedViewport.w !== w || cachedViewport.h !== h) {
+    cachedViewport = { w, h }
+  }
+  return cachedViewport
+}
+
+const getServerViewportSnapshot = () => DEFAULT_VIEWPORT
+
+function subscribeViewport(onStoreChange: () => void): () => void {
+  let raf = 0
+  const onResize = () => {
+    if (raf) return
+    raf = window.requestAnimationFrame(() => {
+      raf = 0
+      onStoreChange()
+    })
+  }
+  window.addEventListener('resize', onResize, { passive: true })
+  return () => {
+    if (raf) window.cancelAnimationFrame(raf)
+    window.removeEventListener('resize', onResize)
+  }
+}
 
 function computeDeckMetrics(viewport: { w: number; h: number }) {
   // Gentle scale-up on large displays so phone and control deck stay refined with generous breathing room.
@@ -65,27 +99,7 @@ interface Props {
 export function DesktopDeck({ camera, step, goToStep }: Props) {
   const { t } = useI18n()
   const stageRef = useRef<HTMLDivElement>(null)
-  const [viewport, setViewport] = useState(() =>
-    typeof window !== 'undefined'
-      ? { w: window.innerWidth, h: window.innerHeight }
-      : { w: 1280, h: 800 },
-  )
-
-  useEffect(() => {
-    let raf = 0
-    const onResize = () => {
-      if (raf) return
-      raf = window.requestAnimationFrame(() => {
-        raf = 0
-        setViewport({ w: window.innerWidth, h: window.innerHeight })
-      })
-    }
-    window.addEventListener('resize', onResize, { passive: true })
-    return () => {
-      if (raf) window.cancelAnimationFrame(raf)
-      window.removeEventListener('resize', onResize)
-    }
-  }, [])
+  const viewport = useSyncExternalStore(subscribeViewport, getViewportSnapshot, getServerViewportSnapshot)
 
   const { k, innerContainerW, settledScale, settledLeftX, giantScale, giantY } = computeDeckMetrics(viewport)
 

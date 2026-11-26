@@ -1,5 +1,6 @@
 export { I18nProvider } from './I18nProvider'
 export {
+  applyDocumentMeta,
   BANNER_DISMISSED_KEY,
   detectBrowserLocale,
   matchLocale,
@@ -7,7 +8,7 @@ export {
   resolveInitialLocale,
   useI18n,
 } from './context'
-export { loadMessages } from './locales'
+export { getCachedMessages, loadMessages } from './locales'
 export {
   LOCALE_META,
   localeFromPathname,

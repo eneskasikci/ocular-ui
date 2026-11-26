@@ -3,6 +3,25 @@
   "plugins": ["react", "typescript", "oxc"],
   "rules": {
     "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+    "react/only-export-components": ["warn", { "allowConstantExport": true }],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "react",
+            "importNames": ["useEffect"],
+            "message": "useEffect is banned in this repo. Prefer derived state, event handlers, ref cleanup callbacks, or useSyncExternalStore. See https://react.dev/learn/you-might-not-need-an-effect"
+          }
+        ]
+      }
+    ],
+    "no-restricted-properties": [
+      "error",
+      {
+        "property": "useEffect",
+        "message": "useEffect is banned in this repo. Prefer derived state, event handlers, ref cleanup callbacks, or useSyncExternalStore. See https://react.dev/learn/you-might-not-need-an-effect"
+      }
+    ]
   }
 }

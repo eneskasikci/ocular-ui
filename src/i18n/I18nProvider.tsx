@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useMemo, type ReactNode } from 'react'
 import { I18nContext, resolveInitialLocale, type I18nContextValue } from './context'
-import { getCachedMessages, loadMessages } from './locales'
-import { format, LOCALE_META, localePath, type Locale, type Messages } from './types'
+import { getCachedMessages } from './locales'
+import { format, localePath, type Locale } from './types'
 
 export function I18nProvider({
   initialLocale,
@@ -11,9 +11,7 @@ export function I18nProvider({
   children: ReactNode
 }) {
   const locale = initialLocale ?? resolveInitialLocale()
-  const [messages, setMessages] = useState<Messages>(
-    () => getCachedMessages(locale) ?? getCachedMessages('en')!,
-  )
+  const messages = getCachedMessages(locale) ?? getCachedMessages('en')!
 
   const setLocale = useCallback(
     (next: Locale) => {
@@ -22,26 +20,6 @@ export function I18nProvider({
     },
     [locale],
   )
-
-  useEffect(() => {
-    if (getCachedMessages(locale)) return
-    let cancelled = false
-    void loadMessages(locale).then((loaded) => {
-      if (!cancelled) setMessages(loaded)
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [locale])
-
-  useEffect(() => {
-    document.documentElement.lang = LOCALE_META[locale].htmlLang
-    document.title = messages.meta.title
-    const desc = document.querySelector('meta[name="description"]')
-    if (desc) {
-      desc.setAttribute('content', messages.meta.description)
-    }
-  }, [locale, messages])
 
   const value = useMemo<I18nContextValue>(
     () => ({ locale, setLocale, t: messages, format }),

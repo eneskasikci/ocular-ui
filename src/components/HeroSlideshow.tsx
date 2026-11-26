@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState, type CSSProperties } from 'react'
+import { memo, useCallback, useState, type CSSProperties } from 'react'
 import { useReducedMotion } from 'motion/react'
 import { HERO_SIZES, PHOTOS, type PhotoAsset, type PhotoId } from '../data/photos'
 import { useI18n } from '../i18n'
@@ -116,10 +116,8 @@ export const HeroSlideshow = memo(function HeroSlideshow({
   const reduceMotion = Boolean(useReducedMotion())
   const [userPaused, setUserPaused] = useState(false)
   // Stop the infinite drift once the hero scrolls out of view (scroll layout).
-  const sectionRef = useRef<HTMLElement>(null)
   const [offscreen, setOffscreen] = useState(false)
-  useEffect(() => {
-    const el = sectionRef.current
+  const observeSection = useCallback((el: HTMLElement | null) => {
     if (!el) return
     const io = new IntersectionObserver(([e]) => setOffscreen(!e.isIntersecting))
     io.observe(el)
@@ -135,7 +133,7 @@ export const HeroSlideshow = memo(function HeroSlideshow({
 
   return (
     <section
-      ref={sectionRef}
+      ref={observeSection}
       className={cn(
         'relative overflow-hidden',
         inDeck

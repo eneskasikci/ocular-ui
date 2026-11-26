@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useState, useSyncExternalStore } from 'react'
 import { SCENES } from '../config'
 
 // Single-spring deck controller: instant scroll-anchor jumps let DesktopDeck's
@@ -13,6 +13,22 @@ const RETRIGGER_SURGE_RATIO = 2.5
 const STOP_EPS_PX = 3
 
 const DEFAULT_SCENE_IDS = SCENES.map((s) => s.id)
+
+export function getStepFromHash(sceneIds: readonly string[] = DEFAULT_SCENE_IDS): number {
+  if (typeof window === 'undefined') return 0
+  const id = window.location.hash.replace('#', '')
+  const idx = sceneIds.indexOf(id)
+  return idx >= 0 ? idx : 0
+}
+
+function syncStepHash(step: number, sceneIds: readonly string[]): void {
+  if (typeof window === 'undefined') return
+  const id = sceneIds[step]
+  const hash = step === 0 || !id ? '' : `#${id}`
+  if (window.location.hash !== hash) {
+    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`)
+  }
+}
 
 function measureStops(sceneIds: readonly string[]): number[] | null {
   const tops: number[] = []
@@ -44,67 +60,71 @@ function normalizeWheelDelta(e: WheelEvent): number {
   return e.deltaY
 }
 
-interface Options {
-  enabled: boolean
-  step: number
-  onChangeStep: (next: number) => void
-  sceneIds?: readonly string[]
+export interface DeckNavStore {
+  getSnapshot: () => number
+  goToStep: (target: number) => void
+  subscribe: (enabled: boolean, onStoreChange: () => void) => () => void
 }
 
-/**
- * Stop-to-stop navigation for desktop wheel & keyboard.
- * Updates step state and snaps the scroll anchor immediately so Motion's
- * useSpring handles interpolation without native smooth-scroll oscillation.
- */
-export function useDesktopDeckNav({
-  enabled,
-  step,
-  onChangeStep,
-  sceneIds = DEFAULT_SCENE_IDS,
-}: Options) {
-  const stepRef = useRef(step)
-  useEffect(() => {
-    stepRef.current = step
-  }, [step])
+export function createDeckNavStore(sceneIds: readonly string[] = DEFAULT_SCENE_IDS): DeckNavStore {
+  let step = getStepFromHash(sceneIds)
+  let stops: number[] | null = null
+  let lockUntil = 0
+  const listeners = new Set<() => void>()
 
-  const onChangeStepRef = useRef(onChangeStep)
-  useEffect(() => {
-    onChangeStepRef.current = onChangeStep
-  }, [onChangeStep])
+  const notify = () => {
+    for (const listener of listeners) {
+      listener()
+    }
+  }
 
-  const stopsRef = useRef<number[] | null>(null)
-  const lockUntilRef = useRef(0)
+  const setStep = (next: number) => {
+    if (next === step) return
+    step = next
+    notify()
+  }
 
-  const getStops = useCallback((): number[] | null => {
-    if (stopsRef.current) return stopsRef.current
+  const getStops = (): number[] | null => {
+    if (stops) return stops
     const measured = measureStops(sceneIds)
-    stopsRef.current = measured
+    stops = measured
     return measured
-  }, [sceneIds])
+  }
 
-  const goToStep = useCallback(
-    (target: number) => {
-      const clamped = Math.max(0, Math.min(sceneIds.length - 1, target))
-      const stops = getStops()
-      const top = stops ? stops[clamped] : clamped * window.innerHeight
-      if (clamped !== stepRef.current) {
-        stepRef.current = clamped
-        onChangeStepRef.current(clamped)
-      }
-      if (Math.abs(top - window.scrollY) > STOP_EPS_PX) {
-        window.scrollTo({ top, behavior: 'instant' })
-      }
-    },
-    [getStops, sceneIds.length],
-  )
+  const goToStep = (target: number) => {
+    const clamped = Math.max(0, Math.min(sceneIds.length - 1, target))
+    const currentStops = getStops()
+    const top = currentStops ? currentStops[clamped] : clamped * window.innerHeight
+    syncStepHash(clamped, sceneIds)
+    setStep(clamped)
+    if (Math.abs(top - window.scrollY) > STOP_EPS_PX) {
+      window.scrollTo({ top, behavior: 'instant' })
+    }
+  }
 
-  useEffect(() => {
+  const subscribe = (enabled: boolean, onStoreChange: () => void): (() => void) => {
+    listeners.add(onStoreChange)
+
+    const onHashChange = () => {
+      const next = getStepFromHash(sceneIds)
+      if (enabled) {
+        goToStep(next)
+      } else {
+        setStep(next)
+      }
+    }
+    window.addEventListener('hashchange', onHashChange)
+
     if (!enabled) {
-      stopsRef.current = null
-      return
+      stops = null
+      return () => {
+        listeners.delete(onStoreChange)
+        window.removeEventListener('hashchange', onHashChange)
+      }
     }
 
-    stopsRef.current = measureStops(sceneIds)
+    stops = measureStops(sceneIds)
+    syncStepHash(step, sceneIds)
 
     let resizeRaf = 0
     const onResize = () => {
@@ -112,9 +132,9 @@ export function useDesktopDeckNav({
       resizeRaf = window.requestAnimationFrame(() => {
         resizeRaf = 0
         const measured = measureStops(sceneIds)
-        stopsRef.current = measured
+        stops = measured
         if (measured) {
-          const targetTop = measured[stepRef.current]
+          const targetTop = measured[step]
           if (Math.abs(window.scrollY - targetTop) > STOP_EPS_PX) {
             window.scrollTo({ top: targetTop, behavior: 'instant' })
           }
@@ -135,19 +155,19 @@ export function useDesktopDeckNav({
       gestureLocked = true
       lockedDir = triggerDir
       lastStepTime = now
-      lockUntilRef.current = now + STEP_COOLDOWN_MS
+      lockUntil = now + STEP_COOLDOWN_MS
       trailingMin = Infinity
       accumDelta = 0
       accumDir = 0
     }
 
     const onScroll = () => {
-      const tops = getStops()
-      if (!tops) return
-      const nearest = getNearestStep(tops)
-      if (nearest !== stepRef.current) {
-        stepRef.current = nearest
-        onChangeStepRef.current(nearest)
+      const currentStops = getStops()
+      if (!currentStops) return
+      const nearest = getNearestStep(currentStops)
+      if (nearest !== step) {
+        syncStepHash(nearest, sceneIds)
+        setStep(nearest)
       }
     }
 
@@ -162,7 +182,7 @@ export function useDesktopDeckNav({
       const gap = now - lastEventTime
       lastEventTime = now
 
-      const nextStep = stepRef.current + dir
+      const nextStep = step + dir
       if (nextStep < 0 || nextStep >= sceneIds.length) {
         accumDelta = 0
         accumDir = 0
@@ -172,7 +192,7 @@ export function useDesktopDeckNav({
       e.preventDefault()
 
       if (gestureLocked) {
-        if (gap >= GESTURE_IDLE_MS && now >= lockUntilRef.current) {
+        if (gap >= GESTURE_IDLE_MS && now >= lockUntil) {
           gestureLocked = false
           lockedDir = 0
           trailingMin = Infinity
@@ -183,7 +203,7 @@ export function useDesktopDeckNav({
             trailingMin = Math.min(trailingMin, absDelta)
           }
           const isSurge =
-            now >= lockUntilRef.current &&
+            now >= lockUntil &&
             absDelta >= RETRIGGER_SURGE_MIN_PX &&
             trailingMin < Infinity &&
             absDelta >= trailingMin * RETRIGGER_SURGE_RATIO
@@ -249,14 +269,14 @@ export function useDesktopDeckNav({
             : 0
 
       if (!dir) return
-      const nextStep = stepRef.current + dir
+      const nextStep = step + dir
       if (nextStep < 0 || nextStep >= sceneIds.length) return
 
       e.preventDefault()
       const now = performance.now()
-      if (!e.repeat || now >= lockUntilRef.current) {
+      if (!e.repeat || now >= lockUntil) {
         goToStep(nextStep)
-        lockUntilRef.current = now + 220
+        lockUntil = now + 220
       }
     }
 
@@ -265,13 +285,49 @@ export function useDesktopDeckNav({
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
+      listeners.delete(onStoreChange)
+      window.removeEventListener('hashchange', onHashChange)
       if (resizeRaf) window.cancelAnimationFrame(resizeRaf)
       window.removeEventListener('resize', onResize)
       window.removeEventListener('wheel', onWheel)
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('scroll', onScroll)
     }
-  }, [enabled, getStops, goToStep, sceneIds])
+  }
 
-  return goToStep
+  return {
+    getSnapshot: () => step,
+    goToStep,
+    subscribe,
+  }
+}
+
+interface Options {
+  enabled: boolean
+  sceneIds?: readonly string[]
+}
+
+export interface DeckNavController {
+  step: number
+  goToStep: (target: number) => void
+}
+
+const getServerSnapshot = () => 0
+
+/**
+ * Stop-to-stop navigation for desktop wheel & keyboard.
+ * Updates step state and snaps the scroll anchor immediately so Motion's
+ * useSpring handles interpolation without native smooth-scroll oscillation.
+ */
+export function useDesktopDeckNav({
+  enabled,
+  sceneIds = DEFAULT_SCENE_IDS,
+}: Options): DeckNavController {
+  const [store] = useState(() => createDeckNavStore(sceneIds))
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => store.subscribe(enabled, onStoreChange),
+    [store, enabled],
+  )
+  const step = useSyncExternalStore(subscribe, store.getSnapshot, getServerSnapshot)
+  return { step, goToStep: store.goToStep }
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { PHOTO_MAP, PHOTOS, type PhotoAsset, type PhotoId } from '../data/photos'
 import {
   ASPECT_RATIOS,
@@ -75,12 +75,6 @@ export function useCameraState(isRawActive: boolean): CameraController {
   const flashTimer = useRef<number | null>(null)
   const toastTimer = useRef<number | null>(null)
 
-  useEffect(() => {
-    return () => {
-      if (flashTimer.current) window.clearTimeout(flashTimer.current)
-      if (toastTimer.current) window.clearTimeout(toastTimer.current)
-    }
-  }, [])
 
   const photoIndex = Math.max(0, PHOTOS.findIndex((p) => p.id === photoId))
   const photo = PHOTO_MAP[photoId]

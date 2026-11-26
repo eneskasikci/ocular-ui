@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
+import { useCallback, useId, useRef, useState, type KeyboardEvent } from 'react'
 import { LOCALE_META, localePath, SUPPORTED_LOCALES, useI18n } from '../i18n'
 import { cn } from '../lib/cn'
 
@@ -27,13 +27,14 @@ export function LanguageSwitcher() {
     }
   }
 
-  useEffect(() => {
-    if (!open) return
+  const attachMenu = useCallback((node: HTMLDivElement | null) => {
+    menuRef.current = node
+    if (!node) return
 
     const target = pendingFocusRef.current
     pendingFocusRef.current = null
-    if (target && menuRef.current) {
-      const items = menuRef.current.querySelectorAll<HTMLElement>('[role="menuitem"]')
+    if (target) {
+      const items = node.querySelectorAll<HTMLElement>('[role="menuitem"]')
       const el = target === 'last' ? items[items.length - 1] : items[0]
       el?.focus()
     }
@@ -44,8 +45,11 @@ export function LanguageSwitcher() {
       }
     }
     document.addEventListener('pointerdown', onPointerDown)
-    return () => document.removeEventListener('pointerdown', onPointerDown)
-  }, [open])
+    return () => {
+      menuRef.current = null
+      document.removeEventListener('pointerdown', onPointerDown)
+    }
+  }, [])
 
   const onTriggerKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === 'ArrowDown') {
@@ -130,7 +134,7 @@ export function LanguageSwitcher() {
       {open && (
         <div
           id={menuId}
-          ref={menuRef}
+          ref={attachMenu}
           role="menu"
           aria-label={t.a11y.language}
           onKeyDown={onMenuKeyDown}
