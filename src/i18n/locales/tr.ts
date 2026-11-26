@@ -186,6 +186,10 @@ export const tr: Messages = {
     upsellText: 'F1–F4 ve RAW',
     upsellBtn: 'Pro HUD',
     range: 'ALAN',
+    clear: 'TEMİZ',
+    grid: 'IZGARA',
+    roll: 'RULO',
+    heicRaw: 'HEIC+RAW',
     panoramic: 'panoramik',
   },
 }

@@ -24,8 +24,8 @@ export function HudLayoutSwitch({
   return (
     <div
       className={cn(
-        'hud-switch inline-flex items-center gap-2 rounded-full bg-[#0f1014]/94 border border-hair shadow-[0_10px_28px_rgba(0,0,0,.32)] reduced-transparency:bg-graphite',
-        wide ? 'hud-switch--wide w-[min(100%,308px)] justify-between p-1 pl-3.5' : 'p-[3px] pl-3',
+        'hud-switch inline-flex items-center gap-1.5 rounded-full bg-[#0f1014]/94 border border-hair shadow-[0_10px_28px_rgba(0,0,0,.32)] reduced-transparency:bg-graphite',
+        wide ? 'hud-switch--wide w-[min(100%,308px)] justify-between p-1 pl-3' : 'p-[3px] pl-2.5',
       )}
     >
       <span className="font-mono font-bold text-[0.7rem] leading-none tracking-[0.1em] text-ink-subtle uppercase whitespace-nowrap">
@@ -47,7 +47,7 @@ export function HudLayoutSwitch({
               key={opt.id}
               value={opt.id}
               className={cn(
-                'hud-switch__btn relative px-3 border-0 rounded-full bg-transparent font-mono font-bold text-[0.74rem] leading-none tracking-[0.06em] text-ink-muted cursor-pointer z-1 whitespace-nowrap transition-colors duration-180 ease-ocular hover:text-silver data-[state=on]:text-amber',
+                'hud-switch__btn relative px-2.5 border-0 rounded-full bg-transparent font-mono font-bold text-[0.72rem] leading-none tracking-[0.04em] text-ink-muted cursor-pointer z-1 whitespace-nowrap transition-colors duration-180 ease-ocular hover:text-silver data-[state=on]:text-amber',
                 wide ? 'h-[38px] min-w-[68px]' : 'h-[34px] min-w-[52px]',
               )}
             >

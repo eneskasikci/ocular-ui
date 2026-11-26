@@ -186,6 +186,10 @@ export const en: Messages = {
     upsellText: 'F1–F4 deck & RAW',
     upsellBtn: 'Pro HUD',
     range: 'RANGE',
+    clear: 'CLEAR',
+    grid: 'GRID',
+    roll: 'ROLL',
+    heicRaw: 'HEIC+RAW',
     panoramic: 'panoramic',
   },
 }

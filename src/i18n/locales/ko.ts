@@ -186,6 +186,10 @@ export const ko: Messages = {
     upsellText: 'F1–F4 & RAW',
     upsellBtn: 'Pro HUD',
     range: '파인더',
+    clear: '클린',
+    grid: '그리드',
+    roll: '롤',
+    heicRaw: 'HEIC+RAW',
     panoramic: '파노라마',
   },
 }

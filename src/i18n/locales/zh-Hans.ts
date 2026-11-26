@@ -186,6 +186,10 @@ export const zhHans: Messages = {
     upsellText: 'F1–F4 与 RAW',
     upsellBtn: 'Pro HUD',
     range: '旁轴',
+    clear: '纯净',
+    grid: '网格',
+    roll: '胶卷',
+    heicRaw: 'HEIC+RAW',
     panoramic: '全景',
   },
 }

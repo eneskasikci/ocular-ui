@@ -1,5 +1,4 @@
 import { lazy, memo, Suspense, useState } from 'react'
-import { AnimatePresence } from 'motion/react'
 import * as m from 'motion/react-m'
 import { Toggle } from 'radix-ui'
 import { buildOpticalFilter } from '../../data/recipes'
@@ -13,6 +12,12 @@ import { ViewfinderCanvas } from './ViewfinderCanvas'
 
 const QuickMenuDialog = lazy(() =>
   import('./QuickMenuDialog').then((mod) => ({ default: mod.QuickMenuDialog })),
+)
+const RecipeSideMenu = lazy(() =>
+  import('./RecipeSideMenu').then((mod) => ({ default: mod.RecipeSideMenu })),
+)
+const SettingsQuickSheet = lazy(() =>
+  import('./SettingsQuickSheet').then((mod) => ({ default: mod.SettingsQuickSheet })),
 )
 
 interface Props {
@@ -38,19 +43,44 @@ function HardwareButtons() {
 
 export const CameraPhone = memo(function CameraPhone({ camera, isGiantMode }: Props) {
   const { t } = useI18n()
-  const [guidesOn, setGuidesOn] = useState(true)
   const [qOpen, setQOpen] = useState(false)
   const [qMounted, setQMounted] = useState(false)
+  const [recipeMenuOpen, setRecipeMenuOpen] = useState(false)
+  const [recipeMenuMounted, setRecipeMenuMounted] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [settingsMounted, setSettingsMounted] = useState(false)
 
   const toggleQ = () => {
     setQMounted(true)
     setQOpen((v) => !v)
   }
 
-  const { photo, recipe, ev, dr, rawCompare, exifToast, hudLayout, toggleRawCompare } = camera
+  const openRecipeMenu = () => {
+    setRecipeMenuMounted(true)
+    setQOpen(false)
+    setRecipeMenuOpen(true)
+  }
+
+  const openSettings = () => {
+    setSettingsMounted(true)
+    setQOpen(false)
+    setSettingsOpen(true)
+  }
+
+  const {
+    photo,
+    phoneRecipe,
+    ev,
+    dr,
+    rawCompare,
+    dynamicIslandStatus,
+    hudLayout,
+    toggleRawCompare,
+    setHudLayout,
+  } = camera
   const isFree = hudLayout === 'free'
   const showTopRawBadge = !isFree || rawCompare
-  const opticalFilter = buildOpticalFilter(recipe, ev, dr)
+  const opticalFilter = buildOpticalFilter(phoneRecipe, ev, dr)
 
   const giantAware = isGiantMode !== undefined
   const chromeAnimate = giantAware ? { opacity: isGiantMode ? 0 : 1 } : undefined
@@ -67,8 +97,8 @@ export const CameraPhone = memo(function CameraPhone({ camera, isGiantMode }: Pr
       <HardwareButtons />
 
       <div className="phone-screen relative w-full h-full rounded-[39px] overflow-hidden [contain:layout_paint] bg-[#050608] text-silver font-body border border-black/70 select-none">
-        {/* Status Bar & Dead-Centered Dynamic Island */}
-        <div className="relative z-30 h-[34px] pt-2 px-[18px] flex items-center justify-between pointer-events-none" aria-hidden="true">
+        {/* Status Bar & Morphing Dynamic Island (`DynamicIslandStatusPillView`) */}
+        <div className="relative z-32 h-[34px] pt-2 px-[18px] flex items-center justify-between pointer-events-none" aria-hidden="true">
           <m.span
             className="font-ios font-semibold text-[10.5px] leading-none text-silver tracking-[-0.01em]"
             initial={false}
@@ -77,9 +107,34 @@ export const CameraPhone = memo(function CameraPhone({ camera, isGiantMode }: Pr
           >
             9:41
           </m.span>
-          <div className="phone-island absolute left-1/2 top-[13.5px] -translate-x-1/2 w-[24%] h-[15px] rounded-full bg-[#050507] border border-silver/9 flex items-center justify-end pr-[5px]">
-            <span className="w-[5px] h-[5px] rounded-full bg-[radial-gradient(circle_at_35%_35%,#3c5678,#0c1018_72%)]" />
-          </div>
+
+          <m.div
+            layout
+            className={cn(
+              'phone-island absolute left-1/2 -translate-x-1/2 bg-[#050507] border flex items-center overflow-hidden',
+              dynamicIslandStatus
+                ? 'top-[9px] min-w-[164px] max-w-[218px] h-auto px-2.5 pt-[15px] pb-1.5 rounded-[16px] border-white/14 shadow-[0_6px_18px_rgba(0,0,0,.65)] justify-center gap-1.5'
+                : 'top-[13.5px] w-[24%] h-[15px] rounded-full border-silver/9 justify-end pr-[5px]',
+            )}
+            transition={{ duration: 0.24, ease: EASE_OUT }}
+          >
+            {dynamicIslandStatus ? (
+              <div className="flex items-center gap-1 font-mono leading-none">
+                <svg width="8.5" height="8.5" viewBox="0 0 16 16" fill="#e8832a" className="shrink-0">
+                  <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3.3 5.4l-3.9 4.1a.6.6 0 0 1-.86.02L4.7 8.7a.6.6 0 1 1 .84-.86l1.4 1.38 3.48-3.66a.6.6 0 1 1 .88.84z" />
+                </svg>
+                <span className="px-1 py-[1.5px] rounded-full bg-amber text-obsidian font-black text-[6.8px]">
+                  {dynamicIslandStatus.badge}
+                </span>
+                <span className="font-bold text-[7px] text-white whitespace-nowrap truncate">
+                  {dynamicIslandStatus.title}
+                </span>
+              </div>
+            ) : (
+              <span className="w-[5px] h-[5px] rounded-full bg-[radial-gradient(circle_at_35%_35%,#3c5678,#0c1018_72%)]" />
+            )}
+          </m.div>
+
           <m.svg
             className="w-[52px] h-2.5 text-silver"
             viewBox="0 0 76 14"
@@ -126,23 +181,23 @@ export const CameraPhone = memo(function CameraPhone({ camera, isGiantMode }: Pr
                 decoding="async"
                 draggable={false}
               />
-              {recipe.shadowTint && (
+              {phoneRecipe.shadowTint && (
                 <div
                   className="absolute inset-0 pointer-events-none"
                   style={{
-                    background: recipe.shadowTint.background,
-                    mixBlendMode: recipe.shadowTint.blendMode,
-                    opacity: recipe.shadowTint.opacity,
+                    background: phoneRecipe.shadowTint.background,
+                    mixBlendMode: phoneRecipe.shadowTint.blendMode,
+                    opacity: phoneRecipe.shadowTint.opacity,
                   }}
                 />
               )}
-              {recipe.highlightTint && (
+              {phoneRecipe.highlightTint && (
                 <div
                   className="absolute inset-0 pointer-events-none"
                   style={{
-                    background: recipe.highlightTint.background,
-                    mixBlendMode: recipe.highlightTint.blendMode,
-                    opacity: recipe.highlightTint.opacity,
+                    background: phoneRecipe.highlightTint.background,
+                    mixBlendMode: phoneRecipe.highlightTint.blendMode,
+                    opacity: phoneRecipe.highlightTint.opacity,
                   }}
                 />
               )}
@@ -153,87 +208,90 @@ export const CameraPhone = memo(function CameraPhone({ camera, isGiantMode }: Pr
               </div>
               <div className="absolute left-1/2 top-[144px] -translate-x-1/2 inline-flex items-center gap-[3px] px-1.5 py-[2.5px] rounded-full bg-deep/84 border-[0.5px] border-amber/68 text-silver font-mono font-bold text-[4.2px] leading-none tracking-[0.08em] uppercase whitespace-nowrap">
                 <span className="w-[2.2px] h-[2.2px] rounded-full bg-amber" />
-                <span>{photo.name} · {recipe.code}</span>
+                <span>{photo.name} · {phoneRecipe.slotCode}</span>
               </div>
             </div>
           </m.div>
         )}
 
-        {/* Persistent Top Rangefinder HUD */}
+        {/* Camera HUD Content (shifts & scales right when RecipeSideMenu is open, matching `ContentView.swift`) */}
+        <div className="relative w-full h-[calc(100%-34px)] overflow-hidden">
         <m.div
-          className="relative z-25 h-8 px-2.5 flex items-center justify-between"
-          initial={false}
-          animate={chromeAnimate}
-          transition={chromeTransition}
-          style={isGiantMode ? { pointerEvents: 'none' } : undefined}
+          className="relative w-full h-full"
+          animate={recipeMenuOpen ? { x: 24, scale: 0.94 } : { x: 0, scale: 1 }}
+          transition={{ duration: 0.24, ease: EASE_OUT }}
         >
-          <div className="inline-flex items-center gap-1.5" aria-hidden="true">
-            <MeniscusMark className="w-[17px] h-[17px]" />
-            <span className="font-wordmark font-bold text-[13px] leading-none tracking-[0.1em] text-silver/95">
-              OCULAR
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            {showTopRawBadge && (
-              <Toggle.Root
-                pressed={rawCompare}
-                onPressedChange={toggleRawCompare}
-                title={t.a11y.toggleRawCompare}
-                className="sensor-badge inline-flex items-center gap-1 h-6 px-2 rounded-full bg-obsidian/68 border border-silver/20 font-mono font-extrabold text-[9px] leading-none tracking-[0.06em] text-silver/92 cursor-pointer transition-[border-color,background-color] duration-180 ease-ocular motion-reduce:transition-none data-[state=on]:border-amber/72 data-[state=on]:bg-amber/20 data-[state=on]:text-amber"
-              >
-                <span className="w-[4.5px] h-[4.5px] rounded-full bg-amber" />
-                <span>{rawCompare ? t.phone.split : t.phone.raw}</span>
-              </Toggle.Root>
-            )}
-            <button
-              type="button"
-              onClick={toggleQ}
-              aria-label={t.a11y.toggleQMenu}
-              aria-pressed={qOpen}
-              className={cn(
-                'w-7 h-7 rounded-full bg-obsidian/66 border border-silver/20 flex items-center justify-center p-0 cursor-pointer transition-[border-color,color] duration-180 ease-ocular motion-reduce:transition-none',
-                qOpen ? 'border-amber text-amber' : 'text-silver/90',
+          {/* Persistent Top Rangefinder HUD */}
+          <m.div
+            className="relative z-25 h-8 px-2.5 flex items-center justify-between"
+            initial={false}
+            animate={chromeAnimate}
+            transition={chromeTransition}
+            style={isGiantMode ? { pointerEvents: 'none' } : undefined}
+          >
+            <div className="inline-flex items-center gap-1.5 [filter:drop-shadow(0_0_8px_rgba(243,241,236,.22))]" aria-hidden="true">
+              <MeniscusMark className="w-[17px] h-[17px]" />
+              <span className="font-wordmark font-bold text-[13px] leading-none tracking-[0.1em] text-silver/95">
+                OCULAR
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              {showTopRawBadge && (
+                <Toggle.Root
+                  pressed={rawCompare}
+                  onPressedChange={toggleRawCompare}
+                  title={t.a11y.toggleRawCompare}
+                  className="sensor-badge inline-flex items-center gap-1 h-6 px-2 rounded-full bg-obsidian/68 border border-silver/20 font-mono font-extrabold text-[8.5px] leading-none tracking-[0.05em] text-silver/92 cursor-pointer transition-[border-color,background-color] duration-180 ease-ocular motion-reduce:transition-none data-[state=on]:border-amber/72 data-[state=on]:bg-amber/20 data-[state=on]:text-amber"
+                >
+                  <span className={cn('w-[4.5px] h-[4.5px] rounded-full', rawCompare ? 'bg-amber' : 'bg-emerald')} />
+                  <span>{rawCompare ? t.phone.split : t.phone.heicRaw}</span>
+                </Toggle.Root>
               )}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.26.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z" />
-              </svg>
-            </button>
-          </div>
-        </m.div>
-
-        {/* Live 3:4 Portrait Sensor Aperture + EXIF toast */}
-        <div className="relative mt-0.5 w-full">
-          <ViewfinderCanvas camera={camera} showGuides={isFree ? guidesOn : true} />
-
-          <AnimatePresence>
-            {exifToast && (
-              <m.div
-                key={exifToast}
-                className="absolute inset-x-2.5 top-2.5 w-fit max-w-[calc(100%-20px)] mx-auto px-2.5 py-1 rounded-full bg-deep/90 border border-amber/68 text-amber font-mono font-bold text-[9px] leading-none tracking-[0.08em] whitespace-nowrap pointer-events-none z-22"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.2, ease: EASE_OUT }}
-                role="status"
+              <button
+                type="button"
+                onClick={openSettings}
+                aria-label="Camera Settings"
+                aria-pressed={settingsOpen}
+                className={cn(
+                  'w-7 h-7 rounded-full bg-obsidian/66 border border-silver/20 flex items-center justify-center p-0 cursor-pointer transition-[border-color,color] duration-180 ease-ocular motion-reduce:transition-none',
+                  settingsOpen ? 'border-amber text-amber' : 'text-silver/90',
+                )}
               >
-                {exifToast}
-              </m.div>
-            )}
-          </AnimatePresence>
+                {/* SF Symbol `slider.horizontal.3` */}
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <line x1="4" y1="6" x2="20" y2="6" />
+                  <circle cx="9" cy="6" r="2" fill="currentColor" />
+                  <line x1="4" y1="12" x2="20" y2="12" />
+                  <circle cx="15" cy="12" r="2" fill="currentColor" />
+                  <line x1="4" y1="18" x2="20" y2="18" />
+                  <circle cx="10" cy="18" r="2" fill="currentColor" />
+                </svg>
+              </button>
+            </div>
+          </m.div>
+
+          {/* Live 3:4 Portrait Sensor Aperture */}
+          <div className="relative mt-0.5 w-full">
+            <ViewfinderCanvas camera={camera} />
+          </div>
+
+          <PortraitDeck
+            camera={camera}
+            isFree={isFree}
+            qOpen={qOpen}
+            onToggleQ={toggleQ}
+            onOpenRecipeMenu={openRecipeMenu}
+            onSwitchToPro={() => setHudLayout('pro')}
+            chromeAnimate={chromeAnimate}
+            chromeTransition={chromeTransition}
+            disablePointer={Boolean(isGiantMode)}
+          />
+        </m.div>
         </div>
 
-        <PortraitDeck
-          camera={camera}
-          isFree={isFree}
-          qOpen={qOpen}
-          onToggleQ={toggleQ}
-          guidesOn={guidesOn}
-          onToggleGuides={setGuidesOn}
-          chromeAnimate={chromeAnimate}
-          chromeTransition={chromeTransition}
-          disablePointer={Boolean(isGiantMode)}
-        />
+        {recipeMenuOpen && (
+          <div className="absolute inset-0 bg-obsidian/72 pointer-events-none z-33" aria-hidden="true" />
+        )}
 
         {qMounted && (
           <Suspense fallback={null}>
@@ -242,6 +300,29 @@ export const CameraPhone = memo(function CameraPhone({ camera, isGiantMode }: Pr
               isFree={isFree}
               open={qOpen}
               onClose={() => setQOpen(false)}
+              onSwitchToPro={() => setHudLayout('pro')}
+            />
+          </Suspense>
+        )}
+
+        {recipeMenuMounted && (
+          <Suspense fallback={null}>
+            <RecipeSideMenu
+              camera={camera}
+              isFree={isFree}
+              open={recipeMenuOpen}
+              onClose={() => setRecipeMenuOpen(false)}
+              onSwitchToPro={() => setHudLayout('pro')}
+            />
+          </Suspense>
+        )}
+
+        {settingsMounted && (
+          <Suspense fallback={null}>
+            <SettingsQuickSheet
+              camera={camera}
+              open={settingsOpen}
+              onClose={() => setSettingsOpen(false)}
             />
           </Suspense>
         )}

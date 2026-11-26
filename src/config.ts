@@ -9,7 +9,7 @@ export const APP_STORE_URL = 'https://apps.apple.com/app/ocular/id0000000000'
 export const SUPPORT_EMAIL = 'ocular.camera@icloud.com'
 export const EULA_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/'
 
-export type BackdropId = 'silk' | 'prism' | 'crescent' | 'horizon' | 'meridian'
+export type BackdropId = 'silk' | 'prism' | 'crescent' | 'horizon' | 'meridian' | 'reel' | 'aperture'
 
 export interface SceneMeta {
   id: string

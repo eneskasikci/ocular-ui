@@ -186,6 +186,10 @@ export const de: Messages = {
     upsellText: 'F1–F4 & RAW',
     upsellBtn: 'Pro HUD',
     range: 'SUCHER',
+    clear: 'FREI',
+    grid: 'RASTER',
+    roll: 'FILM',
+    heicRaw: 'HEIC+RAW',
     panoramic: 'Panorama',
   },
 }

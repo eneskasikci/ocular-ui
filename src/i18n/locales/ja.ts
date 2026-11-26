@@ -186,6 +186,10 @@ export const ja: Messages = {
     upsellText: 'F1–F4 & RAW',
     upsellBtn: 'Pro HUD',
     range: 'ファインダー',
+    clear: 'クリア',
+    grid: 'グリッド',
+    roll: 'ロール',
+    heicRaw: 'HEIC+RAW',
     panoramic: 'パノラマ',
   },
 }

@@ -287,6 +287,10 @@ export interface Messages {
     upsellText: string
     upsellBtn: string
     range: string
+    clear: string
+    grid: string
+    roll: string
+    heicRaw: string
     panoramic: string
   }
 }

@@ -186,6 +186,10 @@ export const ptBR: Messages = {
     upsellText: 'F1–F4 e RAW',
     upsellBtn: 'Pro HUD',
     range: 'VISOR',
+    clear: 'LIMPO',
+    grid: 'GRADE',
+    roll: 'ROLO',
+    heicRaw: 'HEIC+RAW',
     panoramic: 'panorâmico',
   },
 }

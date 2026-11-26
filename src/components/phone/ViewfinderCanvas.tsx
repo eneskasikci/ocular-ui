@@ -3,8 +3,8 @@ import * as m from 'motion/react-m'
 import { Slider } from 'radix-ui'
 import {
   buildOpticalFilter,
-  GRAIN_LEVELS,
   LENS_SCALE,
+  Q_GRAIN_OPACITY,
   RAW_FILTER,
   type AspectId,
 } from '../../data/recipes'
@@ -19,10 +19,6 @@ interface Props {
   showGuides?: boolean
 }
 
-/**
- * Compute GPU-only matte scales.
- * Phone portrait sensor is 3:4 (0.75); compact mobile monitor is 4:3 (1.333).
- */
 function getMatteScales(aspect: AspectId, compact: boolean): { y: number; x: number } {
   if (!compact) {
     switch (aspect) {
@@ -59,26 +55,49 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
   const { t, format } = useI18n()
   const {
     photo,
-    recipe,
+    phoneRecipe,
     lens,
     ev,
     dr,
     aspect,
-    grain,
-    halation,
+    qGrain,
+    halationLevel,
+    highlightTone,
+    shadowTone,
+    colorSat,
+    clarity,
+    wbKelvin,
+    wbRed,
+    wbBlue,
+    framingGuide,
     rawCompare,
     rawSplit,
     setRawSplit,
     shutterFlash,
     focusKey,
+    focusPoint,
+    setFocusPoint,
   } = camera
 
-  const opticalFilter = buildOpticalFilter(recipe, ev, dr)
-  const grainOpacity = GRAIN_LEVELS.find((g) => g.id === grain)?.opacity ?? 0
-  const showHalation = halation && recipe.id !== 'ac'
+  const opticalFilter = buildOpticalFilter(phoneRecipe, ev, dr, {
+    highlightTone,
+    shadowTone,
+    colorSat,
+    clarity,
+    wbKelvin,
+    wbRed,
+    wbBlue,
+  })
+  const grainOpacity = Q_GRAIN_OPACITY[qGrain] ?? 0
+  const showHalation = halationLevel !== 'off' && phoneRecipe.stockId !== 'ac' && phoneRecipe.stockId !== 'sep'
+  const halationOpacity = halationLevel === 'strong' ? 0.52 : 0.3
   const matte = getMatteScales(aspect, compact)
   const scale = LENS_SCALE[lens]
   const lensTransition = SPRING_LENS
+
+  const effectiveGuide = showGuides ? framingGuide : 'clean'
+  const sunOffsetY = -(Math.min(3, Math.max(-3, ev)) / 3) * 14
+  const railSide = focusPoint.x > 74 ? -28 : 28
 
   return (
     <div
@@ -86,8 +105,15 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
         'relative w-full overflow-hidden bg-obsidian [contain:layout_paint]',
         compact
           ? 'aspect-[4/3] rounded-2xl border border-hair-strong shadow-[0_16px_40px_rgba(0,0,0,.45)]'
-          : 'aspect-[3/4] border-y border-silver/34',
+          : 'aspect-[3/4] border-y border-silver/34 cursor-crosshair',
       )}
+      onClick={(e) => {
+        if (compact || rawCompare) return
+        const rect = e.currentTarget.getBoundingClientRect()
+        const x = Math.min(88, Math.max(12, ((e.clientX - rect.left) / rect.width) * 100))
+        const y = Math.min(84, Math.max(16, ((e.clientY - rect.top) / rect.height) * 100))
+        setFocusPoint({ x, y, locked: true })
+      }}
     >
       {/* Developed live film stack */}
       <m.div
@@ -119,9 +145,9 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
             alt=""
             className={cn(
               IMG_BASE,
-              '[filter:brightness(.44)_contrast(3.4)_sepia(1)_hue-rotate(-36deg)_saturate(5.2)_blur(6px)] mix-blend-screen opacity-34 pointer-events-none',
+              '[filter:brightness(.44)_contrast(3.4)_sepia(1)_hue-rotate(-36deg)_saturate(5.2)_blur(6px)] mix-blend-screen pointer-events-none',
             )}
-            style={{ objectPosition: photo.objectPosition }}
+            style={{ objectPosition: photo.objectPosition, opacity: halationOpacity }}
             decoding="async"
             draggable={false}
           />
@@ -129,24 +155,24 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
       </m.div>
 
       {/* Optical shadow & highlight toning */}
-      {recipe.shadowTint && (
+      {phoneRecipe.shadowTint && (
         <div
           className="absolute inset-0 pointer-events-none transition-opacity duration-280 ease-ocular motion-reduce:transition-none"
           style={{
-            background: recipe.shadowTint.background,
-            mixBlendMode: recipe.shadowTint.blendMode,
-            opacity: recipe.shadowTint.opacity,
+            background: phoneRecipe.shadowTint.background,
+            mixBlendMode: phoneRecipe.shadowTint.blendMode,
+            opacity: phoneRecipe.shadowTint.opacity,
           }}
           aria-hidden="true"
         />
       )}
-      {recipe.highlightTint && (
+      {phoneRecipe.highlightTint && (
         <div
           className="absolute inset-0 pointer-events-none transition-opacity duration-280 ease-ocular motion-reduce:transition-none"
           style={{
-            background: recipe.highlightTint.background,
-            mixBlendMode: recipe.highlightTint.blendMode,
-            opacity: recipe.highlightTint.opacity,
+            background: phoneRecipe.highlightTint.background,
+            mixBlendMode: phoneRecipe.highlightTint.blendMode,
+            opacity: phoneRecipe.highlightTint.opacity,
           }}
           aria-hidden="true"
         />
@@ -201,7 +227,7 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
               RAW DNG
             </span>
             <span className="px-[7px] py-[3px] rounded-full bg-deep/86 border border-amber/58 font-mono font-bold text-[8.5px] leading-none tracking-[0.08em] text-amber">
-              {recipe.code}
+              {phoneRecipe.slotCode}
             </span>
           </div>
 
@@ -217,26 +243,53 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
               <Slider.Range className="hidden" />
             </Slider.Track>
             <Slider.Thumb
-              aria-label={format(t.a11y.compareRawWithRecipe, { name: recipe.name })}
+              aria-label={format(t.a11y.compareRawWithRecipe, { name: phoneRecipe.name })}
               className="block w-8 h-full bg-transparent opacity-0 focus-visible:opacity-100"
             />
           </Slider.Root>
         </>
       )}
 
-      {/* Rangefinder Bright-Line Corners, Green Horizon Level & Amber AF Reticle */}
-      {showGuides && (
-        <div className="vf__corners absolute inset-3.5 pointer-events-none z-5" aria-hidden="true">
-          <span className="absolute top-0 left-0 w-3 h-3 border-t-[1.2px] border-l-[1.2px] border-silver/42" />
-          <span className="absolute top-0 right-0 w-3 h-3 border-t-[1.2px] border-r-[1.2px] border-silver/42" />
-          <span className="absolute bottom-0 left-0 w-3 h-3 border-b-[1.2px] border-l-[1.2px] border-silver/42" />
-          <span className="absolute bottom-0 right-0 w-3 h-3 border-b-[1.2px] border-r-[1.2px] border-silver/42" />
+      {/* Framing guide modes: Clean / Rule-of-Thirds Grid / Rangefinder Corners + Crosshair */}
+      {effectiveGuide === 'ruleOfThirds' && (
+        <div
+          className="absolute inset-0 pointer-events-none z-5"
+          style={{
+            top: `${matte.y * 50}%`,
+            bottom: `${matte.y * 50}%`,
+            left: `${matte.x * 50}%`,
+            right: `${matte.x * 50}%`,
+          }}
+          aria-hidden="true"
+        >
+          <span className="absolute inset-y-0 left-1/3 w-[0.75px] bg-white/28" />
+          <span className="absolute inset-y-0 left-2/3 w-[0.75px] bg-white/28" />
+          <span className="absolute inset-x-0 top-1/3 h-[0.75px] bg-white/28" />
+          <span className="absolute inset-x-0 top-2/3 h-[0.75px] bg-white/28" />
+        </div>
+      )}
+
+      {effectiveGuide === 'rangefinder' && (
+        <div
+          className="vf__corners absolute pointer-events-none z-5"
+          style={{
+            top: `calc(${matte.y * 50}% + 12px)`,
+            bottom: `calc(${matte.y * 50}% + 12px)`,
+            left: `calc(${matte.x * 50}% + 12px)`,
+            right: `calc(${matte.x * 50}% + 12px)`,
+          }}
+          aria-hidden="true"
+        >
+          <span className="absolute top-0 left-0 w-3 h-3 border-t-[1.2px] border-l-[1.2px] border-white/40" />
+          <span className="absolute top-0 right-0 w-3 h-3 border-t-[1.2px] border-r-[1.2px] border-white/40" />
+          <span className="absolute bottom-0 left-0 w-3 h-3 border-b-[1.2px] border-l-[1.2px] border-white/40" />
+          <span className="absolute bottom-0 right-0 w-3 h-3 border-b-[1.2px] border-r-[1.2px] border-white/40" />
         </div>
       )}
 
       {!rawCompare && (
         <>
-          {showGuides && (
+          {effectiveGuide !== 'clean' && (
             <div
               className="vf__horizon absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[118px] h-2.5 flex items-center justify-between pointer-events-none z-5"
               aria-hidden="true"
@@ -253,48 +306,77 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
             </div>
           )}
 
+          {/* Unified Rangefinder Autofocus Reticle + Tap-to-Focus EV sun rail */}
           <m.div
             key={focusKey}
-            className="vf__af absolute left-1/2 top-1/2 w-[42px] h-[42px] -mt-[21px] -ml-[21px] pointer-events-none z-6"
+            className="vf__af absolute w-[40px] h-[40px] -mt-[20px] -ml-[20px] pointer-events-none z-6"
+            style={{ left: `${focusPoint.x}%`, top: `${focusPoint.y}%` }}
             aria-hidden="true"
             initial={{ scale: 1.15, opacity: 0.35 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.24, ease: EASE_OUT }}
           >
-            <span className="absolute top-0 left-0 w-[7px] h-[7px] border-t-[1.4px] border-l-[1.4px] border-[#ffd60a]/55" />
-            <span className="absolute top-0 right-0 w-[7px] h-[7px] border-t-[1.4px] border-r-[1.4px] border-[#ffd60a]/55" />
-            <span className="absolute bottom-0 left-0 w-[7px] h-[7px] border-b-[1.4px] border-l-[1.4px] border-[#ffd60a]/55" />
-            <span className="absolute bottom-0 right-0 w-[7px] h-[7px] border-b-[1.4px] border-r-[1.4px] border-[#ffd60a]/55" />
-            <span className="absolute left-1/2 top-1/2 w-[3px] h-[3px] -mt-[1.5px] -ml-[1.5px] rounded-full bg-[#ffd60a]/60" />
+            <span className={cn('absolute top-0 left-0 w-[6px] h-[6px] border-t-[1.4px] border-l-[1.4px]', focusPoint.locked ? 'border-amber' : 'border-[#ffd60a]/55')} />
+            <span className={cn('absolute top-0 right-0 w-[6px] h-[6px] border-t-[1.4px] border-r-[1.4px]', focusPoint.locked ? 'border-amber' : 'border-[#ffd60a]/55')} />
+            <span className={cn('absolute bottom-0 left-0 w-[6px] h-[6px] border-b-[1.4px] border-l-[1.4px]', focusPoint.locked ? 'border-amber' : 'border-[#ffd60a]/55')} />
+            <span className={cn('absolute bottom-0 right-0 w-[6px] h-[6px] border-b-[1.4px] border-r-[1.4px]', focusPoint.locked ? 'border-amber' : 'border-[#ffd60a]/55')} />
+            <span className={cn('absolute left-1/2 top-1/2 w-[3px] h-[3px] -mt-[1.5px] -ml-[1.5px] rounded-full', focusPoint.locked ? 'bg-amber' : 'bg-[#ffd60a]/60')} />
+            {focusPoint.locked && !compact && (
+              <div
+                className="absolute top-1/2 -translate-y-1/2 flex items-center justify-center"
+                style={{ left: `calc(50% + ${railSide}px)` }}
+              >
+                <span className="block w-[1.5px] h-8 rounded-full bg-amber/45" />
+                <span
+                  className="absolute w-3 h-3 rounded-full bg-black/50 text-amber flex items-center justify-center text-[8px] leading-none"
+                  style={{ transform: `translateY(${sunOffsetY}px)` }}
+                >
+                  ☀
+                </span>
+              </div>
+            )}
           </m.div>
         </>
       )}
 
-      {/* GPU-transformed cinema aspect ratio mattes */}
+      {/* GPU-transformed cinema aspect ratio mattes + illuminated bright-line border */}
       <m.div
-        className="absolute inset-x-0 top-0 h-1/2 origin-top bg-[#050608] pointer-events-none z-9"
+        className="absolute inset-x-0 top-0 h-1/2 origin-top bg-black pointer-events-none z-9"
         animate={{ scaleY: matte.y }}
         transition={lensTransition}
         aria-hidden="true"
       />
       <m.div
-        className="absolute inset-x-0 bottom-0 h-1/2 origin-bottom bg-[#050608] pointer-events-none z-9"
+        className="absolute inset-x-0 bottom-0 h-1/2 origin-bottom bg-black pointer-events-none z-9"
         animate={{ scaleY: matte.y }}
         transition={lensTransition}
         aria-hidden="true"
       />
       <m.div
-        className="absolute inset-y-0 left-0 w-1/2 origin-left bg-[#050608] pointer-events-none z-9"
+        className="absolute inset-y-0 left-0 w-1/2 origin-left bg-black pointer-events-none z-9"
         animate={{ scaleX: matte.x }}
         transition={lensTransition}
         aria-hidden="true"
       />
       <m.div
-        className="absolute inset-y-0 right-0 w-1/2 origin-right bg-[#050608] pointer-events-none z-9"
+        className="absolute inset-y-0 right-0 w-1/2 origin-right bg-black pointer-events-none z-9"
         animate={{ scaleX: matte.x }}
         transition={lensTransition}
         aria-hidden="true"
       />
+
+      {aspect !== '4:3' && (
+        <div
+          className="absolute pointer-events-none z-10 border border-white/55"
+          style={{
+            top: `${matte.y * 50}%`,
+            bottom: `${matte.y * 50}%`,
+            left: `${matte.x * 50}%`,
+            right: `${matte.x * 50}%`,
+          }}
+          aria-hidden="true"
+        />
+      )}
 
       {aspect === 'xpan' && (
         <span
@@ -322,8 +404,8 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
       <span className="sr-only">
         {format(t.a11y.viewfinderSr, {
           alt: photo.alt,
-          name: recipe.name,
-          code: recipe.code,
+          name: phoneRecipe.name,
+          code: phoneRecipe.slotCode,
           lens,
           dr,
           aspect: aspect === 'xpan' ? `65:24 ${t.phone.panoramic}` : aspect,

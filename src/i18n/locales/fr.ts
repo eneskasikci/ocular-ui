@@ -186,6 +186,10 @@ export const fr: Messages = {
     upsellText: 'F1–F4 & RAW',
     upsellBtn: 'Pro HUD',
     range: 'VISEUR',
+    clear: 'NET',
+    grid: 'GRILLE',
+    roll: 'PELL.',
+    heicRaw: 'HEIC+RAW',
     panoramic: 'panoramique',
   },
 }

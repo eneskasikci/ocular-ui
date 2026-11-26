@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync:ios": "python3 ../Ocular/scripts/sync-ocular-site.py --site-dir .",
+    "check:ios": "python3 -c \"import os,subprocess,sys; s='../Ocular/scripts/sync-ocular-site.py'; sys.exit(subprocess.call([sys.executable, s, '--check', '--site-dir', '.']) if os.path.exists(s) else 0)\""
   },
   "dependencies": {
     "motion": "^14.14.0",
