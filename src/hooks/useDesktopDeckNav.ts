@@ -3,11 +3,13 @@ import { SCENES } from '../config'
 
 // Single-spring deck controller: instant scroll-anchor jumps let DesktopDeck's
 // useSpring(scrollYProgress) own all motion, eliminating smooth-scroll fighting and tab bounce.
-const STEP_COOLDOWN_MS = 420
-const REVERSE_COOLDOWN_MS = 120
-const INERTIA_WINDOW_MS = 1800
-const INERTIA_GAP_MS = 350
-const MOUSE_DETENT_MIN = 50
+const STEP_COOLDOWN_MS = 520
+const REVERSE_COOLDOWN_MS = 220
+const GESTURE_IDLE_MS = 160
+const STEP_THRESHOLD_PX = 18
+const REVERSE_THRESHOLD_PX = 24
+const RETRIGGER_SURGE_MIN_PX = 36
+const RETRIGGER_SURGE_RATIO = 2.5
 const STOP_EPS_PX = 3
 
 const DEFAULT_SCENE_IDS = SCENES.map((s) => s.id)
@@ -36,34 +38,10 @@ function getNearestStep(tops: number[]): number {
   return best
 }
 
-interface WheelInertiaSample {
-  dir: -1 | 1
-  lastDir: -1 | 0 | 1
-  ts: number
-  lastTriggerTime: number
-  lastEventTime: number
-  absDelta: number
-  lastAbsDelta: number
-}
-
-function isWheelInertia({
-  dir,
-  lastDir,
-  ts,
-  lastTriggerTime,
-  lastEventTime,
-  absDelta,
-  lastAbsDelta,
-}: WheelInertiaSample): boolean {
-  // Discrete mouse wheel notches repeat identical large deltas (>= 50px).
-  const isMouseWheelClick = absDelta >= MOUSE_DETENT_MIN && absDelta === lastAbsDelta
-  return (
-    dir === lastDir &&
-    ts - lastTriggerTime < INERTIA_WINDOW_MS &&
-    ts - lastEventTime < INERTIA_GAP_MS &&
-    absDelta <= lastAbsDelta &&
-    !isMouseWheelClick
-  )
+function normalizeWheelDelta(e: WheelEvent): number {
+  if (e.deltaMode === 1) return e.deltaY * 32
+  if (e.deltaMode === 2) return e.deltaY * window.innerHeight
+  return e.deltaY
 }
 
 interface Options {
@@ -145,10 +123,23 @@ export function useDesktopDeckNav({
     }
 
     let lastEventTime = 0
-    let lastAbsDelta = 0
-    let lastDir: -1 | 0 | 1 = 0
-    let lastTriggerTime = -Infinity
     let lastStepTime = -Infinity
+    let gestureLocked = false
+    let lockedDir: -1 | 0 | 1 = 0
+    let trailingMin = Infinity
+    let accumDelta = 0
+    let accumDir: -1 | 0 | 1 = 0
+
+    const triggerWheelStep = (targetStep: number, triggerDir: -1 | 1, now: number) => {
+      goToStep(targetStep)
+      gestureLocked = true
+      lockedDir = triggerDir
+      lastStepTime = now
+      lockUntilRef.current = now + STEP_COOLDOWN_MS
+      trailingMin = Infinity
+      accumDelta = 0
+      accumDir = 0
+    }
 
     const onScroll = () => {
       const tops = getStops()
@@ -162,49 +153,63 @@ export function useDesktopDeckNav({
 
     const onWheel = (e: WheelEvent) => {
       if (e.ctrlKey || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return
-      const dir: -1 | 0 | 1 = e.deltaY > 0 ? 1 : e.deltaY < 0 ? -1 : 0
+      const delta = normalizeWheelDelta(e)
+      const dir: -1 | 0 | 1 = delta > 0 ? 1 : delta < 0 ? -1 : 0
       if (!dir) return
 
       const now = performance.now()
-      const ts = e.timeStamp || now
-      const absDelta = Math.abs(e.deltaY)
-      const prevDir = lastDir
-
-      const isInertia = isWheelInertia({
-        dir,
-        lastDir: prevDir,
-        ts,
-        lastTriggerTime,
-        lastEventTime,
-        absDelta,
-        lastAbsDelta,
-      })
-
-      lastEventTime = ts
-      lastAbsDelta = absDelta
-      lastDir = dir
+      const absDelta = Math.abs(delta)
+      const gap = now - lastEventTime
+      lastEventTime = now
 
       const nextStep = stepRef.current + dir
-      if (nextStep < 0 || nextStep >= sceneIds.length) return
-
-      if (dir === prevDir && now < lockUntilRef.current) {
-        e.preventDefault()
-        return
-      }
-      if (dir !== prevDir && now < lastStepTime + REVERSE_COOLDOWN_MS) {
-        e.preventDefault()
-        return
-      }
-      if (isInertia) {
-        e.preventDefault()
+      if (nextStep < 0 || nextStep >= sceneIds.length) {
+        accumDelta = 0
+        accumDir = 0
         return
       }
 
       e.preventDefault()
-      goToStep(nextStep)
-      lastTriggerTime = ts
-      lastStepTime = now
-      lockUntilRef.current = now + STEP_COOLDOWN_MS
+
+      if (gestureLocked) {
+        if (gap >= GESTURE_IDLE_MS && now >= lockUntilRef.current) {
+          gestureLocked = false
+          lockedDir = 0
+          trailingMin = Infinity
+          accumDelta = 0
+          accumDir = 0
+        } else if (dir === lockedDir) {
+          if (now >= lastStepTime + 180) {
+            trailingMin = Math.min(trailingMin, absDelta)
+          }
+          const isSurge =
+            now >= lockUntilRef.current &&
+            absDelta >= RETRIGGER_SURGE_MIN_PX &&
+            trailingMin < Infinity &&
+            absDelta >= trailingMin * RETRIGGER_SURGE_RATIO
+          if (!isSurge) return
+          triggerWheelStep(nextStep, dir, now)
+          return
+        } else {
+          if (now < lastStepTime + REVERSE_COOLDOWN_MS) return
+          if (accumDir !== dir) {
+            accumDir = dir
+            accumDelta = 0
+          }
+          accumDelta += absDelta
+          if (accumDelta < REVERSE_THRESHOLD_PX) return
+          triggerWheelStep(nextStep, dir, now)
+          return
+        }
+      }
+
+      if (gap >= GESTURE_IDLE_MS || accumDir !== dir) {
+        accumDir = dir
+        accumDelta = 0
+      }
+      accumDelta += absDelta
+      if (accumDelta < STEP_THRESHOLD_PX) return
+      triggerWheelStep(nextStep, dir, now)
     }
 
     const onKeyDown = (e: KeyboardEvent) => {
