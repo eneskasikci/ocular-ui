@@ -31,7 +31,7 @@ export function Backdrop({ active, still = false }: { active: BackdropId; still?
             <div
               key={id}
               className={cn(
-                'backdrop-layer absolute inset-0 transition-opacity duration-900 ease-ocular motion-reduce:transition-none',
+                'backdrop-layer absolute inset-0 overflow-hidden [contain:strict] transition-opacity duration-900 ease-ocular motion-reduce:transition-none',
                 id === active ? 'opacity-100' : 'opacity-0',
                 (id === active || id === prev) && 'is-active',
                 still && 'is-still',

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useScroll, useSpring, useTransform } from 'motion/react'
 import * as m from 'motion/react-m'
 import { Tabs } from 'radix-ui'
@@ -16,8 +16,8 @@ import { PrivacyStage } from './Privacy'
 import { HudLayoutSwitch, PhotoStepper } from './SimControls'
 import { TiersStage } from './Tiers'
 
-// Overdamped scroll spring matching minimalistscreens.com (zero bounce, silky glide).
-const SCROLL_SPRING = { stiffness: 320, damping: 46, mass: 0.45 }
+// Critically/slightly overdamped spring (zero bounce, silky glide across single-step jumps).
+const SCROLL_SPRING = { stiffness: 180, damping: 28, mass: 0.9 }
 const MAX_STEP = SCENES.length - 1
 
 type FeatureKey = 'recipes' | 'capture' | 'raw'
@@ -42,7 +42,7 @@ function computeDeckMetrics(viewport: { w: number; h: number }) {
   const giantScale = Math.min(5.2, Math.max(2.2, (viewport.w - 28) / PHONE_BASE_W))
   const carrierCenterY = viewport.h / 2 + 22
   const giantY = 76 + (PHONE_BASE_H / 2) * giantScale - carrierCenterY
-  return { k, settledScale, settledLeftX, giantScale, giantY }
+  return { k, innerContainerW, settledScale, settledLeftX, giantScale, giantY }
 }
 
 function renderFeaturePanel(id: FeatureKey, camera: CameraController) {
@@ -87,9 +87,9 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
     }
   }, [])
 
-  const { k, settledScale, settledLeftX, giantScale, giantY } = computeDeckMetrics(viewport)
+  const { k, innerContainerW, settledScale, settledLeftX, giantScale, giantY } = computeDeckMetrics(viewport)
 
-  // Continuous spring-damped scroll progress (0..MAX_STEP) with plateau holds around each stop.
+  // Continuous spring-damped scroll progress (0..MAX_STEP) driven by instant stop jumps.
   const { scrollYProgress } = useScroll({
     target: stageRef,
     offset: ['start start', 'end end'],
@@ -97,16 +97,22 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
   const smoothProgress = useSpring(scrollYProgress, SCROLL_SPRING)
   const progress = useTransform(smoothProgress, (v) => v * MAX_STEP)
 
-  const heroY = useTransform(progress, [0, 0.06, 0.94, 1], ['0%', '0%', '-100%', '-100%'])
-  const phoneX = useTransform(progress, [0, 1.06, 1.94, MAX_STEP], [0, 0, settledLeftX, settledLeftX])
-  const phoneY = useTransform(progress, [0, 1.06, 1.94, MAX_STEP], [giantY, giantY, 0, 0])
-  const phoneScale = useTransform(progress, [0, 1.06, 1.94, MAX_STEP], [giantScale, giantScale, settledScale, settledScale])
-  const phoneOpacity = useTransform(progress, [0, 4.08, 4.72, MAX_STEP], [1, 1, 0, 0])
+  // Sync deep-linked initial step immediately without an intro spring sweep from 0.
+  const initialStepRef = useRef(step)
+  useLayoutEffect(() => {
+    smoothProgress.jump(initialStepRef.current / MAX_STEP)
+  }, [smoothProgress])
 
-  const featureX = useTransform(progress, [0, 1.12, 1.92, MAX_STEP], [72, 72, 0, 0])
-  const featureOpacity = useTransform(progress, [0, 1.12, 1.85, 4.08, 4.72, MAX_STEP], [0, 0, 1, 1, 0, 0])
-  const tiersOpacity = useTransform(progress, [0, 4.28, 4.92, 5.08, 5.72, MAX_STEP], [0, 0, 1, 1, 0, 0])
-  const privacyOpacity = useTransform(progress, [0, 5.28, 5.92, MAX_STEP], [0, 0, 1, 1])
+  const heroY = useTransform(progress, [0, 1], ['0%', '-100%'])
+  const phoneX = useTransform(progress, [0, 1, 2, MAX_STEP], [0, 0, settledLeftX, settledLeftX])
+  const phoneY = useTransform(progress, [0, 1, 2, MAX_STEP], [giantY, giantY, 0, 0])
+  const phoneScale = useTransform(progress, [0, 1, 2, MAX_STEP], [giantScale, giantScale, settledScale, settledScale])
+  const phoneOpacity = useTransform(progress, [0, 4, 4.75, MAX_STEP], [1, 1, 0, 0])
+
+  const featureX = useTransform(progress, [0, 1.15, 2, MAX_STEP], [56, 56, 0, 0])
+  const featureOpacity = useTransform(progress, [0, 1.15, 1.9, 4, 4.7, MAX_STEP], [0, 0, 1, 1, 0, 0])
+  const tiersOpacity = useTransform(progress, [0, 4.25, 4.95, 5.05, 5.7, MAX_STEP], [0, 0, 1, 1, 0, 0])
+  const privacyOpacity = useTransform(progress, [0, 5.25, 5.95, MAX_STEP], [0, 0, 1, 1])
 
   const enterCamera = useCallback(() => goToStep(1), [goToStep])
   const isHero = step === 0
@@ -125,7 +131,11 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
           {/* Slide 1: Full-height slideshow hero */}
           <m.div
             className="absolute inset-0 z-30 bg-obsidian will-change-transform"
-            style={{ y: heroY, pointerEvents: isHero ? 'auto' : 'none' }}
+            style={{
+              y: heroY,
+              pointerEvents: isHero ? 'auto' : 'none',
+              visibility: step >= 2 ? 'hidden' : 'visible',
+            }}
             aria-hidden={!isHero}
             inert={!isHero || undefined}
           >
@@ -160,7 +170,10 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
           </m.div>
 
           {/* Steps 2-4: Always-Mounted Zero-Lag Right Feature Deck (Radix Tabs) */}
-          <div style={{ zoom: k }} className="relative z-22 w-full max-w-[1160px] mx-auto px-[var(--gutter)] pt-[calc(var(--header)-10px)] grid grid-cols-[316px_minmax(0,1fr)] gap-x-[clamp(56px,6.5vw,108px)] items-center pointer-events-none">
+          <div
+            style={{ width: innerContainerW, transform: k === 1 ? undefined : `scale(${k})` }}
+            className="relative z-22 shrink-0 origin-center px-[var(--gutter)] pt-[calc(var(--header)-10px)] grid grid-cols-[316px_minmax(0,1fr)] gap-x-[clamp(56px,6.5vw,108px)] items-center pointer-events-none"
+          >
             <div aria-hidden="true" />
             <m.div
               className="feature-column"
@@ -256,13 +269,20 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
 
           {/* Step 5: Free & Pro Tiers */}
           <m.section
-            className="absolute inset-0 z-26 flex items-center justify-center pt-[calc(var(--header)+12px)] px-[var(--gutter)] pb-5"
-            style={{ opacity: tiersOpacity, pointerEvents: tiersVisible ? 'auto' : 'none' }}
+            className="absolute inset-0 z-26 flex items-center justify-center pt-[calc(var(--header)+12px)] pb-5"
+            style={{
+              opacity: tiersOpacity,
+              pointerEvents: tiersVisible ? 'auto' : 'none',
+              visibility: step < 4 ? 'hidden' : 'visible',
+            }}
             aria-labelledby="h-tiers"
             aria-hidden={!tiersVisible}
             inert={!tiersVisible || undefined}
           >
-            <div style={{ zoom: k }} className="w-full flex justify-center">
+            <div
+              style={{ width: innerContainerW, transform: k === 1 ? undefined : `scale(${k})` }}
+              className="shrink-0 origin-center px-[var(--gutter)] flex justify-center"
+            >
               <TiersStage headingId="h-tiers" />
             </div>
           </m.section>
@@ -270,13 +290,22 @@ export function DesktopDeck({ camera, step, goToStep }: Props) {
           {/* Step 6: Privacy + Docked Footer */}
           <m.section
             className="absolute inset-0 z-26 pt-[var(--header)] px-0 pb-0 flex flex-col items-stretch justify-between"
-            style={{ opacity: privacyOpacity, pointerEvents: privacyVisible ? 'auto' : 'none' }}
+            style={{
+              opacity: privacyOpacity,
+              pointerEvents: privacyVisible ? 'auto' : 'none',
+              visibility: step < 5 ? 'hidden' : 'visible',
+            }}
             aria-labelledby="h-privacy"
             aria-hidden={!privacyVisible}
             inert={!privacyVisible || undefined}
           >
-            <div style={{ zoom: k }} className="flex-1 flex items-center justify-center py-3 px-[var(--gutter)]">
-              <PrivacyStage headingId="h-privacy" />
+            <div className="flex-1 flex items-center justify-center py-3 px-[var(--gutter)]">
+              <div
+                style={{ transform: k === 1 ? undefined : `scale(${k})` }}
+                className="origin-center flex justify-center"
+              >
+                <PrivacyStage headingId="h-privacy" />
+              </div>
             </div>
             <div className="deck-footer w-full shrink-0">
               <Footer />

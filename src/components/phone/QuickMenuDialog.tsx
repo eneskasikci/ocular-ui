@@ -25,14 +25,21 @@ export function QuickMenuDialog({ camera, isFree, open, onClose }: Props) {
   const grainLabel = t.capture.grainLevels[grain]
 
   return (
-    <AnimatePresence>
-      {open && (
-        <Dialog.Content
-          forceMount
-          asChild
-          onPointerDownOutside={(e) => e.preventDefault()}
-          onFocusOutside={(e) => e.preventDefault()}
-        >
+    <Dialog.Root
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) onClose()
+      }}
+      modal={false}
+    >
+      <AnimatePresence>
+        {open && (
+          <Dialog.Content
+            forceMount
+            asChild
+            onPointerDownOutside={(e) => e.preventDefault()}
+            onFocusOutside={(e) => e.preventDefault()}
+          >
           <m.div
             className="inphone-q absolute inset-x-2.5 bottom-4 z-35 p-3 rounded-[20px] bg-obsidian/94 border border-silver/26 shadow-[0_16px_36px_rgba(0,0,0,.64)] flex flex-col gap-2.5"
             initial={{ opacity: 0, y: 14, scale: 0.98 }}
@@ -138,5 +145,6 @@ export function QuickMenuDialog({ camera, isFree, open, onClose }: Props) {
         </Dialog.Content>
       )}
     </AnimatePresence>
+    </Dialog.Root>
   )
 }

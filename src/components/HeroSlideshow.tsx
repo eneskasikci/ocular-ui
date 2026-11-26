@@ -155,7 +155,8 @@ export const HeroSlideshow = memo(function HeroSlideshow({
             'flex gap-2.5 h-full',
             reduceMotion
               ? 'w-full overflow-x-auto [scroll-snap-type:x_mandatory] [scrollbar-width:thin]'
-              : 'w-max will-change-transform slideshow-track-drift',
+              : 'w-max slideshow-track-drift',
+            !reduceMotion && !(paused || userPaused || offscreen) && 'will-change-transform',
             (paused || userPaused || offscreen) && 'is-paused',
           )}
         >

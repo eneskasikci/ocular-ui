@@ -6,4 +6,19 @@ import { ocularStaticI18n } from './scripts/vite-i18n-static.ts'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), ocularStaticI18n()],
+  build: {
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            {
+              name: 'vendor-react',
+              test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/,
+              priority: 30,
+            },
+          ],
+        },
+      },
+    },
+  },
 })

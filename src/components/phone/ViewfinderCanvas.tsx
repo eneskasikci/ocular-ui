@@ -153,11 +153,13 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
       )}
 
       {/* Organic film grain */}
-      <div
-        className="absolute inset-0 pointer-events-none mix-blend-overlay transition-opacity duration-220 ease-ocular motion-reduce:transition-none bg-grain-vf"
-        style={{ opacity: grainOpacity }}
-        aria-hidden="true"
-      />
+      {grainOpacity > 0 && (
+        <div
+          className="absolute inset-0 pointer-events-none mix-blend-overlay transition-opacity duration-220 ease-ocular motion-reduce:transition-none bg-grain-vf"
+          style={{ opacity: grainOpacity }}
+          aria-hidden="true"
+        />
+      )}
 
       {/* RAW Darkroom before/after split layer */}
       {rawCompare && (
@@ -270,25 +272,25 @@ export function ViewfinderCanvas({ camera, compact = false, showGuides = true }:
 
       {/* GPU-transformed cinema aspect ratio mattes */}
       <m.div
-        className="absolute inset-x-0 top-0 h-1/2 origin-top bg-[#050608] pointer-events-none z-9 will-change-transform"
+        className="absolute inset-x-0 top-0 h-1/2 origin-top bg-[#050608] pointer-events-none z-9"
         animate={{ scaleY: matte.y }}
         transition={lensTransition}
         aria-hidden="true"
       />
       <m.div
-        className="absolute inset-x-0 bottom-0 h-1/2 origin-bottom bg-[#050608] pointer-events-none z-9 will-change-transform"
+        className="absolute inset-x-0 bottom-0 h-1/2 origin-bottom bg-[#050608] pointer-events-none z-9"
         animate={{ scaleY: matte.y }}
         transition={lensTransition}
         aria-hidden="true"
       />
       <m.div
-        className="absolute inset-y-0 left-0 w-1/2 origin-left bg-[#050608] pointer-events-none z-9 will-change-transform"
+        className="absolute inset-y-0 left-0 w-1/2 origin-left bg-[#050608] pointer-events-none z-9"
         animate={{ scaleX: matte.x }}
         transition={lensTransition}
         aria-hidden="true"
       />
       <m.div
-        className="absolute inset-y-0 right-0 w-1/2 origin-right bg-[#050608] pointer-events-none z-9 will-change-transform"
+        className="absolute inset-y-0 right-0 w-1/2 origin-right bg-[#050608] pointer-events-none z-9"
         animate={{ scaleX: matte.x }}
         transition={lensTransition}
         aria-hidden="true"

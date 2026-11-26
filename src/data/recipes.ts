@@ -244,22 +244,23 @@ export const GRAIN_LEVELS: readonly { id: GrainLevel; label: string; opacity: nu
 
 export const RAW_FILTER = 'brightness(0.95) contrast(0.82) saturate(0.72)'
 
-/** Combines film recipe grading, EV bias, and DR highlight compression into a GPU filter string. */
-export function buildOpticalFilter(recipe: FilmRecipe, ev: number, dr: DrMode): string {
+/** Combines film recipe grading, EV bias, and DR highlight compression into a GPU filter string, or undefined when identity. */
+export function buildOpticalFilter(recipe: FilmRecipe, ev: number, dr: DrMode): string | undefined {
   const drContrast = dr === 'DR400' ? 0.93 : dr === 'DR200' ? 0.97 : 1.0
   const drBrightness = dr === 'DR400' ? 1.03 : dr === 'DR200' ? 1.015 : 1.0
   const evMult = Math.min(1.55, Math.max(0.55, Math.pow(2, ev * 0.35)))
   const brightness = recipe.grade.brightness * drBrightness * evMult
   const contrast = recipe.grade.contrast * drContrast
 
-  return [
-    `brightness(${brightness.toFixed(3)})`,
-    `contrast(${contrast.toFixed(3)})`,
-    `grayscale(${recipe.grade.grayscale})`,
-    `sepia(${recipe.grade.sepia})`,
-    `saturate(${recipe.grade.saturate})`,
-    `hue-rotate(${recipe.grade.hueRotate}deg)`,
-  ].join(' ')
+  const parts: string[] = []
+  if (Math.abs(brightness - 1) > 0.002) parts.push(`brightness(${brightness.toFixed(3)})`)
+  if (Math.abs(contrast - 1) > 0.002) parts.push(`contrast(${contrast.toFixed(3)})`)
+  if (recipe.grade.grayscale > 0) parts.push(`grayscale(${recipe.grade.grayscale})`)
+  if (recipe.grade.sepia > 0) parts.push(`sepia(${recipe.grade.sepia})`)
+  if (Math.abs(recipe.grade.saturate - 1) > 0.002) parts.push(`saturate(${recipe.grade.saturate})`)
+  if (recipe.grade.hueRotate !== 0) parts.push(`hue-rotate(${recipe.grade.hueRotate}deg)`)
+
+  return parts.length > 0 ? parts.join(' ') : undefined
 }
 
 export function formatEv(ev: number): string {

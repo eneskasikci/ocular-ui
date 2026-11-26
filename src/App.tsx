@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { LazyMotion, MotionConfig, useReducedMotion } from 'motion/react'
 import { SCENES } from './config'
 import { Backdrop } from './components/Backdrop'
@@ -43,7 +43,7 @@ function HomePage() {
     const onHashChange = () => {
       const next = getStepFromHash()
       if (isDesktopDeck) {
-        goToStep(next, 'smooth')
+        goToStep(next)
       } else {
         setStep(next)
       }
@@ -55,9 +55,9 @@ function HomePage() {
   const scrollActive = useActiveScene(!isDesktopDeck)
   const active = isDesktopDeck ? step : scrollActive
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isDesktopDeck) return
-    goToStep(getStepFromHash(), 'instant')
+    goToStep(getStepFromHash())
   }, [goToStep, isDesktopDeck])
 
   // Keep the deck step in the URL so refresh and shared links land on the same view.
@@ -81,7 +81,7 @@ function HomePage() {
       </a>
       <Header
         active={active}
-        onGoTop={isDesktopDeck ? () => goToStep(0, 'smooth') : undefined}
+        onGoTop={isDesktopDeck ? () => goToStep(0) : undefined}
       />
       <main id="main">
         <CameraExperience
