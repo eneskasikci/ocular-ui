@@ -153,7 +153,7 @@ export const zhHans: Messages = {
       ['自定义配方槽位', '7 个 (C1–C7)'],
     ],
     trialBadge: '3 天免费试用',
-    trialCopy: '月度、年度或终身买断。已保存的配方保留在您的设备上。',
+    trialCopy: '年度方案提供。另有月度和终身买断。已保存的配方保留在您的设备上。',
     readFaq: '有疑问？查看常见问题',
   },
   privacy: {

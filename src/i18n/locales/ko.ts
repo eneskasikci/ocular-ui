@@ -153,7 +153,7 @@ export const ko: Messages = {
       ['사용자 지정 레시피 슬롯', '7개 (C1–C7)'],
     ],
     trialBadge: '3일 무료 체험',
-    trialCopy: '월간, 연간 또는 평생 이용권. 저장된 레시피는 기기에 유지됩니다.',
+    trialCopy: '연간 플랜에 포함. 월간 및 평생 이용권도 있습니다. 저장된 레시피는 기기에 유지됩니다.',
     readFaq: '궁금한 점이 있나요? FAQ 보기',
   },
   privacy: {

@@ -153,7 +153,7 @@ export const it: Messages = {
       ['Slot ricette personalizzate', '7 (C1–C7)'],
     ],
     trialBadge: 'PROVA GRATUITA DI 3 GIORNI',
-    trialCopy: 'Mensile, Annuale o A vita. Le ricette salvate restano sul dispositivo.',
+    trialCopy: 'Con il piano annuale. Disponibili anche Mensile e A vita. Le ricette salvate restano sul dispositivo.',
     readFaq: 'Domande? Leggi le FAQ',
   },
   privacy: {

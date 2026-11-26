@@ -153,7 +153,7 @@ export const ptBR: Messages = {
       ['Slots de Receita Personalizada', '7 (C1–C7)'],
     ],
     trialBadge: 'TESTE GRÁTIS DE 3 DIAS',
-    trialCopy: 'Mensal, Anual ou Vitalício. Receitas salvas permanecem no seu dispositivo.',
+    trialCopy: 'No plano anual. Mensal e Vitalício também disponíveis. Receitas salvas permanecem no seu dispositivo.',
     readFaq: 'Dúvidas? Leia as perguntas frequentes',
   },
   privacy: {

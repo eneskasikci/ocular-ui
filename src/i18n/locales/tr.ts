@@ -153,7 +153,7 @@ export const tr: Messages = {
       ['Özel Reçete Yuvaları', '7 (C1–C7)'],
     ],
     trialBadge: '3 GÜNLÜK ÜCRETSİZ DENEME',
-    trialCopy: 'Aylık, Yıllık veya Ömür Boyu. Kayıtlı tarifler cihazınızda kalır.',
+    trialCopy: 'Yıllık planla. Aylık ve Ömür Boyu da mevcut. Kayıtlı tarifler cihazınızda kalır.',
     readFaq: 'Sorularınız mı var? SSS’yi okuyun',
   },
   privacy: {

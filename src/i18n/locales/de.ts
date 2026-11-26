@@ -153,7 +153,7 @@ export const de: Messages = {
       ['Eigene Slots', '7 (C1–C7)'],
     ],
     trialBadge: '3 TAGE KOSTENLOS TESTEN',
-    trialCopy: 'Monatlich, Jährlich oder Lebenslang. Gespeicherte Rezepte bleiben auf dem Gerät.',
+    trialCopy: 'Mit dem Jahresabo. Monatlich und Lebenslang ebenfalls verfügbar. Gespeicherte Rezepte bleiben auf dem Gerät.',
     readFaq: 'Fragen? Zur FAQ',
   },
   privacy: {

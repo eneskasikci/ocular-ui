@@ -153,7 +153,7 @@ export const fr: Messages = {
       ['Emplacements perso', '7 (C1–C7)'],
     ],
     trialBadge: 'ESSAI GRATUIT 3 JOURS',
-    trialCopy: 'Mensuel, Annuel ou À vie. Vos recettes restent sur votre appareil.',
+    trialCopy: 'Avec l’abonnement annuel. Mensuel et À vie aussi disponibles. Vos recettes restent sur votre appareil.',
     readFaq: 'Des questions ? Lire la FAQ',
   },
   privacy: {

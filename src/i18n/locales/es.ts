@@ -153,7 +153,7 @@ export const es: Messages = {
       ['Ranuras personalizadas', '7 (C1–C7)'],
     ],
     trialBadge: 'PRUEBA GRATIS DE 3 DÍAS',
-    trialCopy: 'Mensual, Anual o De por vida. Tus recetas se quedan en tu dispositivo.',
+    trialCopy: 'Con el plan anual. También Mensual y De por vida. Tus recetas se quedan en tu dispositivo.',
     readFaq: '¿Dudas? Lee las preguntas frecuentes',
   },
   privacy: {

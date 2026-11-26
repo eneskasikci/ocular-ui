@@ -153,7 +153,7 @@ export const en: Messages = {
       ['Custom slots', '7 (C1–C7)'],
     ],
     trialBadge: '3-DAY FREE TRIAL',
-    trialCopy: 'Monthly, annual, or Lifetime. Saved recipes stay on your device.',
+    trialCopy: 'With the annual plan. Monthly and Lifetime also available. Saved recipes stay on your device.',
     readFaq: 'Questions? Read the FAQ',
   },
   privacy: {
