@@ -1,13 +1,15 @@
 import { createContext, useContext } from 'react'
-import { format, SUPPORTED_LOCALES, type Locale, type Messages } from './types'
+import { format, LOCALE_META, localeFromPathname, localePath, SUPPORTED_LOCALES, type Locale, type Messages } from './types'
 
-export const STORAGE_KEY = 'ocular-lang'
+export const BANNER_DISMISSED_KEY = 'ocular-lang-banner-dismissed'
 
 export function matchLocale(raw: string): Locale | null {
   const normalized = raw.trim().toLowerCase().replace(/_/g, '-')
   if (!normalized) return null
 
-  const exact = SUPPORTED_LOCALES.find((code) => code.toLowerCase() === normalized)
+  const exact = SUPPORTED_LOCALES.find(
+    (code) => code.toLowerCase() === normalized || LOCALE_META[code].slug === normalized,
+  )
   if (exact) return exact
 
   if (normalized === 'zh' || normalized.startsWith('zh-hans') || normalized === 'zh-cn' || normalized === 'zh-sg') {
@@ -21,33 +23,40 @@ export function matchLocale(raw: string): Locale | null {
   return SUPPORTED_LOCALES.find((code) => code.toLowerCase() === base) ?? null
 }
 
-export function resolveInitialLocale(): Locale {
-  if (typeof window === 'undefined') return 'en'
-
-  const param = new URLSearchParams(window.location.search).get('lang')
-  if (param) {
-    const matched = matchLocale(param)
-    if (matched) return matched
-  }
-
-  try {
-    const stored = window.localStorage.getItem(STORAGE_KEY)
-    if (stored) {
-      const matched = matchLocale(stored)
-      if (matched) return matched
-    }
-  } catch {
-    // Ignore storage access restrictions
-  }
-
+export function detectBrowserLocale(): Locale | null {
+  if (typeof navigator === 'undefined') return null
   const navLangs = navigator.languages?.length ? navigator.languages : [navigator.language]
   for (const lang of navLangs) {
     if (!lang) continue
     const matched = matchLocale(lang)
     if (matched) return matched
   }
+  return null
+}
 
-  return 'en'
+export function resolveInitialLocale(): Locale {
+  if (typeof window === 'undefined') return 'en'
+  return localeFromPathname(window.location.pathname) ?? 'en'
+}
+
+export function redirectLegacyLangParam(): boolean {
+  if (typeof window === 'undefined') return false
+
+  const params = new URLSearchParams(window.location.search)
+  const param = params.get('lang')
+  if (!param) return false
+
+  const matched = matchLocale(param)
+  if (!matched) return false
+
+  params.delete('lang')
+  const search = params.toString()
+  const target = `${localePath(matched)}${search ? `?${search}` : ''}${window.location.hash}`
+  const current = `${window.location.pathname}${window.location.search}${window.location.hash}`
+  if (target === current) return false
+
+  window.location.replace(target)
+  return true
 }
 
 export interface I18nContextValue {

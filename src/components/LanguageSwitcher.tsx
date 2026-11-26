@@ -1,12 +1,21 @@
+import { useState } from 'react'
 import { DropdownMenu } from 'radix-ui'
-import { LOCALE_META, SUPPORTED_LOCALES, useI18n, type Locale } from '../i18n'
+import { LOCALE_META, localePath, SUPPORTED_LOCALES, useI18n } from '../i18n'
 import { cn } from '../lib/cn'
 
 export function LanguageSwitcher() {
-  const { locale, setLocale, t } = useI18n()
+  const { locale, t } = useI18n()
+  const [hash, setHash] = useState(() => (typeof window !== 'undefined' ? window.location.hash : ''))
 
   return (
-    <DropdownMenu.Root modal={false}>
+    <DropdownMenu.Root
+      modal={false}
+      onOpenChange={(open) => {
+        if (open && typeof window !== 'undefined') {
+          setHash(window.location.hash)
+        }
+      }}
+    >
       <DropdownMenu.Trigger asChild>
         <button
           type="button"
@@ -45,22 +54,21 @@ export function LanguageSwitcher() {
         <DropdownMenu.Content
           align="end"
           sideOffset={8}
+          aria-label={t.a11y.language}
           className="z-100 min-w-[196px] p-1.5 rounded-2xl bg-[#0f1014]/96 border border-hair-strong shadow-[0_18px_48px_rgba(0,0,0,.6)] backdrop-blur-md"
         >
-          <DropdownMenu.RadioGroup
-            value={locale}
-            onValueChange={(value) => setLocale(value as Locale)}
-            aria-label={t.a11y.language}
-          >
-            {SUPPORTED_LOCALES.map((code) => {
-              const active = code === locale
-              const meta = LOCALE_META[code]
-              return (
-                <DropdownMenu.RadioItem
-                  key={code}
-                  value={code}
+          {SUPPORTED_LOCALES.map((code) => {
+            const active = code === locale
+            const meta = LOCALE_META[code]
+            return (
+              <DropdownMenu.Item key={code} asChild>
+                <a
+                  href={`${localePath(code)}${hash}`}
+                  hrefLang={meta.hreflang}
+                  lang={meta.htmlLang}
+                  aria-current={active ? 'page' : undefined}
                   className={cn(
-                    'flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-[0.86rem] font-body font-medium cursor-pointer outline-none transition-colors duration-150',
+                    'flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-[0.86rem] font-body font-medium no-underline cursor-pointer outline-none transition-colors duration-150',
                     active
                       ? 'text-amber bg-amber/14 font-semibold'
                       : 'text-silver/90 hover:bg-graphite/80 hover:text-silver focus:bg-graphite/80',
@@ -70,10 +78,10 @@ export function LanguageSwitcher() {
                   <span className="font-mono font-bold text-[0.7rem] tracking-[0.06em] opacity-75">
                     {meta.short}
                   </span>
-                </DropdownMenu.RadioItem>
-              )
-            })}
-          </DropdownMenu.RadioGroup>
+                </a>
+              </DropdownMenu.Item>
+            )
+          })}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>

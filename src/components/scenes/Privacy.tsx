@@ -36,7 +36,7 @@ export const PrivacyStage = memo(function PrivacyStage({ headingId }: { headingI
         {t.privacy.subline}
       </p>
 
-      <a className="inline-flex items-center min-h-[44px] font-bold" href="/privacy">
+      <a className="inline-flex items-center min-h-[44px] font-bold" href="/privacy/">
         {t.privacy.readPolicy}
       </a>
     </div>

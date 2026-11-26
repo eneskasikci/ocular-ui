@@ -1,3 +1,4 @@
+import { SITE_URL } from '../config.ts'
 import type { FilmId, GrainLevel } from '../data/recipes'
 
 export const SUPPORTED_LOCALES = [
@@ -15,17 +16,122 @@ export const SUPPORTED_LOCALES = [
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number]
 
-export const LOCALE_META: Record<Locale, { label: string; short: string }> = {
-  en: { label: 'English', short: 'EN' },
-  tr: { label: 'Türkçe', short: 'TR' },
-  de: { label: 'Deutsch', short: 'DE' },
-  fr: { label: 'Français', short: 'FR' },
-  es: { label: 'Español', short: 'ES' },
-  it: { label: 'Italiano', short: 'IT' },
-  ja: { label: '日本語', short: 'JA' },
-  ko: { label: '한국어', short: 'KO' },
-  'zh-Hans': { label: '简体中文', short: '中文' },
-  'pt-BR': { label: 'Português (Brasil)', short: 'PT' },
+export interface LocaleMeta {
+  label: string
+  short: string
+  slug: string
+  htmlLang: string
+  hreflang: string
+  ogLocale: string
+  suggestCta: string
+}
+
+export const LOCALE_META: Record<Locale, LocaleMeta> = {
+  en: {
+    label: 'English',
+    short: 'EN',
+    slug: '',
+    htmlLang: 'en',
+    hreflang: 'en',
+    ogLocale: 'en_US',
+    suggestCta: 'View in English',
+  },
+  tr: {
+    label: 'Türkçe',
+    short: 'TR',
+    slug: 'tr',
+    htmlLang: 'tr',
+    hreflang: 'tr',
+    ogLocale: 'tr_TR',
+    suggestCta: 'Türkçe olarak görüntüle',
+  },
+  de: {
+    label: 'Deutsch',
+    short: 'DE',
+    slug: 'de',
+    htmlLang: 'de',
+    hreflang: 'de',
+    ogLocale: 'de_DE',
+    suggestCta: 'Auf Deutsch ansehen',
+  },
+  fr: {
+    label: 'Français',
+    short: 'FR',
+    slug: 'fr',
+    htmlLang: 'fr',
+    hreflang: 'fr',
+    ogLocale: 'fr_FR',
+    suggestCta: 'Voir en français',
+  },
+  es: {
+    label: 'Español',
+    short: 'ES',
+    slug: 'es',
+    htmlLang: 'es',
+    hreflang: 'es',
+    ogLocale: 'es_ES',
+    suggestCta: 'Ver en español',
+  },
+  it: {
+    label: 'Italiano',
+    short: 'IT',
+    slug: 'it',
+    htmlLang: 'it',
+    hreflang: 'it',
+    ogLocale: 'it_IT',
+    suggestCta: 'Visualizza in italiano',
+  },
+  ja: {
+    label: '日本語',
+    short: 'JA',
+    slug: 'ja',
+    htmlLang: 'ja',
+    hreflang: 'ja',
+    ogLocale: 'ja_JP',
+    suggestCta: '日本語で見る',
+  },
+  ko: {
+    label: '한국어',
+    short: 'KO',
+    slug: 'ko',
+    htmlLang: 'ko',
+    hreflang: 'ko',
+    ogLocale: 'ko_KR',
+    suggestCta: '한국어로 보기',
+  },
+  'zh-Hans': {
+    label: '简体中文',
+    short: '中文',
+    slug: 'zh-hans',
+    htmlLang: 'zh-Hans',
+    hreflang: 'zh-Hans',
+    ogLocale: 'zh_CN',
+    suggestCta: '查看简体中文版',
+  },
+  'pt-BR': {
+    label: 'Português',
+    short: 'PT',
+    slug: 'pt',
+    htmlLang: 'pt',
+    hreflang: 'pt',
+    ogLocale: 'pt_BR',
+    suggestCta: 'Ver em português',
+  },
+}
+
+export function localePath(locale: Locale): string {
+  const { slug } = LOCALE_META[locale]
+  return slug ? `/${slug}/` : '/'
+}
+
+export function localeUrl(locale: Locale, origin = SITE_URL): string {
+  return `${origin}${localePath(locale)}`
+}
+
+export function localeFromPathname(pathname: string): Locale | null {
+  const segment = pathname.replace(/^\/+|\/+$/g, '').split('/')[0]?.toLowerCase() ?? ''
+  if (!segment) return null
+  return SUPPORTED_LOCALES.find((code) => LOCALE_META[code].slug === segment) ?? null
 }
 
 export type SceneId = 'top' | 'camera' | 'recipes' | 'capture' | 'raw' | 'tiers' | 'privacy'

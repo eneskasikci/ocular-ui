@@ -4,6 +4,7 @@ import { SCENES } from './config'
 import { Backdrop } from './components/Backdrop'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
+import { LanguageBanner } from './components/LanguageBanner'
 import { CameraExperience } from './components/scenes/CameraExperience'
 import { useActiveScene } from './hooks/useActiveScene'
 import { useDesktopDeckNav } from './hooks/useDesktopDeckNav'
@@ -91,6 +92,7 @@ function HomePage() {
         />
       </main>
       {!isDesktopDeck && <Footer />}
+      <LanguageBanner />
     </>
   )
 }
