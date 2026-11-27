@@ -141,13 +141,13 @@ export const es: Messages = {
     freeRows: [
       ['Películas', '3 (STD, CC, AC)'],
       ['Dial manual y lentes', 'Completo'],
-      ['Salida', '12 MP · Marca sutil'],
+      ['Salida', '12 MP · Sin marca'],
       ['RAW y óptica', '—'],
       ['Ranuras personalizadas', '1 (C1)'],
     ],
     proRows: [
       ['Películas', 'Las 12'],
-      ['Salida', 'Res. total · Sin marca'],
+      ['Salida', 'Res. total'],
       ['RAW y sala oscura', 'Bayer RAW y ProRAW'],
       ['Óptica y encuadre', 'Halación · 65:24 Pano'],
       ['Ranuras personalizadas', '7 (C1–C7)'],

@@ -141,13 +141,13 @@ export const de: Messages = {
     freeRows: [
       ['Film-Looks', '3 (STD, CC, AC)'],
       ['Manuelle Räder & Linsen', 'Voll'],
-      ['Ausgabe', '12 MP · Dezentes Wasserzeichen'],
+      ['Ausgabe', '12 MP · Ohne Wasserzeichen'],
       ['RAW & Optik', '—'],
       ['Eigene Slots', '1 (C1)'],
     ],
     proRows: [
       ['Film-Looks', 'Alle 12'],
-      ['Ausgabe', 'Volle Aufl. · Unmarkiert'],
+      ['Ausgabe', 'Volle Aufl.'],
       ['RAW & Dunkelkammer', 'Bayer RAW & ProRAW'],
       ['Optik & Format', 'Halation · 65:24 Pano'],
       ['Eigene Slots', '7 (C1–C7)'],

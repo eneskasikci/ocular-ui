@@ -141,13 +141,13 @@ export const ptBR: Messages = {
     freeRows: [
       ['Filmes', '3 (STD, CC, AC)'],
       ['Mostradores e lentes', 'Completo'],
-      ['Saída', '12 MP · Marca d’água sutil'],
+      ['Saída', '12 MP · Sem marca d’água'],
       ['RAW e óptica', '—'],
       ['Slots de Receita Personalizada', '1 (C1)'],
     ],
     proRows: [
       ['Filmes', 'Todos os 12'],
-      ['Saída', 'Res. total · Sem marcação'],
+      ['Saída', 'Res. total'],
       ['RAW e câmera escura', 'Bayer RAW e ProRAW'],
       ['Óptica e enquadramento', 'Halagem · 65:24 Pano'],
       ['Slots de Receita Personalizada', '7 (C1–C7)'],

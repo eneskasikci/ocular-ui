@@ -141,13 +141,13 @@ export const tr: Messages = {
     freeRows: [
       ['Film stokları', '3 (STD, CC, AC)'],
       ['Manuel kadranlar ve lensler', 'Tam'],
-      ['Çıktı', '12 MP · Zarif filigran'],
+      ['Çıktı', '12 MP · Filigransız'],
       ['RAW ve optikler', '—'],
       ['Özel Reçete Yuvaları', '1 (C1)'],
     ],
     proRows: [
       ['Film stokları', 'Tümü (12)'],
-      ['Çıktı', 'Tam çöz. · İşaretsiz'],
+      ['Çıktı', 'Tam çöz.'],
       ['RAW ve karanlık oda', 'Bayer RAW ve ProRAW'],
       ['Optik ve çerçeveleme', 'Halasyon · 65:24 Pano'],
       ['Özel Reçete Yuvaları', '7 (C1–C7)'],

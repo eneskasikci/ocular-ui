@@ -141,13 +141,13 @@ export const fr: Messages = {
     freeRows: [
       ['Pellicules', '3 (STD, CC, AC)'],
       ['Molettes & focales', 'Complet'],
-      ['Sortie', '12 MP · Filigrane discret'],
+      ['Sortie', '12 MP · Sans filigrane'],
       ['RAW & optique', '—'],
       ['Emplacements perso', '1 (C1)'],
     ],
     proRows: [
       ['Pellicules', 'Toutes les 12'],
-      ['Sortie', 'Pleine rés. · Sans marque'],
+      ['Sortie', 'Pleine rés.'],
       ['RAW & laboratoire', 'Bayer RAW & ProRAW'],
       ['Optique & cadrage', 'Halation · 65:24 Pano'],
       ['Emplacements perso', '7 (C1–C7)'],

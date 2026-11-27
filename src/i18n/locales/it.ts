@@ -141,13 +141,13 @@ export const it: Messages = {
     freeRows: [
       ['Pellicole', '3 (STD, CC, AC)'],
       ['Ghiere manuali e lenti', 'Completo'],
-      ['Output', '12 MP · Watermark discreto'],
+      ['Output', '12 MP · Senza watermark'],
       ['RAW e ottica', '—'],
       ['Slot ricette personalizzate', '1 (C1)'],
     ],
     proRows: [
       ['Pellicole', 'Tutte 12'],
-      ['Output', 'Piena ris. · Senza marchio'],
+      ['Output', 'Piena ris.'],
       ['RAW e camera oscura', 'Bayer RAW e ProRAW'],
       ['Ottica e formato', 'Alazione · 65:24 Pano'],
       ['Slot ricette personalizzate', '7 (C1–C7)'],

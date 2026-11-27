@@ -141,13 +141,13 @@ export const en: Messages = {
     freeRows: [
       ['Film stocks', '3 (STD, CC, AC)'],
       ['Manual dials & primes', 'Full'],
-      ['Output', '12 MP · Subtle watermark'],
+      ['Output', '12 MP · No watermark'],
       ['RAW & optics', '—'],
       ['Custom slots', '1 (C1)'],
     ],
     proRows: [
       ['Film stocks', 'All 12'],
-      ['Output', 'Full res · Unmarked'],
+      ['Output', 'Full res'],
       ['RAW & darkroom', 'Bayer RAW & ProRAW'],
       ['Optics & framing', 'Halation · 65:24 Pano'],
       ['Custom slots', '7 (C1–C7)'],
