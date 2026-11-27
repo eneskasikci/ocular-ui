@@ -402,7 +402,7 @@ export const OCULAR_CURATED_RECIPES = {
       "wbKelvin": 5600,
       "wbRed": 0,
       "wbBlue": 0,
-      "highlightTone": 2.0,
+      "highlightTone": 0.0,
       "shadowTone": 2.0,
       "color": 0,
       "sharpness": -1,
